@@ -1,4 +1,5 @@
-const JAVA_BACKEND_URL = 'http://localhost:8080/api';
+// Lấy URL từ biến môi trường, nếu không có mới dùng localhost để test dưới máy
+const JAVA_BACKEND_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
 
 export async function fetchGeminiAdvice(assessmentData: any) {
   try {
@@ -21,15 +22,17 @@ export async function fetchGeminiAdvice(assessmentData: any) {
     throw error;
   }
 }
+
 export async function registerUser(data: { fullName: string; email: string; password: string; role?: string }) {
-  const response = await fetch('http://localhost:8080/api/auth/register', {
+  const response = await fetch(`${JAVA_BACKEND_URL}/auth/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
   return response.json();
 }
+
 export async function lookupTaxCode(taxCode: string) {
-  const response = await fetch(`http://localhost:8080/api/auth/tax-lookup/${taxCode.trim()}`);
+  const response = await fetch(`${JAVA_BACKEND_URL}/auth/tax-lookup/${taxCode.trim()}`);
   return response.json();
-} 
+}
