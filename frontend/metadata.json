@@ -1,0 +1,6 @@
+{
+  "name": "POLYMATCH - Nền tảng Đánh giá Mức độ Chuyển đổi số & Sàn Công nghệ DBI",
+  "description": "Nền tảng đánh giá mức độ chuyển đổi số và kết nối giải pháp cho doanh nghiệp",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
