@@ -1,0 +1,6 @@
+{
+  "name": "POLYMATCH Logistics - Trưởng thành Số & Ghép nối Công nghệ",
+  "description": "Nền tảng đánh giá mức độ trưởng thành số DBI & LDMI, chẩn đoán khoảng trống và kết nối giải pháp công nghệ logistics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
