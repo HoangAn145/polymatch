@@ -1,0 +1,304 @@
+import { KnowledgeGap } from '../types';
+
+export const KNOWLEDGE_GAPS: KnowledgeGap[] = [
+  {
+    ma: "G-VT-01",
+    nhom_nang_luc: "VT",
+    ten: "Điều phối xe thủ công",
+    trieu_chung: "Điều phối viên quá tải; xe chờ lâu; không biết xe nào rảnh",
+    nguyen_nhan: "Điều phối dựa vào trí nhớ và điện thoại, không có lịch xe chung",
+    buoc_tiep: {
+      muc_1: "Lập lịch xe dùng chung trên bảng tính, chuẩn hóa mẫu lệnh điều xe",
+      muc_2: "Chuyển sang phần mềm quản lý vận tải có mô-đun lệnh điều xe",
+      muc_3: "Bật gợi ý xe theo tải trọng và vị trí",
+      muc_4: "Thử nghiệm điều phối tự động trên một nhóm tuyến"
+    },
+    dieu_kien: "Có người điều phối dùng được máy tính; danh sách xe và tài xế cập nhật",
+    chi_so: "Số chuyến mỗi xe mỗi ngày; thời gian chờ điều xe",
+    rui_ro: "Dữ liệu đầu vào kém; điều phối viên kháng cự; kỳ vọng tối ưu tự động khi dữ liệu chưa sẵn sàng",
+    nguon: ["Facchini et al. (2020)", "Toth & Vigo, The Vehicle Routing Problem (SIAM)"],
+    luu_y_bang_chung: "Mức tiết kiệm 5–30% của công cụ định tuyến là tuyên bố nhà cung cấp, không dùng làm cam kết"
+  },
+  {
+    ma: "G-VT-02",
+    nhom_nang_luc: "VT",
+    ten: "Lập tuyến chưa tối ưu",
+    trieu_chung: "Chi phí nhiên liệu cao; giao trễ ở tuyến nhiều điểm",
+    nguyen_nhan: "Tuyến lập theo kinh nghiệm, không tính ràng buộc giờ giao",
+    buoc_tiep: {
+      muc_1: "Ghi lại tuyến thực tế và thời gian để có số liệu gốc",
+      muc_2: "Dùng công cụ gợi ý tuyến cho từng chuyến",
+      muc_3: "Tối ưu nhiều điểm giao và nhiều xe",
+      muc_4: "Tối ưu động theo giao thông thực tế"
+    },
+    dieu_kien: "Địa chỉ giao hàng chuẩn hóa; số liệu tuyến ít nhất 1 tháng",
+    chi_so: "Chi phí mỗi km; số km mỗi đơn; OTIF",
+    rui_ro: "Địa chỉ Việt Nam chưa chuẩn hóa gây sai tuyến; bỏ qua ràng buộc cấm tải, giờ cấm",
+    nguon: ["Kuo (2010), Computers & Industrial Engineering"],
+    luu_y_bang_chung: "Nghiên cứu mô phỏng ghi nhận giảm khoảng 5% nhiên liệu; không khái quát cho Việt Nam"
+  },
+  {
+    ma: "G-VT-03",
+    nhom_nang_luc: "VT",
+    ten: "Dữ liệu định vị không được khai thác",
+    trieu_chung: "Có thiết bị giám sát hành trình nhưng không ai xem; không biết xe đang ở đâu khi khách hỏi",
+    nguyen_nhan: "Dữ liệu định vị nằm riêng ở ứng dụng thiết bị, không gắn với chuyến",
+    buoc_tiep: {
+      muc_1: "Phân công người xem dữ liệu, bật cảnh báo cơ bản",
+      muc_2: "Chọn nhà cung cấp định vị có API hoặc tích hợp với phần mềm vận tải",
+      muc_3: "Gắn dữ liệu định vị với chuyến và đơn",
+      muc_4: "Dùng dữ liệu để chấm điểm tài xế và bảo trì dự phòng"
+    },
+    dieu_kien: "Thiết bị giám sát hành trình đang hoạt động",
+    chi_so: "Số cảnh báo xử lý; tỷ lệ chuyến có vị trí thời gian thực",
+    rui_ro: "Dữ liệu phân mảnh giữa nhà cung cấp thiết bị; chất lượng tín hiệu; quyền riêng tư tài xế",
+    nguon: ["Nghị định 10/2020/NĐ-CP", "Thông tư 12/2020/TT-BGTVT", "Thông tư 71/2024/TT-BCA"],
+    luu_y_bang_chung: "Thiết bị giám sát hành trình là bắt buộc nên dữ liệu đã có sẵn, là điểm khởi động nhanh"
+  },
+  {
+    ma: "G-KB-01",
+    nhom_nang_luc: "KB",
+    ten: "Tồn kho không chính xác",
+    trieu_chung: "Kiểm kê lệch; hết hàng bất ngờ; khách phàn nàn giao thiếu",
+    nguyen_nhan: "Ghi nhập xuất chậm hoặc sai; không quản lý theo vị trí",
+    buoc_tiep: {
+      muc_1: "Chuẩn hóa mã hàng và vị trí, quy định ghi ngay khi nhập xuất",
+      muc_2: "Dùng phần mềm quản lý kho cơ bản và mã vạch",
+      muc_3: "Quản lý theo vị trí, lô, hạn dùng; kiểm kê luân phiên",
+      muc_4: "Quét cập nhật thời gian thực, đối soát liên tục"
+    },
+    dieu_kien: "Danh mục mã hàng thống nhất; có thiết bị quét hoặc điện thoại",
+    chi_so: "Độ chính xác tồn kho; số lần hết hàng ngoài kế hoạch",
+    rui_ro: "Đầu tư RFID lớn; quy trình kém thì công nghệ không cứu được",
+    nguon: ["Frazelle, World-Class Warehousing and Material Handling", "Auburn University RFID Lab"],
+    luu_y_bang_chung: "RFID Lab Auburn: độ chính xác khoảng 63–65% không RFID, trên 95% có RFID"
+  },
+  {
+    ma: "G-KB-02",
+    nhom_nang_luc: "KB",
+    ten: "Năng suất lấy hàng thấp",
+    trieu_chung: "Nhân viên đi tìm hàng lâu; giờ cao điểm dồn đơn",
+    nguyen_nhan: "Bố trí vị trí không theo tần suất; lấy từng đơn lẻ",
+    buoc_tiep: {
+      muc_1: "Đo thời gian lấy hàng hiện tại",
+      muc_2: "Gán vị trí cố định và in phiếu lấy hàng theo tuyến đi",
+      muc_3: "Sắp xếp vị trí theo tần suất, gom đơn lấy theo đợt",
+      muc_4: "Hệ thống tự lập đợt lấy hàng, cân nhắc tự động hóa"
+    },
+    dieu_kien: "Sơ đồ kho; dữ liệu đơn hàng ít nhất 1 tháng",
+    chi_so: "Năng suất lấy hàng; thời gian xử lý đơn",
+    rui_ro: "Bố trí vị trí sai làm tăng quãng đi; tự động hóa sớm khi sản lượng chưa đủ",
+    nguon: ["De Koster et al. (2007), European Journal of Operational Research"],
+    luu_y_bang_chung: "Lấy hàng chiếm khoảng 50–75% chi phí vận hành kho theo tổng quan học thuật"
+  },
+  {
+    ma: "G-GN-01",
+    nhom_nang_luc: "GN",
+    ten: "Báo giá chậm",
+    trieu_chung: "Khách chờ báo giá lâu; mất đơn vào tay đối thủ",
+    nguyen_nhan: "Tính giá tay từ nhiều nguồn cước",
+    buoc_tiep: {
+      muc_1: "Chuẩn hóa bảng cước theo tuyến và loại hàng",
+      muc_2: "Dùng phần mềm báo giá theo bảng cước",
+      muc_3: "Báo giá tự động, lưu lịch sử để phân tích tỷ lệ chốt",
+      muc_4: "Cập nhật cước thị trường tự động từ nhiều hãng"
+    },
+    dieu_kien: "Bảng cước các hãng được cập nhật định kỳ",
+    chi_so: "Thời gian báo giá; tỷ lệ báo giá thành đơn",
+    rui_ro: "Dữ liệu cước lỗi thời; tích hợp nhiều hãng phức tạp",
+    nguon: ["DHL Logistics Trend Radar", "Báo cáo Logistics Việt Nam 2023 (Bộ Công Thương)"],
+    luu_y_bang_chung: "Không tìm được case Việt Nam có số liệu định lượng"
+  },
+  {
+    ma: "G-GN-02",
+    nhom_nang_luc: "GN",
+    ten: "Theo dõi lô hàng quốc tế thủ công",
+    trieu_chung: "Nhân viên dành nhiều giờ tra cứu từng hãng; khách hỏi liên tục",
+    nguyen_nhan: "Không có công cụ tra cứu tập trung",
+    buoc_tiep: {
+      muc_1: "Lập bảng theo dõi chung cho mọi lô đang chạy",
+      muc_2: "Dùng công cụ tra cứu tập trung nhiều hãng",
+      muc_3: "Cập nhật trạng thái tự động, cảnh báo trễ",
+      muc_4: "Dự báo thời gian đến, cảnh báo chủ động cho khách"
+    },
+    dieu_kien: "Mã vận đơn và container được ghi đầy đủ",
+    chi_so: "Thời gian tra cứu mỗi lô; số cuộc gọi hỏi tình trạng",
+    rui_ro: "Dữ liệu hãng tàu không đồng nhất; chi phí nền tảng theo dõi",
+    nguon: ["Christopher, Logistics and Supply Chain Management"],
+    luu_y_bang_chung: "Con số giảm chi phí của control tower là tuyên bố nhà cung cấp"
+  },
+  {
+    ma: "G-DH-01",
+    nhom_nang_luc: "DH",
+    ten: "Tiếp nhận đơn thủ công",
+    trieu_chung: "Nhập lại đơn nhiều lần; sai địa chỉ, sai số lượng",
+    nguyen_nhan: "Đơn đến từ nhiều kênh, không có nơi tập trung",
+    buoc_tiep: {
+      muc_1: "Gom mọi đơn về một mẫu và một nơi",
+      muc_2: "Dùng phần mềm quản lý đơn (OMS)",
+      muc_3: "Cho khách tự tạo đơn qua cổng hoặc kết nối",
+      muc_4: "Đơn tự động phân bổ kho và xe"
+    },
+    dieu_kien: "Mẫu đơn thống nhất",
+    chi_so: "Tỷ lệ đơn sai; thời gian xử lý đơn",
+    rui_ro: "Khách quen đặt qua kênh phi chuẩn; tích hợp kênh phức tạp",
+    nguon: ["Bowersox et al., Supply Chain Logistics Management", "Chopra & Meindl"]
+  },
+  {
+    ma: "G-DH-02",
+    nhom_nang_luc: "DH",
+    ten: "Không có bằng chứng giao hàng điện tử",
+    trieu_chung: "Tranh chấp giao hàng; chậm đối soát vì chờ biên bản giấy",
+    nguyen_nhan: "Xác nhận giao bằng giấy hoặc ảnh rời rạc",
+    buoc_tiep: {
+      muc_1: "Quy định chụp ảnh và gửi theo mẫu thống nhất",
+      muc_2: "Dùng ứng dụng tài xế có chụp ảnh và ký (ePOD)",
+      muc_3: "Nối xác nhận giao với phần mềm vận tải",
+      muc_4: "Gửi xác nhận ngay cho khách, tự đối soát"
+    },
+    dieu_kien: "Tài xế có điện thoại thông minh",
+    chi_so: "Thời gian đối soát; số tranh chấp giao hàng",
+    rui_ro: "Tài xế không dùng ứng dụng; vùng mất sóng; chất lượng ảnh",
+    nguon: ["Rushton et al., The Handbook of Logistics and Distribution Management"]
+  },
+  {
+    ma: "G-DH-03",
+    nhom_nang_luc: "DH",
+    ten: "Không đo được giao đúng hạn đủ hàng",
+    trieu_chung: "Không trả lời được khách khi hỏi về chất lượng dịch vụ",
+    nguyen_nhan: "Không ghi lại giờ cam kết và giờ giao thực tế",
+    buoc_tiep: {
+      muc_1: "Ghi giờ cam kết và giờ giao thực tế cho từng đơn",
+      muc_2: "Tính OTIF hằng tháng",
+      muc_3: "Đo tự động theo khách hàng",
+      muc_4: "Cảnh báo sớm nguy cơ trễ cam kết"
+    },
+    dieu_kien: "Có ghi nhận giờ giao",
+    chi_so: "OTIF (On-Time In-Full)",
+    rui_ro: "Định nghĩa mập mờ gây tranh cãi với khách; dữ liệu không đủ",
+    nguon: ["ASCM, SCOR Digital Standard (RL.2.1, RL.2.2)"],
+    luu_y_bang_chung: "Chuẩn OTIF 98% của các chuỗi bán lẻ lớn là tham chiếu quốc tế, không áp cho SME Việt Nam"
+  },
+  {
+    ma: "G-HT-01",
+    nhom_nang_luc: "HT",
+    ten: "Khách không tự theo dõi được hàng",
+    trieu_chung: "Bộ phận chăm sóc khách hàng tốn nhiều thời gian trả lời cuộc gọi",
+    nguyen_nhan: "Dữ liệu trạng thái không được chia sẻ ra ngoài",
+    buoc_tiep: {
+      muc_1: "Chuẩn hóa các trạng thái đơn và cập nhật đều đặn",
+      muc_2: "Cổng tra cứu cho khách",
+      muc_3: "Đường dẫn theo dõi thời gian thực",
+      muc_4: "Cảnh báo chủ động và dự báo thời gian đến"
+    },
+    dieu_kien: "Có dữ liệu trạng thái trên phần mềm",
+    chi_so: "Số cuộc gọi hỏi tình trạng; mức hài lòng khách",
+    rui_ro: "Dữ liệu trạng thái trễ làm mất niềm tin; bảo mật dữ liệu khách",
+    nguon: ["Christopher, Logistics and Supply Chain Management"]
+  },
+  {
+    ma: "G-HT-02",
+    nhom_nang_luc: "HT",
+    ten: "Hệ thống nội bộ rời rạc",
+    trieu_chung: "Nhập lại dữ liệu giữa các phần mềm; số liệu các bộ phận không khớp",
+    nguyen_nhan: "Mỗi bộ phận chọn phần mềm riêng, không tính đến kết nối",
+    buoc_tiep: {
+      muc_1: "Lập danh sách phần mềm và dữ liệu mỗi phần mềm giữ",
+      muc_2: "Xuất nhập file theo lịch cố định",
+      muc_3: "Kết nối trực tiếp giữa phần mềm vận tải, kho, đơn hàng và kế toán",
+      muc_4: "Một nền dữ liệu chung"
+    },
+    dieu_kien: "Có người hiểu quy trình liên phòng ban",
+    chi_so: "Số giờ nhập lại dữ liệu; tỷ lệ chênh lệch số liệu",
+    rui_ro: "Dữ liệu bẩn làm dự án tích hợp thất bại; phần mềm kế toán cũ không có API",
+    nguon: ["Chopra & Meindl, Supply Chain Management"]
+  },
+  {
+    ma: "G-CT-01",
+    nhom_nang_luc: "CT",
+    ten: "Chứng từ lập thủ công, hay sai",
+    trieu_chung: "Sửa chứng từ nhiều lần; chậm giao hàng vì thiếu giấy tờ",
+    nguyen_nhan: "Nhập lại cùng dữ liệu trên nhiều chứng từ",
+    buoc_tiep: {
+      muc_1: "Dùng mẫu chuẩn cho từng loại chứng từ",
+      muc_2: "Lập chứng từ từ dữ liệu lô hàng trên phần mềm",
+      muc_3: "Tự sinh chứng từ và ký số",
+      muc_4: "Trao đổi chứng từ điện tử với đối tác"
+    },
+    dieu_kien: "Dữ liệu lô hàng được nhập đầy đủ một lần",
+    chi_so: "Tỷ lệ chứng từ phải sửa; thời gian lập bộ chứng từ",
+    rui_ro: "Mã nghiệp vụ VNACCS phức tạp; thiếu nhân sự am hiểu; dữ liệu nguồn sai lan truyền",
+    nguon: ["Hệ thống VNACCS/VCIS, Tổng cục Hải quan", "Nghị định 123/2020/NĐ-CP"],
+    luu_y_bang_chung: "Hóa đơn điện tử bắt buộc toàn quốc từ 01/7/2022"
+  },
+  {
+    ma: "G-CP-01",
+    nhom_nang_luc: "CP",
+    ten: "Không biết chi phí và lợi nhuận theo tuyến, theo khách",
+    trieu_chung: "Có tuyến lỗ mà không biết; báo giá theo cảm tính",
+    nguyen_nhan: "Chi phí chỉ tập hợp tổng cuối tháng",
+    buoc_tiep: {
+      muc_1: "Ghi chi phí trực tiếp theo chuyến",
+      muc_2: "Tính chi phí theo chuyến và tuyến hằng tháng",
+      muc_3: "Tự động phân bổ chi phí theo tuyến và khách",
+      muc_4: "Phân tích lợi nhuận, cảnh báo tuyến lỗ"
+    },
+    dieu_kien: "Có ghi nhận nhiên liệu, cầu đường theo chuyến",
+    chi_so: "Chi phí mỗi km; lợi nhuận gộp theo tuyến",
+    rui_ro: "Phân bổ chi phí theo hoạt động làm thủ công tốn công, khó duy trì",
+    nguon: ["Kaplan & Narayanan, customer profitability", "Christopher, Logistics Management"]
+  },
+  {
+    ma: "G-CP-02",
+    nhom_nang_luc: "CP",
+    ten: "Thiếu bảng điều khiển chỉ số",
+    trieu_chung: "Lãnh đạo không nắm tình hình vận hành hằng ngày",
+    nguyen_nhan: "Số liệu nằm rải rác, không ai tổng hợp",
+    buoc_tiep: {
+      muc_1: "Chọn 3 đến 5 chỉ số quan trọng nhất và theo dõi hằng tuần",
+      muc_2: "Bảng điều khiển cập nhật định kỳ",
+      muc_3: "Bảng điều khiển thời gian thực",
+      muc_4: "Thêm dự báo và cảnh báo"
+    },
+    dieu_kien: "Dữ liệu các chỉ số được ghi nhận",
+    chi_so: "Số chỉ số được theo dõi định kỳ",
+    rui_ro: "Bảng điều khiển đẹp nhưng dữ liệu sai; quá nhiều chỉ số không hành động được",
+    nguon: ["ASCM, SCOR Digital Standard", "Christopher, Logistics and Supply Chain Management"]
+  },
+  {
+    ma: "G-XA-01",
+    nhom_nang_luc: "XA",
+    ten: "Chạy rỗng cao, không đo được",
+    trieu_chung: "Chiều về thường không có hàng; chi phí nhiên liệu lớn",
+    nguyen_nhan: "Không có dữ liệu chạy rỗng, không tìm hàng chiều về",
+    buoc_tiep: {
+      muc_1: "Ghi lại km có hàng và km rỗng từng chuyến",
+      muc_2: "Đo tỷ lệ chạy rỗng hằng tháng, chủ động tìm hàng chiều về",
+      muc_3: "Ghép chuyến về qua đối tác hoặc sàn giao vận",
+      muc_4: "Ghép chuyến tự động"
+    },
+    dieu_kien: "Có ghi nhận km theo chuyến",
+    chi_so: "Tỷ lệ km chạy rỗng; tỷ lệ chuyến về có hàng",
+    rui_ro: "Một phần chạy rỗng do mất cân đối tuyến, không loại bỏ được; đội xe nhỏ khó tìm hàng chiều về",
+    nguon: ["Eurostat, road freight statistics", "World Bank, The economics of empty trips"],
+    luu_y_bang_chung: "EU năm 2024: 21,6% vehicle-km chạy rỗng"
+  },
+  {
+    ma: "G-XA-02",
+    nhom_nang_luc: "XA",
+    ten: "Chưa đo được phát thải",
+    trieu_chung: "Khách hàng lớn yêu cầu số liệu phát thải mà không có",
+    nguyen_nhan: "Không có phương pháp tính",
+    buoc_tiep: {
+      muc_1: "Ghi nhiên liệu theo chuyến",
+      muc_2: "Tính phát thải từ nhiên liệu theo hệ số chuẩn",
+      muc_3: "Áp dụng phương pháp GLEC Framework hoặc ISO 14083",
+      muc_4: "Báo cáo phát thải theo lô cho khách"
+    },
+    dieu_kien: "Có số liệu nhiên liệu theo chuyến",
+    chi_so: "kg CO₂e mỗi tấn-km; kg CO₂e mỗi lô",
+    rui_ro: "Thiếu dữ liệu nhiên liệu; hệ số mặc định kém chính xác; rủi ro tô vẽ xanh",
+    nguon: ["Smart Freight Centre (2023), GLEC Framework v3", "ISO 14083:2023"],
+    luu_y_bang_chung: "Đơn vị chuẩn gCO2e/tkm, cơ sở well-to-wheel"
+  }
+];

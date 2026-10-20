@@ -1,0 +1,8 @@
+{
+  "name": "POLYMATCH",
+  "description": "Nền tảng đánh giá mức độ trưởng thành số và kết nối giải pháp công nghệ cho doanh nghiệp trong chuỗi cung ứng logistics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
