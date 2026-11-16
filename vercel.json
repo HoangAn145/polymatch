@@ -1,0 +1,25 @@
+{
+  "framework": "vite",
+  "installCommand": "npm exec --yes --package=bun@1.4.4 -- bun install --frozen-lockfile",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "functions": { "api/platform.ts": { "maxDuration": 60 } },
+  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    }
+  ]
+}
