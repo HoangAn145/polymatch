@@ -1,4 +1,3 @@
-import { demoMode } from '../lib/supabase';
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -26,8 +25,8 @@ export const PublicLayout: React.FC = () => {
   const toast = useToast();
   const currentUser = authService.getCurrentUser();
 
-  const handleLogout = () => {
-    authService.logout();
+  const handleLogout = async () => {
+    await authService.logout();
     toast.info("Đã đăng xuất", "Hẹn gặp lại bạn!");
     navigate('/');
   };
@@ -56,7 +55,6 @@ export const PublicLayout: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-[#F7F9FC] text-slate-800">
       {/* Demo helper toolbar */}
       <DemoToolbar />
-      {!demoMode && <div className="bg-amber-50 text-amber-900 text-sm px-4 py-2 text-center">Thông tin giới thiệu và danh mục đang chờ xác minh. Đăng nhập để sử dụng không gian làm việc mới. <Link to="/workspace" className="underline font-semibold">Mở không gian làm việc</Link></div>}
 
       {/* Main Header (BDX Portal Inspired) */}
       <header className="sticky top-0 z-30 bg-white border-b border-slate-200/90 shadow-2xs">

@@ -1,6 +1,6 @@
 # Trạng thái triển khai
 
-Đây là triển khai mã nguồn cho phạm vi 5 nhóm chức năng được yêu cầu. Chưa nghiệm thu production khi chưa có Supabase/Vercel/Gemini thật. Không coi build thành công là xác nhận hệ thống đã vận hành trên Vercel.
+Phạm vi hiện tại: giữ nguyên các chức năng/giao diện/đường dẫn gốc và bổ sung các mục 02–05 (Diagnostic/Matching, Chatbot CSKH, Roadmap/ROI, KPI/quản trị). Chưa nghiệm thu production khi chưa có Supabase/Vercel/Gemini thật. Không coi build thành công là xác nhận hệ thống đã vận hành trên Vercel.
 
 | Nhóm | Đã triển khai trong nhánh này | Còn cần xác nhận/cấu hình |
 | --- | --- | --- |
@@ -14,8 +14,12 @@
 
 - Workbook và SQL chứa nội dung workbook được giữ ngoài repository công khai. Chỉ có công cụ chuyển đổi local; chủ dự án nhập dữ liệu vào Supabase riêng. Bộ kiểm thử schema/RLS dùng nội dung tổng hợp, không dùng dữ liệu workbook.
 
-- `/workspace` là luồng dùng Supabase. Các dashboard cũ dựa localStorage chỉ có trong chế độ demo tường minh. Các đường dẫn dashboard cũ chuyển về `/workspace` khi dùng production. Các chức năng thương mại cũ (ví, hợp đồng, báo giá, thanh toán) chưa được chuyển sang backend trong phạm vi này.
-- Trang giới thiệu/danh mục công khai kế thừa từ bản demo được đánh dấu thông tin đang chờ xác minh. Không dùng case study/giá kế thừa làm bằng chứng đã kiểm chứng.
+- Giữ toàn bộ đường dẫn, layout và menu Buyer/Seller/Admin gốc. `/workspace` chỉ là alias sau xác nhận email, chuyển về dashboard theo vai trò. Form đăng ký/đăng nhập gốc dùng Supabase khi chạy production; chế độ demo vẫn có bộ đổi vai trò và dữ liệu cũ.
+- Các nghiệp vụ có sẵn (kết nối, tư vấn, báo cáo, dự án, giải pháp Seller, báo giá, hợp đồng, hoa hồng và quản trị gốc) được giữ nguyên giao diện và cơ chế localStorage của bản gốc. Đây không phải quá trình chuyển toàn bộ nghiệp vụ thương mại lên backend. Dữ liệu demo cũ được giữ nguyên khóa `polymatch_database_v3`; cache của người dùng Supabase dùng khóa riêng theo user ID.
+- Bổ sung menu `/buyer/roadmap`, `/buyer/kpi`, `/buyer/support`, `/seller/support`, `/admin/knowledge`, `/admin/support`, `/admin/support-audit`. Giữ nguyên trang `/buyer/projects` và `/admin/audit` gốc.
+- Diagnostic dùng wizard gốc với KPI/budget thực tế, không tự chọn đáp án trong phiên Supabase. Kết quả được chuyển về cấu trúc cũ để giữ biểu đồ, so sánh, gửi yêu cầu kết nối và lịch sử. Trong production, chẩn đoán được tính/lưu qua Vercel Function; phiên demo tính cùng quy tắc và lưu thêm bản snapshot cho Roadmap.
+- ROI giữ nguyên thanh trượt, biểu đồ dòng tiền và đầu vào gốc; thêm ba kịch bản. Hoàn vốn ngoài kỳ hoặc dòng tiền ròng âm hiển thị chưa hoàn vốn; ROI tính trên tổng chi phí đầu tư và vận hành.
+- Trang giới thiệu/danh mục công khai giữ giao diện và nội dung của bản gốc. Nguồn giá/case study trong dữ liệu kế thừa chưa được xác minh lại. Không dùng case study/giá kế thừa làm bằng chứng đã kiểm chứng.
 - `gia_min_trieu` trong danh mục cũ đã là giá 12 tháng, kể cả thuê bao tháng. Không nhân thêm 12. Giá chưa biết không được khẳng định là phù hợp ngân sách.
 - Điểm matching giữ 7 nhóm thành phần; phần tích hợp và kiểm chứng để 0 vì chưa có dữ liệu được xác minh, và hiển thị rõ giới hạn. Điểm không phải xác suất thành công.
 - 3PL đang trả lời toàn bộ câu hỏi LDMI áp dụng cho nhánh 3PL. Chưa tách bộ câu hỏi theo từng dịch vụ 3PL.

@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import {
+  Link,
+  Navigate,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import {
   Layers,
   LayoutDashboard,
@@ -31,12 +37,12 @@ import {
   ChevronRight,
   ExternalLink,
   ShieldCheck,
-  Coins
-} from 'lucide-react';
-import { authService } from '../services/authService';
-import { dbService } from '../services/mockDatabase';
-import { DemoToolbar } from '../components/common/DemoToolbar';
-import { useToast } from '../components/ui/Toast';
+  Coins,
+} from "lucide-react";
+import { authService } from "../services/authService";
+import { dbService } from "../services/mockDatabase";
+import { DemoToolbar } from "../components/common/DemoToolbar";
+import { useToast } from "../components/ui/Toast";
 
 export const DashboardLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -45,104 +51,293 @@ export const DashboardLayout: React.FC = () => {
   const toast = useToast();
   const currentUser = authService.getCurrentUser();
 
-  if (!currentUser) {
-    // If not logged in, redirect to login
-    React.useEffect(() => {
-      navigate('/login');
-    }, [navigate]);
-    return null;
-  }
-
-  // Role guarding
-  const path = location.pathname;
-  if (path.startsWith('/buyer') && currentUser.role !== 'BUYER') {
-    React.useEffect(() => {
-      toast.warning("Hạn chế quyền truy cập", "Bạn cần đăng nhập tài khoản Doanh nghiệp (Buyer).");
-      if (currentUser.role === 'SELLER') navigate('/seller/dashboard');
-      else if (currentUser.role === 'ADMIN') navigate('/admin/dashboard');
-    }, [currentUser, navigate]);
-  } else if (path.startsWith('/seller') && currentUser.role !== 'SELLER') {
-    React.useEffect(() => {
-      toast.warning("Hạn chế quyền truy cập", "Bạn cần đăng nhập tài khoản Nhà cung cấp (Seller).");
-      if (currentUser.role === 'BUYER') navigate('/buyer/dashboard');
-      else if (currentUser.role === 'ADMIN') navigate('/admin/dashboard');
-    }, [currentUser, navigate]);
-  } else if (path.startsWith('/admin') && currentUser.role !== 'ADMIN') {
-    React.useEffect(() => {
-      toast.warning("Khu vực Quản trị viên", "Chỉ tài khoản Admin mới có quyền truy cập khu vực này.");
-      if (currentUser.role === 'BUYER') navigate('/buyer/dashboard');
-      else if (currentUser.role === 'SELLER') navigate('/seller/dashboard');
-    }, [currentUser, navigate]);
-  }
+  if (!currentUser) return <Navigate to="/login" replace />;
+  const requestedRole = location.pathname.split("/")[1]?.toUpperCase();
+  if (
+    ["BUYER", "SELLER", "ADMIN"].includes(requestedRole) &&
+    requestedRole !== currentUser.role
+  )
+    return (
+      <Navigate to={`/${currentUser.role.toLowerCase()}/dashboard`} replace />
+    );
 
   const wallet = currentUser ? dbService.getWallet(currentUser.id) : null;
-  const walletPath = currentUser?.role === 'BUYER' ? '/buyer/wallet' : currentUser?.role === 'SELLER' ? '/seller/wallet' : '/admin/wallets';
+  const walletPath =
+    currentUser?.role === "BUYER"
+      ? "/buyer/wallet"
+      : currentUser?.role === "SELLER"
+        ? "/seller/wallet"
+        : "/admin/wallets";
 
-  const handleLogout = () => {
-    authService.logout();
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+    } catch (e) {
+      toast.error("Không thể đăng xuất", (e as Error).message);
+      return;
+    }
     toast.info("Đã đăng xuất", "Hẹn gặp lại bạn!");
-    navigate('/login');
+    navigate("/login");
   };
 
   // Nav items per role
   const buyerNav = [
-    { title: "Tổng quan", path: "/buyer/dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
-    { title: "Hồ sơ doanh nghiệp", path: "/buyer/profile", icon: <Building2 className="w-4 h-4" /> },
-    { title: "Đánh giá chuyển đổi số", path: "/buyer/assessment", icon: <FileCheck2 className="w-4 h-4" /> },
-    { title: "Kết quả đánh giá", path: "/buyer/results", icon: <Award className="w-4 h-4" /> },
-    { title: "Điểm nghẽn logistics", path: "/buyer/gaps", icon: <AlertTriangle className="w-4 h-4" /> },
-    { title: "Giải pháp đề xuất", path: "/buyer/solutions", icon: <Lightbulb className="w-4 h-4" /> },
-    { title: "So sánh giải pháp", path: "/buyer/compare", icon: <GitCompare className="w-4 h-4" /> },
-    { title: "Mô phỏng ROI", path: "/buyer/roi", icon: <Calculator className="w-4 h-4" /> },
-    { title: "Yêu cầu kết nối", path: "/buyer/connections", icon: <Send className="w-4 h-4" /> },
-    { title: "Ví tín chỉ (Nạp / Rút)", path: "/buyer/wallet", icon: <Coins className="w-4 h-4 text-amber-500" /> },
-    { title: "Báo cáo chuyên sâu", path: "/buyer/reports", icon: <FileSpreadsheet className="w-4 h-4" /> },
-    { title: "Tư vấn chuyên gia", path: "/buyer/consulting", icon: <Users className="w-4 h-4" /> },
-    { title: "Dự án & KPI", path: "/buyer/projects", icon: <FolderGit2 className="w-4 h-4" /> },
-    { title: "Lịch sử đánh giá", path: "/buyer/history", icon: <History className="w-4 h-4" /> },
-    { title: "Cài đặt tài khoản", path: "/buyer/settings", icon: <Settings className="w-4 h-4" /> }
+    {
+      title: "Tổng quan",
+      path: "/buyer/dashboard",
+      icon: <LayoutDashboard className="w-4 h-4" />,
+    },
+    {
+      title: "Hồ sơ doanh nghiệp",
+      path: "/buyer/profile",
+      icon: <Building2 className="w-4 h-4" />,
+    },
+    {
+      title: "Đánh giá chuyển đổi số",
+      path: "/buyer/assessment",
+      icon: <FileCheck2 className="w-4 h-4" />,
+    },
+    {
+      title: "Kết quả đánh giá",
+      path: "/buyer/results",
+      icon: <Award className="w-4 h-4" />,
+    },
+    {
+      title: "Điểm nghẽn logistics",
+      path: "/buyer/gaps",
+      icon: <AlertTriangle className="w-4 h-4" />,
+    },
+    {
+      title: "Giải pháp đề xuất",
+      path: "/buyer/solutions",
+      icon: <Lightbulb className="w-4 h-4" />,
+    },
+    {
+      title: "So sánh giải pháp",
+      path: "/buyer/compare",
+      icon: <GitCompare className="w-4 h-4" />,
+    },
+    {
+      title: "Mô phỏng ROI",
+      path: "/buyer/roi",
+      icon: <Calculator className="w-4 h-4" />,
+    },
+    {
+      title: "Yêu cầu kết nối",
+      path: "/buyer/connections",
+      icon: <Send className="w-4 h-4" />,
+    },
+    {
+      title: "Ví tín chỉ (Nạp / Rút)",
+      path: "/buyer/wallet",
+      icon: <Coins className="w-4 h-4 text-amber-500" />,
+    },
+    {
+      title: "Báo cáo chuyên sâu",
+      path: "/buyer/reports",
+      icon: <FileSpreadsheet className="w-4 h-4" />,
+    },
+    {
+      title: "Tư vấn chuyên gia",
+      path: "/buyer/consulting",
+      icon: <Users className="w-4 h-4" />,
+    },
+    {
+      title: "Dự án & KPI",
+      path: "/buyer/projects",
+      icon: <FolderGit2 className="w-4 h-4" />,
+    },
+    {
+      title: "Lịch sử đánh giá",
+      path: "/buyer/history",
+      icon: <History className="w-4 h-4" />,
+    },
+    {
+      title: "Lộ trình triển khai",
+      path: "/buyer/roadmap",
+      icon: <FolderGit2 className="w-4 h-4" />,
+    },
+    {
+      title: "Lịch sử KPI & Cảnh báo",
+      path: "/buyer/kpi",
+      icon: <BarChart3 className="w-4 h-4" />,
+    },
+    {
+      title: "Hỗ trợ CSKH",
+      path: "/buyer/support",
+      icon: <HelpCircle className="w-4 h-4" />,
+    },
+    {
+      title: "Cài đặt tài khoản",
+      path: "/buyer/settings",
+      icon: <Settings className="w-4 h-4" />,
+    },
   ];
 
   const sellerNav = [
-    { title: "Tổng quan", path: "/seller/dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
-    { title: "Hồ sơ nhà cung cấp", path: "/seller/profile", icon: <Building2 className="w-4 h-4" /> },
-    { title: "Xác minh tài khoản", path: "/seller/verification", icon: <ShieldAlert className="w-4 h-4" /> },
-    { title: "Giải pháp của tôi", path: "/seller/solutions", icon: <Lightbulb className="w-4 h-4" /> },
-    { title: "Thêm giải pháp", path: "/seller/solutions/new", icon: <PlusCircle className="w-4 h-4" /> },
-    { title: "Yêu cầu kết nối", path: "/seller/requests", icon: <Send className="w-4 h-4" /> },
-    { title: "Báo giá đã gửi", path: "/seller/quotes", icon: <FileText className="w-4 h-4" /> },
-    { title: "Hợp đồng giao dịch", path: "/seller/contracts", icon: <FileCheck2 className="w-4 h-4" /> },
-    { title: "Ví tín chỉ (Nạp / Rút)", path: "/seller/wallet", icon: <Coins className="w-4 h-4 text-amber-500" /> },
-    { title: "Đối soát hoa hồng", path: "/seller/commission", icon: <BadgePercent className="w-4 h-4" /> },
-    { title: "Gói tham gia (6tr/năm)", path: "/seller/subscription", icon: <CreditCard className="w-4 h-4" /> },
-    { title: "Thống kê hiệu quả", path: "/seller/analytics", icon: <BarChart3 className="w-4 h-4" /> },
-    { title: "Cài đặt tài khoản", path: "/seller/settings", icon: <Settings className="w-4 h-4" /> }
+    {
+      title: "Tổng quan",
+      path: "/seller/dashboard",
+      icon: <LayoutDashboard className="w-4 h-4" />,
+    },
+    {
+      title: "Hồ sơ nhà cung cấp",
+      path: "/seller/profile",
+      icon: <Building2 className="w-4 h-4" />,
+    },
+    {
+      title: "Xác minh tài khoản",
+      path: "/seller/verification",
+      icon: <ShieldAlert className="w-4 h-4" />,
+    },
+    {
+      title: "Giải pháp của tôi",
+      path: "/seller/solutions",
+      icon: <Lightbulb className="w-4 h-4" />,
+    },
+    {
+      title: "Thêm giải pháp",
+      path: "/seller/solutions/new",
+      icon: <PlusCircle className="w-4 h-4" />,
+    },
+    {
+      title: "Yêu cầu kết nối",
+      path: "/seller/requests",
+      icon: <Send className="w-4 h-4" />,
+    },
+    {
+      title: "Báo giá đã gửi",
+      path: "/seller/quotes",
+      icon: <FileText className="w-4 h-4" />,
+    },
+    {
+      title: "Hợp đồng giao dịch",
+      path: "/seller/contracts",
+      icon: <FileCheck2 className="w-4 h-4" />,
+    },
+    {
+      title: "Ví tín chỉ (Nạp / Rút)",
+      path: "/seller/wallet",
+      icon: <Coins className="w-4 h-4 text-amber-500" />,
+    },
+    {
+      title: "Đối soát hoa hồng",
+      path: "/seller/commission",
+      icon: <BadgePercent className="w-4 h-4" />,
+    },
+    {
+      title: "Gói tham gia (6tr/năm)",
+      path: "/seller/subscription",
+      icon: <CreditCard className="w-4 h-4" />,
+    },
+    {
+      title: "Thống kê hiệu quả",
+      path: "/seller/analytics",
+      icon: <BarChart3 className="w-4 h-4" />,
+    },
+    {
+      title: "Hỗ trợ CSKH",
+      path: "/seller/support",
+      icon: <HelpCircle className="w-4 h-4" />,
+    },
+    {
+      title: "Cài đặt tài khoản",
+      path: "/seller/settings",
+      icon: <Settings className="w-4 h-4" />,
+    },
   ];
 
   const adminNav = [
-    { title: "Tổng quan nền tảng", path: "/admin/dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
-    { title: "Quản lý người dùng", path: "/admin/users", icon: <Users className="w-4 h-4" /> },
-    { title: "Xác minh nhà cung cấp", path: "/admin/sellers", icon: <UserCheck className="w-4 h-4" /> },
-    { title: "Duyệt giải pháp", path: "/admin/solutions", icon: <Lightbulb className="w-4 h-4" /> },
-    { title: "Quản lý chuyên gia", path: "/admin/experts", icon: <Users className="w-4 h-4" /> },
-    { title: "Lịch tư vấn", path: "/admin/consulting", icon: <CalendarDays className="w-4 h-4" /> },
-    { title: "Quản lý ví & Tín chỉ", path: "/admin/wallets", icon: <Coins className="w-4 h-4 text-amber-500" /> },
-    { title: "Bộ câu hỏi & Tiêu chí", path: "/admin/questions", icon: <HelpCircle className="w-4 h-4" /> },
-    { title: "Yêu cầu kết nối sàn", path: "/admin/connections", icon: <Send className="w-4 h-4" /> },
-    { title: "Giao dịch & Hoa hồng", path: "/admin/transactions", icon: <BadgePercent className="w-4 h-4" /> },
-    { title: "Quản lý bài viết", path: "/admin/articles", icon: <FileText className="w-4 h-4" /> },
-    { title: "Cấu hình hệ thống", path: "/admin/config", icon: <Settings className="w-4 h-4" /> },
-    { title: "Nhật ký hệ thống", path: "/admin/audit", icon: <History className="w-4 h-4" /> }
+    {
+      title: "Tổng quan nền tảng",
+      path: "/admin/dashboard",
+      icon: <LayoutDashboard className="w-4 h-4" />,
+    },
+    {
+      title: "Quản lý người dùng",
+      path: "/admin/users",
+      icon: <Users className="w-4 h-4" />,
+    },
+    {
+      title: "Xác minh nhà cung cấp",
+      path: "/admin/sellers",
+      icon: <UserCheck className="w-4 h-4" />,
+    },
+    {
+      title: "Duyệt giải pháp",
+      path: "/admin/solutions",
+      icon: <Lightbulb className="w-4 h-4" />,
+    },
+    {
+      title: "Quản lý chuyên gia",
+      path: "/admin/experts",
+      icon: <Users className="w-4 h-4" />,
+    },
+    {
+      title: "Lịch tư vấn",
+      path: "/admin/consulting",
+      icon: <CalendarDays className="w-4 h-4" />,
+    },
+    {
+      title: "Quản lý ví & Tín chỉ",
+      path: "/admin/wallets",
+      icon: <Coins className="w-4 h-4 text-amber-500" />,
+    },
+    {
+      title: "Bộ câu hỏi & Tiêu chí",
+      path: "/admin/questions",
+      icon: <HelpCircle className="w-4 h-4" />,
+    },
+    {
+      title: "Yêu cầu kết nối sàn",
+      path: "/admin/connections",
+      icon: <Send className="w-4 h-4" />,
+    },
+    {
+      title: "Giao dịch & Hoa hồng",
+      path: "/admin/transactions",
+      icon: <BadgePercent className="w-4 h-4" />,
+    },
+    {
+      title: "Quản lý bài viết",
+      path: "/admin/articles",
+      icon: <FileText className="w-4 h-4" />,
+    },
+    {
+      title: "Cấu hình hệ thống",
+      path: "/admin/config",
+      icon: <Settings className="w-4 h-4" />,
+    },
+    {
+      title: "Tri thức chatbot",
+      path: "/admin/knowledge",
+      icon: <FileText className="w-4 h-4" />,
+    },
+    {
+      title: "Yêu cầu CSKH",
+      path: "/admin/support",
+      icon: <HelpCircle className="w-4 h-4" />,
+    },
+    {
+      title: "Nhật ký CSKH",
+      path: "/admin/support-audit",
+      icon: <History className="w-4 h-4" />,
+    },
+    {
+      title: "Nhật ký hệ thống",
+      path: "/admin/audit",
+      icon: <History className="w-4 h-4" />,
+    },
   ];
 
   let currentNav = buyerNav;
   let roleTitle = "Doanh nghiệp (Buyer)";
   let roleBg = "bg-blue-600";
-  if (currentUser.role === 'SELLER') {
+  if (currentUser.role === "SELLER") {
     currentNav = sellerNav;
     roleTitle = "Nhà cung cấp (Seller)";
     roleBg = "bg-emerald-600";
-  } else if (currentUser.role === 'ADMIN') {
+  } else if (currentUser.role === "ADMIN") {
     currentNav = adminNav;
     roleTitle = "Quản trị viên (Admin)";
     roleBg = "bg-purple-600";
@@ -165,7 +360,7 @@ export const DashboardLayout: React.FC = () => {
         {/* Sidebar Component (Clean BDX style) */}
         <aside
           className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200/90 transform transition-transform duration-200 ease-in-out md:static md:translate-x-0 flex flex-col ${
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           {/* Brand header */}
@@ -190,21 +385,28 @@ export const DashboardLayout: React.FC = () => {
           <div className="p-3 mx-3 my-2 rounded-lg bg-slate-50 border border-slate-200/80">
             <div className="flex items-center gap-2">
               <span className={`w-2 h-2 rounded-full ${roleBg}`} />
-              <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">{roleTitle}</span>
+              <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+                {roleTitle}
+              </span>
             </div>
-            <p className="text-xs font-semibold text-slate-900 mt-1 truncate" title={currentUser.companyName}>
+            <p
+              className="text-xs font-semibold text-slate-900 mt-1 truncate"
+              title={currentUser.companyName}
+            >
               {currentUser.companyName}
             </p>
-            {currentUser.role === 'SELLER' && (
+            {currentUser.role === "SELLER" && (
               <div className="mt-1.5 flex items-center gap-1.5">
                 <span
                   className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${
                     currentUser.vendorApproved
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-amber-100 text-amber-800'
+                      ? "bg-emerald-100 text-emerald-800"
+                      : "bg-amber-100 text-amber-800"
                   }`}
                 >
-                  {currentUser.vendorApproved ? '✓ Đã xác minh' : '⏳ Chờ Admin duyệt'}
+                  {currentUser.vendorApproved
+                    ? "✓ Đã xác minh"
+                    : "⏳ Chờ Admin duyệt"}
                 </span>
               </div>
             )}
@@ -220,15 +422,19 @@ export const DashboardLayout: React.FC = () => {
                 <span className="text-[11px] font-medium">Số dư ví:</span>
               </div>
               <div className="font-extrabold text-[#1769AA] font-mono flex items-center gap-1">
-                <span>{wallet ? wallet.so_du_tin_chi.toLocaleString('vi-VN') : 0}</span>
-                <span className="text-[10px] text-slate-500 font-normal">TC</span>
+                <span>
+                  {wallet ? wallet.so_du_tin_chi.toLocaleString("vi-VN") : 0}
+                </span>
+                <span className="text-[10px] text-slate-500 font-normal">
+                  TC
+                </span>
               </div>
             </Link>
           </div>
 
           {/* Nav items list */}
           <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-0.5">
-            {currentNav.map(item => {
+            {currentNav.map((item) => {
               const isActive = location.pathname === item.path;
               return (
                 <Link
@@ -237,11 +443,13 @@ export const DashboardLayout: React.FC = () => {
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                     isActive
-                      ? 'bg-blue-50 text-[#1769AA] font-bold shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                      ? "bg-blue-50 text-[#1769AA] font-bold shadow-2xs"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   }`}
                 >
-                  <span className={`${isActive ? 'text-[#1769AA]' : 'text-slate-400'}`}>
+                  <span
+                    className={`${isActive ? "text-[#1769AA]" : "text-slate-400"}`}
+                  >
                     {item.icon}
                   </span>
                   <span className="truncate">{item.title}</span>
@@ -283,16 +491,19 @@ export const DashboardLayout: React.FC = () => {
 
               {/* Breadcrumb path */}
               <div className="flex items-center gap-2 text-xs text-slate-500">
-                <span className="font-semibold text-slate-700">{roleTitle}</span>
+                <span className="font-semibold text-slate-700">
+                  {roleTitle}
+                </span>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
                 <span className="text-slate-900 font-medium capitalize">
-                  {location.pathname.split('/').pop()?.replace(/-/g, ' ') || 'Dashboard'}
+                  {location.pathname.split("/").pop()?.replace(/-/g, " ") ||
+                    "Dashboard"}
                 </span>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
-              {currentUser.role === 'BUYER' && (
+              {currentUser.role === "BUYER" && (
                 <Link
                   to="/buyer/assessment"
                   className="hidden sm:inline-flex items-center gap-1.5 bg-[#1769AA] hover:bg-[#104D80] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors shadow-2xs"
@@ -302,7 +513,7 @@ export const DashboardLayout: React.FC = () => {
                 </Link>
               )}
 
-              {currentUser.role === 'SELLER' && (
+              {currentUser.role === "SELLER" && (
                 <Link
                   to="/seller/solutions/new"
                   className="hidden sm:inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors shadow-2xs"
@@ -319,8 +530,12 @@ export const DashboardLayout: React.FC = () => {
                 title="Nhấn để xem Ví tín chỉ & Nạp / Rút"
               >
                 <Coins className="w-4 h-4 text-amber-600" />
-                <span className="font-mono">{wallet ? wallet.so_du_tin_chi.toLocaleString('vi-VN') : 0}</span>
-                <span className="text-[10px] text-amber-700 font-semibold uppercase">Tín chỉ</span>
+                <span className="font-mono">
+                  {wallet ? wallet.so_du_tin_chi.toLocaleString("vi-VN") : 0}
+                </span>
+                <span className="text-[10px] text-amber-700 font-semibold uppercase">
+                  Tín chỉ
+                </span>
               </Link>
 
               <div className="h-7 w-[1px] bg-slate-200 hidden sm:block" />
@@ -331,8 +546,12 @@ export const DashboardLayout: React.FC = () => {
                   {currentUser.fullName.charAt(0)}
                 </div>
                 <div className="hidden lg:block text-left">
-                  <div className="text-xs font-semibold text-slate-900 leading-tight">{currentUser.fullName}</div>
-                  <div className="text-[10px] text-slate-500 leading-tight truncate max-w-[140px]">{currentUser.companyName}</div>
+                  <div className="text-xs font-semibold text-slate-900 leading-tight">
+                    {currentUser.fullName}
+                  </div>
+                  <div className="text-[10px] text-slate-500 leading-tight truncate max-w-[140px]">
+                    {currentUser.companyName}
+                  </div>
                 </div>
               </div>
             </div>

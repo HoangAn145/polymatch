@@ -66,7 +66,7 @@ Sau khi nhập dữ liệu riêng: đăng nhập admin → Quản lý tri thức
 1. Tạo hai tài khoản Buyer, một Seller và một Admin được nâng quyền qua SQL; xác nhận email.
 2. Kiểm tra đăng nhập, đăng xuất, khôi phục mật khẩu qua email thật.
 3. Buyer hoàn thành đủ câu hỏi và KPI gốc; tải lại trang để xác minh lịch sử lưu trong Supabase.
-4. Kiểm tra kết quả/điểm thành phần, lý do loại giải pháp; thử ngân sách thấp và nguồn lực thấp.
+4. Kiểm tra kết quả/điểm thành phần, lý do loại giải pháp; thử ngân sách thấp và nguồn lực thấp. Các trang gốc `/buyer/results`, `/buyer/solutions`, `/buyer/compare`, `/buyer/history` vẫn sử dụng cùng kết quả.
 5. Tạo lộ trình, ghi KPI ở ít nhất hai ngày và đối chiếu cảnh báo; thử cả chiều tăng tốt và giảm tốt.
 6. Duyệt một tài liệu FAQ và logistics, kiểm tra trích dẫn; thử câu hỏi không có tài liệu và chế độ tìm tin tức.
 7. Gửi yêu cầu sau khi bấm đồng ý chuyển chuyên viên; Admin xử lý và Buyer xem phản hồi.
@@ -79,3 +79,9 @@ Sau khi nhập dữ liệu riêng: đăng nhập admin → Quản lý tri thức
 - Project Supabase và quyền chạy migration, cấu hình Auth.
 - Thêm các biến bí mật vào Vercel qua dashboard hoặc cơ chế secrets bảo mật.
 - Email tài khoản quản trị và người có trách nhiệm duyệt dữ liệu/nguồn tin.
+
+## Bảo toàn ứng dụng gốc
+
+Nhánh này giữ các dashboard `/buyer/*`, `/seller/*`, `/admin/*`. Liên kết email `/workspace` tự chuyển về dashboard đúng vai trò. Sau khi redeploy Preview, các menu gốc và nghiệp vụ cũ vẫn truy cập được, không cần bật demo để khôi phục menu. Bật `VITE_DEMO_MODE=true` chỉ khi chủ dự án muốn dùng dữ liệu diễn tập và bộ đổi vai trò.
+
+Các tính năng bổ sung dùng các bảng đã tạo bởi hai migration hiện có; không cần chạy lại SQL đã thành công. Dữ liệu localStorage gốc không bị xóa hoặc đổi tên. Cache production tách theo người đăng nhập để tránh dùng nhầm dữ liệu demo hoặc dữ liệu người khác.

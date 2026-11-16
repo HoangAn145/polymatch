@@ -1,7 +1,7 @@
 import { DBI_QUESTIONS, LDMI_QUESTIONS } from "../data/assessmentQuestions";
 import { KNOWLEDGE_GAPS } from "../data/knowledgeGaps";
 import { SOLUTIONS_DATA } from "../data/solutionsData";
-import type { LogisticsBranch, EnterpriseScale } from "../types";
+import type { LogisticsBranch, EnterpriseScale, Solution } from "../types";
 export interface DiagnosticInput {
   branch: LogisticsBranch;
   scale: EnterpriseScale;
@@ -51,6 +51,24 @@ const mean = (a: number[]) =>
   a.length
     ? Math.round((a.reduce((s, x) => s + x, 0) / a.length) * 10) / 10
     : 0;
+export function solutionRejections(
+  sol: Solution,
+  branch: LogisticsBranch,
+  scale: EnterpriseScale,
+  budget: number,
+  level: number,
+): string[] {
+  const reasons: string[] = [];
+  if (!sol.phan_khuc.includes(branch)) reasons.push("Không phù hợp loại hình.");
+  if (!sol.quy_mo_phu_hop.includes(scale))
+    reasons.push("Không phù hợp quy mô.");
+  if (sol.muc_ldmi_phu_hop > level + 1)
+    reasons.push("Vượt quá mức trưởng thành hiện tại + 1.");
+  // Catalog minimum prices are already annualized.
+  if (sol.gia_min_trieu !== undefined && sol.gia_min_trieu > budget)
+    reasons.push("Chi phí tối thiểu 12 tháng vượt ngân sách.");
+  return reasons;
+}
 export function diagnose(input: DiagnosticInput) {
   validateInput(input);
   const questions = questionsFor(input.branch);
@@ -85,16 +103,13 @@ export function diagnose(input: DiagnosticInput) {
     }));
   const excluded: { id: string; title: string; reasons: string[] }[] = [];
   const matches = SOLUTIONS_DATA.flatMap((sol) => {
-    const reasons: string[] = [];
-    if (!sol.phan_khuc.includes(input.branch))
-      reasons.push("Không phù hợp loại hình.");
-    if (!sol.quy_mo_phu_hop.includes(input.scale))
-      reasons.push("Không phù hợp quy mô.");
-    if (sol.muc_ldmi_phu_hop > level + 1)
-      reasons.push("Vượt quá mức trưởng thành hiện tại + 1.");
-    // Existing catalog gia_min_trieu is already annualized, including monthly subscriptions.
-    if (sol.gia_min_trieu !== undefined && sol.gia_min_trieu > input.budget)
-      reasons.push("Chi phí tối thiểu 12 tháng vượt ngân sách.");
+    const reasons = solutionRejections(
+      sol,
+      input.branch,
+      input.scale,
+      input.budget,
+      level,
+    );
     if (reasons.length) {
       excluded.push({ id: sol.id, title: sol.ten, reasons });
       return [];

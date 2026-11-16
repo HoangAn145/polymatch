@@ -49,6 +49,7 @@ export interface EnterpriseProfile {
   };
   phan_mem_dang_dung: string[]; // ['ke_toan', 'tms', 'wms', 'oms', 'erp', 'giao_nhan', 'khong']
   ngan_sach_12_thang?: string;
+  ngan_sach_toi_da_trieu?: number;
   thoi_diem_trien_khai?: string;
   san_sang_nhan_su?: number;
   san_sang_du_lieu?: number;
@@ -127,6 +128,7 @@ export interface KnowledgeGap {
 }
 
 export interface AssessmentResult {
+  diagnostic?: import("../lib/diagnostic").DiagnosticResult;
   id: string;
   userId: string;
   doanh_nghiep_id: string;

@@ -2,7 +2,7 @@
 
 React/Vite frontend, Supabase Auth/Postgres/RLS, and Vercel Functions for Diagnostic and CSKH.
 
-The production workspace is `/workspace`. Demo workspaces are available only when `VITE_DEMO_MODE=true`. Production never trusts demo users or browser role selection.
+The original Buyer, Seller and Admin pages, routes, registration forms and navigation remain in place. New Diagnostic, CSKH, Roadmap/ROI and KPI features extend those pages. `/workspace` is only an email-callback alias that redirects to the authenticated role dashboard. Demo mode is explicitly enabled with `VITE_DEMO_MODE=true`; cloud sign-in uses Supabase profiles and RLS.
 
 ## Local development
 
@@ -21,6 +21,7 @@ npm run lint
 npm test
 npm run test:browser
 npm run test:browser:configured
+npm run test:browser:demo
 npm run build
 ```
 

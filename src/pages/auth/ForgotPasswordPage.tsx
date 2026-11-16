@@ -1,3 +1,4 @@
+import {demoMode, requireSupabase} from '../../lib/supabase';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Layers, ArrowLeft, ArrowRight, CheckCircle2, KeyRound } from 'lucide-react';
@@ -17,8 +18,18 @@ export const ForgotPasswordPage: React.FC = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSendCode = (e: React.FormEvent) => {
+  const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!demoMode) {
+      setLoading(true);
+      try {
+        const {error} = await requireSupabase().auth.resetPasswordForEmail(email, {redirectTo:`${window.location.origin}/reset-password`});
+        if (error) throw error;
+        toast.info('Kiểm tra email', 'Nếu email có tài khoản, bạn sẽ nhận được liên kết khôi phục mật khẩu.');
+      } catch(e) { toast.error('Không thể gửi liên kết', (e as Error).message); }
+      finally { setLoading(false); }
+      return;
+    }
     const user = dbService.getUsers().find(u => u.email.toLowerCase() === email.trim().toLowerCase());
 
     if (!user) {
@@ -73,7 +84,7 @@ export const ForgotPasswordPage: React.FC = () => {
             Khôi phục mật khẩu tài khoản
           </h2>
           <p className="text-xs text-slate-500">
-            Quy trình diễn tập khôi phục quyền truy cập demo
+            {demoMode ? "Quy trình diễn tập khôi phục quyền truy cập demo" : "Khôi phục quyền truy cập qua email xác nhận"}
           </p>
         </div>
 
@@ -82,7 +93,7 @@ export const ForgotPasswordPage: React.FC = () => {
           {step === 1 && (
             <form onSubmit={handleSendCode} className="space-y-4 text-xs">
               <p className="text-slate-600 leading-relaxed">
-                Nhập địa chỉ email tài khoản của bạn để nhận mã khôi phục diễn tập.
+                Nhập địa chỉ email tài khoản của bạn để nhận hướng dẫn khôi phục.
               </p>
 
               <div>

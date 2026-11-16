@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
-import { api, requireSupabase } from "../../lib/supabase";
+import { api, demoMode } from "../../lib/supabase";
+import { featureStore } from "../../lib/featureStore";
+import { authService } from "../../services/authService";
 type Reply = {
   answer: string;
   sources: { id?: string; title: string; source?: string; url?: string }[];
@@ -9,6 +11,8 @@ type Reply = {
   mode: string;
 };
 export function ChatWidget({ session }: { session: Session | null }) {
+  const userId =
+    session?.user.id || (demoMode ? authService.getCurrentUser()?.id : null);
   const [open, setOpen] = useState(false),
     [question, setQuestion] = useState(""),
     [mode, setMode] = useState("faq"),
@@ -22,7 +26,38 @@ export function ChatWidget({ session }: { session: Session | null }) {
     setError("");
     setTicket("");
     try {
-      setReply(await api<Reply>("chat", { question, mode }));
+      if (demoMode) {
+        const { data } = await featureStore()
+          .from("knowledge_documents")
+          .select("*")
+          .eq("status", "approved");
+        const terms = question
+          .toLowerCase()
+          .split(/\s+/)
+          .filter((t) => t.length > 2);
+        const ranked = (data || [])
+          .map((d) => ({
+            d,
+            score: terms.filter((t) =>
+              (d.title + " " + d.content).toLowerCase().includes(t),
+            ).length,
+          }))
+          .filter((x) => x.score > 0)
+          .sort((a, b) => b.score - a.score);
+        const doc = ranked[0]?.d;
+        setReply({
+          answer:
+            mode === "news"
+              ? "Tìm tin tức mới cần phiên đăng nhập Supabase và Gemini đã cấu hình."
+              : doc?.content ||
+                "Chưa có tài liệu đã duyệt phù hợp. Bạn có thể gửi câu hỏi cho chuyên viên.",
+          sources: doc
+            ? [{ id: doc.id, title: doc.title, source: doc.source }]
+            : [],
+          handoff: !doc,
+          mode: "faq",
+        });
+      } else setReply(await api<Reply>("chat", { question, mode }));
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -30,13 +65,13 @@ export function ChatWidget({ session }: { session: Session | null }) {
     }
   }
   async function handoff() {
-    if (!session) return;
+    if (!userId) return;
     setBusy(true);
     setError("");
     try {
-      const { data, error } = await requireSupabase()
+      const { data, error } = await featureStore()
         .from("support_tickets")
-        .insert({ user_id: session.user.id, question })
+        .insert({ user_id: userId, question })
         .select("id")
         .single();
       if (error) throw error;
@@ -58,7 +93,7 @@ export function ChatWidget({ session }: { session: Session | null }) {
           <p className="text-xs text-slate-500">
             FAQ đã duyệt, kiến thức có nguồn và tìm kiếm tin tức.
           </p>
-          {!session ? (
+          {!userId ? (
             <p>
               <Link className="text-blue-700 underline" to="/login">
                 Đăng nhập

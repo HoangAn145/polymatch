@@ -1,17 +1,13 @@
 import { test, expect } from "@playwright/test";
-test("production requires real auth, hides demo identity switching, and protects workspace", async ({
+test("original auth UI remains, missing configuration fails closed, and protected routes stay protected", async ({
   page,
 }) => {
   await page.goto("/login");
   await expect(
-    page.getByRole("heading", { name: "Đăng nhập POLYMATCH" }),
+    page.getByRole("heading", { name: "Đăng nhập Cổng thông tin POLYMATCH" }),
   ).toBeVisible();
-  await expect(
-    page.getByText("Chưa cấu hình Supabase cho ứng dụng."),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Đăng nhập", exact: true }),
-  ).toBeDisabled();
+  await expect(page.getByRole("alert")).toContainText("Chưa cấu hình Supabase");
+  await expect(page.locator("form button[type=submit]")).toBeDisabled();
   await expect(
     page.getByText("Điền nhanh tài khoản diễn tập (Demo)"),
   ).toHaveCount(0);
@@ -23,25 +19,32 @@ test("production requires real auth, hides demo identity switching, and protects
   await expect(
     page.getByRole("region", { name: "Chatbot CSKH" }),
   ).toBeVisible();
-  await expect(
-    page.getByText("để trao đổi và theo dõi yêu cầu."),
-  ).toBeVisible();
 });
-test("mobile auth fits viewport and registration requires password", async ({
+test("original registration choice and both full registration forms remain", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/register");
   await expect(
-    page.getByRole("heading", { name: "Đăng ký POLYMATCH" }),
+    page.getByRole("heading", { name: "Chọn loại tài khoản đăng ký" }),
   ).toBeVisible();
-  await expect(page.getByLabel("Mật khẩu", { exact: true })).toHaveAttribute(
-    "minlength",
-    "8",
-  );
+  await page.goto("/register/buyer");
+  await expect(
+    page.locator("form input[type=password]").first(),
+  ).toHaveAttribute("minlength", "8");
+  await expect(
+    page.getByText("Mã số thuế", { exact: false }).first(),
+  ).toBeVisible();
   expect(
     await page.evaluate(
-      () => document.documentElement.scrollWidth <= window.innerWidth,
+      () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+  await page.goto("/register/seller");
+  await expect(
+    page.locator("form input[type=password]").first(),
+  ).toHaveAttribute("minlength", "8");
+  await expect(
+    page.getByRole("heading", { name: /Đăng ký tài khoản Nhà cung cấp/ }),
+  ).toBeVisible();
 });

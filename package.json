@@ -11,7 +11,8 @@
     "lint": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "test:browser": "playwright test",
-    "test:browser:configured": "playwright test --config playwright.configured.config.ts"
+    "test:browser:configured": "playwright test --config playwright.configured.config.ts",
+    "test:browser:demo": "playwright test --config playwright.demo.config.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
