@@ -1,3 +1,5 @@
+import { demoMode } from './lib/supabase';
+import { ProductionApp } from './pages/platform/ProductionApp';
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ToastProvider } from './components/ui/Toast';
@@ -80,6 +82,7 @@ const ScrollToTop: React.FC = () => {
 };
 
 export default function App() {
+  if (!demoMode) return <ProductionApp />;
   return (
     <ToastProvider>
       <BrowserRouter>

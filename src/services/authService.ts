@@ -1,3 +1,4 @@
+import { demoMode } from '../lib/supabase';
 import { User, EnterpriseProfile, SellerProfile } from '../types';
 import { dbService } from './mockDatabase';
 
@@ -32,10 +33,11 @@ class AuthService {
   private currentUser: User | null = null;
 
   constructor() {
-    this.loadSession();
+    if (demoMode) this.loadSession();
   }
 
   private loadSession(): void {
+    if (!demoMode) return;
     try {
       const stored = localStorage.getItem(SESSION_KEY);
       if (stored) {
@@ -61,6 +63,7 @@ class AuthService {
   }
 
   public async login(email: string): Promise<User> {
+    if (!demoMode) throw new Error("Đăng nhập bằng Supabase tại /login.");
     const users = dbService.getUsers();
     const found = users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
 
@@ -193,6 +196,7 @@ class AuthService {
   }
 
   public switchDemoUser(role: 'BUYER' | 'SELLER_APPROVED' | 'SELLER_PENDING' | 'ADMIN'): User {
+    if (!demoMode) throw new Error("Chế độ demo đã tắt.");
     const users = dbService.getUsers();
     let target: User | undefined;
 

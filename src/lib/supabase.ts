@@ -1,0 +1,28 @@
+import { createClient } from "@supabase/supabase-js";
+const env = import.meta.env;
+export const demoMode = env.VITE_DEMO_MODE === "true";
+export const supabase =
+  env.VITE_SUPABASE_URL && env.VITE_SUPABASE_ANON_KEY
+    ? createClient(env.VITE_SUPABASE_URL, env.VITE_SUPABASE_ANON_KEY)
+    : null;
+export function requireSupabase() {
+  if (!supabase)
+    throw new Error("Chưa cấu hình Supabase. Vui lòng liên hệ quản trị viên.");
+  return supabase;
+}
+export async function api<T>(path: string, body: unknown): Promise<T> {
+  const { data } = await requireSupabase().auth.getSession();
+  if (!data.session) throw new Error("Vui lòng đăng nhập.");
+  const res = await fetch(`/api/${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${data.session.access_token}`,
+    },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(45000),
+  });
+  const value = await res.json();
+  if (!res.ok) throw new Error(value.error || "Không thể xử lý yêu cầu.");
+  return value;
+}
