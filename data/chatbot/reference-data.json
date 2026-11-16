@@ -1,0 +1,622 @@
+[
+  {
+    "external_id": "SRC001",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC001",
+        "Tên nguồn": "Cục Xuất nhập khẩu – Bộ Công Thương / Cổng Logistics Việt Nam",
+        "Loại nguồn": "Cơ quan nhà nước",
+        "Chủ đề theo dõi": "Báo cáo Logistics Việt Nam; chính sách và thông tin ngành",
+        "Phạm vi": "Việt Nam",
+        "URL/RSS/API": "https://logistics.gov.vn/",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "Có nội dung tải báo cáo; RSS/API cần kiểm tra riêng",
+        "Điều kiện sử dụng": "Ưu tiên báo cáo gốc; ghi năm, trang, kỳ dữ liệu; kiểm tra ngày cập nhật.",
+        "Người phụ trách": "Nhóm nội dung",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Nguồn chính cho bối cảnh logistics Việt Nam."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 4
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC002",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC002",
+        "Tên nguồn": "World Bank – Logistics Performance Index",
+        "Loại nguồn": "Tổ chức quốc tế / dữ liệu",
+        "Chủ đề theo dõi": "LPI, hiệu quả logistics quốc gia, phương pháp đo lường",
+        "Phạm vi": "Toàn cầu",
+        "URL/RSS/API": "https://lpi.worldbank.org/",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "Có dữ liệu/trang phương pháp; API tùy dataset",
+        "Điều kiện sử dụng": "Phân biệt LPI 2023 và LPI 2.0; không suy rộng sang KPI doanh nghiệp.",
+        "Người phụ trách": "Nhóm nghiên cứu",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Dùng trang phương pháp và dataset gốc."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 5
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC003",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC003",
+        "Tên nguồn": "UN Trade and Development (UNCTAD)",
+        "Loại nguồn": "Tổ chức quốc tế / báo cáo",
+        "Chủ đề theo dõi": "Vận tải biển, cảng, thương mại, số hóa logistics",
+        "Phạm vi": "Toàn cầu",
+        "URL/RSS/API": "https://unctad.org/publications",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "Có kho ấn phẩm; RSS/API kiểm tra riêng",
+        "Điều kiện sử dụng": "Ghi năm báo cáo và thời điểm dữ liệu; số liệu vận tải biến động nhanh.",
+        "Người phụ trách": "Nhóm nghiên cứu",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Ưu tiên Review of Maritime Transport."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 6
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC004",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC004",
+        "Tên nguồn": "CSCMP – Supply Chain Management Definitions and Glossary",
+        "Loại nguồn": "Hiệp hội chuyên môn",
+        "Chủ đề theo dõi": "Định nghĩa logistics, SCM và thuật ngữ",
+        "Phạm vi": "Toàn cầu",
+        "URL/RSS/API": "https://cscmp.org/CSCMP/cscmp/educate/scm_definitions_and_glossary_of_terms.aspx",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "Không xác nhận",
+        "Điều kiện sử dụng": "Dùng cho định nghĩa; ghi rõ là định nghĩa CSCMP.",
+        "Người phụ trách": "Nhóm chuyên môn",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Nguồn thuật ngữ logistics."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 7
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC005",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC005",
+        "Tên nguồn": "ASCM – SCOR Digital Standard",
+        "Loại nguồn": "Hiệp hội chuyên môn / mô hình",
+        "Chủ đề theo dõi": "Quy trình chuỗi cung ứng, KPI, reliability, responsiveness, cost, asset, environment",
+        "Phạm vi": "Toàn cầu",
+        "URL/RSS/API": "https://scor.ascm.org/",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "Không xác nhận",
+        "Điều kiện sử dụng": "Kiểm tra phiên bản SCOR và trang metric cụ thể; không tự thay đổi công thức chuẩn.",
+        "Người phụ trách": "Nhóm chuyên môn",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Nguồn tham chiếu KPI."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 8
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC006",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC006",
+        "Tên nguồn": "GS1 – EPCIS Standard",
+        "Loại nguồn": "Tổ chức tiêu chuẩn",
+        "Chủ đề theo dõi": "Truy xuất, visibility, dữ liệu sự kiện chuỗi cung ứng",
+        "Phạm vi": "Toàn cầu",
+        "URL/RSS/API": "https://www.gs1.org/standards/epcis",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "Tài liệu tiêu chuẩn công khai",
+        "Điều kiện sử dụng": "Ghi phiên bản EPCIS; phân biệt tiêu chuẩn và giải pháp thương mại.",
+        "Người phụ trách": "Nhóm chuyên môn",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Chuẩn dữ liệu truy xuất."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 9
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC007",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC007",
+        "Tên nguồn": "NIST – AI Risk Management Framework",
+        "Loại nguồn": "Cơ quan tiêu chuẩn quốc gia Hoa Kỳ",
+        "Chủ đề theo dõi": "Quản trị rủi ro AI, độ tin cậy, minh bạch, bảo mật",
+        "Phạm vi": "Hoa Kỳ/quốc tế tham khảo",
+        "URL/RSS/API": "https://www.nist.gov/itl/ai-risk-management-framework",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "Có tài liệu tải xuống",
+        "Điều kiện sử dụng": "Khung tự nguyện; nêu rõ không phải tư vấn pháp lý hay chứng nhận.",
+        "Người phụ trách": "Nhóm AI",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Nguồn nguyên tắc chatbot đáng tin cậy."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 10
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC008",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC008",
+        "Tên nguồn": "OECD – Digitalisation of SMEs",
+        "Loại nguồn": "Tổ chức quốc tế",
+        "Chủ đề theo dõi": "Chuyển đổi số SME, kỹ năng, dữ liệu, an ninh mạng, rào cản",
+        "Phạm vi": "Các quốc gia OECD",
+        "URL/RSS/API": "https://www.oecd.org/en/topics/digitalisation-of-smes.html",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "Có ấn phẩm công khai",
+        "Điều kiện sử dụng": "Không áp tỷ lệ khảo sát đa quốc gia cho Việt Nam nếu không có mẫu Việt Nam.",
+        "Người phụ trách": "Nhóm nghiên cứu",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Dùng phân tích rào cản và khuyến nghị."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 11
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC009",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC009",
+        "Tên nguồn": "ISO – Standards explained",
+        "Loại nguồn": "Tổ chức tiêu chuẩn quốc tế",
+        "Chủ đề theo dõi": "ISO 9001, ISO 14001, ISO/IEC 42001 và hệ thống quản lý",
+        "Phạm vi": "Toàn cầu",
+        "URL/RSS/API": "https://www.iso.org/home/insights-news/resources/standards-explained.html",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "Có nội dung công khai; tiêu chuẩn đầy đủ có bản quyền",
+        "Điều kiện sử dụng": "Trang giới thiệu không thay thế toàn văn tiêu chuẩn; không sao chép nội dung tiêu chuẩn trả phí.",
+        "Người phụ trách": "Nhóm chuyên môn",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Chú ý phiên bản tiêu chuẩn hiện hành."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 12
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC010",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC010",
+        "Tên nguồn": "European Commission – AI Act",
+        "Loại nguồn": "Cơ quan quản lý khu vực",
+        "Chủ đề theo dõi": "Quy định AI, mốc áp dụng, nghĩa vụ theo vai trò",
+        "Phạm vi": "EU",
+        "URL/RSS/API": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "Trang pháp lý công khai",
+        "Điều kiện sử dụng": "Theo dõi sửa đổi và mốc hiệu lực; chỉ áp dụng khi có yếu tố thuộc phạm vi EU.",
+        "Người phụ trách": "Pháp chế",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Trang cập nhật quy định."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 13
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC011",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC011",
+        "Tên nguồn": "World Bank – Logistics Performance Index 2023",
+        "Loại nguồn": "Tổ chức quốc tế / báo cáo",
+        "Chủ đề theo dõi": "LPI 2023, 139 nền kinh tế, cấu phần logistics",
+        "Phạm vi": "Toàn cầu",
+        "URL/RSS/API": "https://www.worldbank.org/en/news/press-release/2023/04/21/world-bank-releases-logistics-performance-index-2023",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "Có báo cáo công khai",
+        "Điều kiện sử dụng": "Dùng đúng bối cảnh 2023, không gọi là dữ liệu mới nhất của mọi chỉ báo.",
+        "Người phụ trách": "Nhóm nghiên cứu",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Thông cáo phát hành LPI 2023."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 14
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC012",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC012",
+        "Tên nguồn": "OECD – SME digitalisation for competitiveness (2025)",
+        "Loại nguồn": "Báo cáo nghiên cứu",
+        "Chủ đề theo dõi": "Rào cản và tỷ lệ khảo sát số hóa SME",
+        "Phạm vi": "Mẫu khảo sát đa quốc gia",
+        "URL/RSS/API": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/04/sme-digitalisation-for-competitiveness_3116862a/197e3077-en.pdf",
+        "Ưu tiên": "Cao",
+        "Độ tin cậy": "Cao",
+        "Có RSS/API?": "PDF công khai",
+        "Điều kiện sử dụng": "Khi trích số liệu ghi trang/biểu đồ, mẫu khảo sát và năm; không suy rộng quá phạm vi.",
+        "Người phụ trách": "Nhóm nghiên cứu",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Nguồn số liệu rào cản SME."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 15
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC013",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC013",
+        "Tên nguồn": "Vietnam Logistics Review",
+        "Loại nguồn": "Báo chí chuyên ngành",
+        "Chủ đề theo dõi": "Tin tức, phân tích ngành logistics Việt Nam",
+        "Phạm vi": "Việt Nam",
+        "URL/RSS/API": "https://vlr.vn/",
+        "Ưu tiên": "Trung bình",
+        "Độ tin cậy": "Trung bình",
+        "Có RSS/API?": "Kiểm tra trực tiếp",
+        "Điều kiện sử dụng": "Dùng làm nguồn bối cảnh/tin tức; với số liệu quan trọng phải truy xuất nguồn gốc ban đầu.",
+        "Người phụ trách": "Nhóm nội dung",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Báo chí chuyên ngành; không thay thế văn bản gốc."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 16
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC014",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC014",
+        "Tên nguồn": "Báo Công Thương",
+        "Loại nguồn": "Báo chí chính thống",
+        "Chủ đề theo dõi": "Chính sách công thương, xuất nhập khẩu, logistics",
+        "Phạm vi": "Việt Nam",
+        "URL/RSS/API": "https://congthuong.vn/",
+        "Ưu tiên": "Trung bình-Cao",
+        "Độ tin cậy": "Trung bình-Cao",
+        "Có RSS/API?": "Kiểm tra trực tiếp",
+        "Điều kiện sử dụng": "Ưu tiên bài dẫn văn bản/báo cáo gốc; xác minh ngày đăng và cơ quan phát ngôn.",
+        "Người phụ trách": "Nhóm nội dung",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Nguồn báo chí để cập nhật diễn biến."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 17
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "SRC015",
+    "category": "source",
+    "data": {
+      "fields": {
+        "SRC_ID": "SRC015",
+        "Tên nguồn": "Google Scholar",
+        "Loại nguồn": "Cơ sở dữ liệu học thuật",
+        "Chủ đề theo dõi": "Bài báo khoa học, luận văn, trích dẫn",
+        "Phạm vi": "Toàn cầu",
+        "URL/RSS/API": "https://scholar.google.com/",
+        "Ưu tiên": "Cao (để tìm kiếm)",
+        "Độ tin cậy": "Tùy bài báo",
+        "Có RSS/API?": "Có công cụ tìm kiếm",
+        "Điều kiện sử dụng": "Không coi Scholar là nhà xuất bản; phải mở bài gốc, kiểm tra tạp chí, DOI, tác giả và năm.",
+        "Người phụ trách": "Nhóm nghiên cứu",
+        "Ngày kiểm tra": "2026-11-13T00:00:00",
+        "Ghi chú": "Dùng để tìm, không dùng làm trích dẫn cuối cùng nếu có bản gốc."
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Nguon_tin",
+        "row": 18
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "CS001",
+    "category": "handoff",
+    "data": {
+      "fields": {
+        "CASE_ID": "CS001",
+        "Tình huống": "Không tìm thấy câu trả lời đáng tin cậy",
+        "Dấu hiệu": "Không có tài liệu phù hợp; nguồn mâu thuẫn; mức tin cậy thấp",
+        "Thông tin cần hỏi": "Câu hỏi; mục đích; tài liệu liên quan nếu người dùng tự nguyện",
+        "Bộ phận nhận": "CSKH/Chuyên môn",
+        "Ưu tiên": "Bình thường",
+        "SLA phản hồi": "Trong 1 ngày làm việc – đề xuất, cần POLYMATCH phê duyệt",
+        "Thông báo người dùng": "Tôi chưa có đủ căn cứ để trả lời chính xác. Tôi sẽ chuyển câu hỏi đến bộ phận phụ trách nếu bạn đồng ý.",
+        "Điều kiện chuyển": "Người dùng đồng ý tạo yêu cầu hoặc câu hỏi thuộc phạm vi cần chuyên gia.",
+        "Người duyệt": "Nhóm vận hành"
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Chuyen_tiep_CSKH",
+        "row": 4
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "CS002",
+    "category": "handoff",
+    "data": {
+      "fields": {
+        "CASE_ID": "CS002",
+        "Tình huống": "Khiếu nại thanh toán/đối soát",
+        "Dấu hiệu": "Báo trừ tiền, giao dịch lỗi, hóa đơn hoặc hoàn tiền",
+        "Thông tin cần hỏi": "Mã giao dịch rút gọn; thời điểm; số tiền; email/tài khoản liên hệ theo quy trình an toàn",
+        "Bộ phận nhận": "Tài chính/CSKH",
+        "Ưu tiên": "Cao",
+        "SLA phản hồi": "Trong 4 giờ làm việc – đề xuất, cần phê duyệt",
+        "Thông báo người dùng": "Tôi sẽ chuyển thông tin đến bộ phận phụ trách kiểm tra. Vui lòng không gửi mật khẩu, OTP hoặc toàn bộ thông tin thẻ.",
+        "Điều kiện chuyển": "Mọi khiếu nại liên quan tiền, hóa đơn, hoàn phí.",
+        "Người duyệt": "Tài chính + CSKH"
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Chuyen_tiep_CSKH",
+        "row": 5
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "CS003",
+    "category": "handoff",
+    "data": {
+      "fields": {
+        "CASE_ID": "CS003",
+        "Tình huống": "Sự cố tài khoản/đăng nhập",
+        "Dấu hiệu": "Không đăng nhập được; nghi ngờ chiếm quyền; tài khoản bị khóa",
+        "Thông tin cần hỏi": "Email/tên tài khoản; thời điểm; ảnh lỗi đã che dữ liệu nhạy cảm",
+        "Bộ phận nhận": "Kỹ thuật/CSKH",
+        "Ưu tiên": "Cao",
+        "SLA phản hồi": "Trong 4 giờ làm việc – đề xuất, cần phê duyệt",
+        "Thông báo người dùng": "Tôi sẽ chuyển yêu cầu đến bộ phận kỹ thuật. Không cung cấp mật khẩu hoặc mã OTP cho bất kỳ ai.",
+        "Điều kiện chuyển": "Sự cố ảnh hưởng truy cập hoặc có dấu hiệu an ninh.",
+        "Người duyệt": "Kỹ thuật"
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Chuyen_tiep_CSKH",
+        "row": 6
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "CS004",
+    "category": "handoff",
+    "data": {
+      "fields": {
+        "CASE_ID": "CS004",
+        "Tình huống": "Dữ liệu cá nhân/bảo mật",
+        "Dấu hiệu": "Yêu cầu truy cập, chỉnh sửa, xóa dữ liệu; nghi ngờ rò rỉ",
+        "Thông tin cần hỏi": "Mô tả yêu cầu; thông tin xác minh danh tính theo quy trình được phê duyệt",
+        "Bộ phận nhận": "Phụ trách dữ liệu/pháp chế",
+        "Ưu tiên": "Khẩn cấp",
+        "SLA phản hồi": "Thông báo tiếp nhận ngay; xử lý theo SLA pháp lý/nội bộ đã phê duyệt",
+        "Thông báo người dùng": "Yêu cầu của bạn cần bộ phận phụ trách dữ liệu tiếp nhận. Vui lòng không gửi thêm dữ liệu nhạy cảm qua cuộc trò chuyện này.",
+        "Điều kiện chuyển": "Yêu cầu quyền dữ liệu hoặc sự cố rò rỉ/an ninh.",
+        "Người duyệt": "Pháp chế/bảo mật"
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Chuyen_tiep_CSKH",
+        "row": 7
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "CS005",
+    "category": "handoff",
+    "data": {
+      "fields": {
+        "CASE_ID": "CS005",
+        "Tình huống": "Tranh chấp/điều khoản hợp đồng",
+        "Dấu hiệu": "Bất đồng về chất lượng, cam kết, trách nhiệm, điều khoản",
+        "Thông tin cần hỏi": "Mã hợp đồng/đơn hàng; nội dung tranh chấp; tài liệu liên quan qua kênh bảo mật",
+        "Bộ phận nhận": "Pháp chế/Quản lý đối tác",
+        "Ưu tiên": "Cao",
+        "SLA phản hồi": "Trong 1 ngày làm việc – đề xuất, cần phê duyệt",
+        "Thông báo người dùng": "Nội dung này cần nhân viên có thẩm quyền kiểm tra theo hồ sơ và điều khoản liên quan.",
+        "Điều kiện chuyển": "Có tranh chấp hoặc yêu cầu diễn giải nghĩa vụ pháp lý/hợp đồng.",
+        "Người duyệt": "Pháp chế"
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Chuyen_tiep_CSKH",
+        "row": 8
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "CS006",
+    "category": "handoff",
+    "data": {
+      "fields": {
+        "CASE_ID": "CS006",
+        "Tình huống": "Tư vấn kỹ thuật/triển khai chuyên sâu",
+        "Dấu hiệu": "Cần khảo sát tích hợp ERP/WMS/TMS/API; yêu cầu kiến trúc hoặc POC",
+        "Thông tin cần hỏi": "Hệ thống hiện tại; mục tiêu; quy mô; yêu cầu tích hợp; người phụ trách kỹ thuật",
+        "Bộ phận nhận": "Chuyên gia giải pháp",
+        "Ưu tiên": "Bình thường",
+        "SLA phản hồi": "Trong 2 ngày làm việc – đề xuất, cần phê duyệt",
+        "Thông báo người dùng": "Tôi sẽ chuyển nhu cầu của bạn đến chuyên gia giải pháp để đánh giá chi tiết hơn.",
+        "Điều kiện chuyển": "Cần thiết kế giải pháp hoặc xác minh tương thích thực tế.",
+        "Người duyệt": "Nhóm chuyên môn"
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Chuyen_tiep_CSKH",
+        "row": 9
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "CS007",
+    "category": "handoff",
+    "data": {
+      "fields": {
+        "CASE_ID": "CS007",
+        "Tình huống": "Đánh giá nhà cung cấp/đề nghị chứng thực",
+        "Dấu hiệu": "Yêu cầu xác nhận uy tín, chứng chỉ, chất lượng hoặc khiếu nại nhà cung cấp",
+        "Thông tin cần hỏi": "Tên pháp nhân; mã số thuế; bằng chứng công khai; nội dung cần xác minh",
+        "Bộ phận nhận": "Quản lý nhà cung cấp",
+        "Ưu tiên": "Cao",
+        "SLA phản hồi": "Trong 1 ngày làm việc – đề xuất, cần phê duyệt",
+        "Thông báo người dùng": "POLYMATCH cần kiểm tra hồ sơ và bằng chứng trước khi đưa ra kết luận.",
+        "Điều kiện chuyển": "Yêu cầu chứng thực hoặc có dấu hiệu thông tin nhà cung cấp không chính xác.",
+        "Người duyệt": "Quản lý đối tác"
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Chuyen_tiep_CSKH",
+        "row": 10
+      }
+    },
+    "approved": false
+  },
+  {
+    "external_id": "CS008",
+    "category": "handoff",
+    "data": {
+      "fields": {
+        "CASE_ID": "CS008",
+        "Tình huống": "Yêu cầu gặp nhân viên",
+        "Dấu hiệu": "Người dùng nói muốn gặp người thật hoặc không hài lòng với chatbot",
+        "Thông tin cần hỏi": "Chủ đề; khung giờ liên hệ; phương thức liên hệ mà người dùng đồng ý cung cấp",
+        "Bộ phận nhận": "CSKH",
+        "Ưu tiên": "Bình thường",
+        "SLA phản hồi": "Trong 1 ngày làm việc – đề xuất, cần phê duyệt",
+        "Thông báo người dùng": "Tôi có thể chuyển yêu cầu để nhân viên liên hệ. Bạn chỉ cần cung cấp thông tin liên hệ nếu đồng ý.",
+        "Điều kiện chuyển": "Người dùng yêu cầu nhân viên hoặc từ chối tiếp tục với chatbot.",
+        "Người duyệt": "Nhóm CSKH"
+      },
+      "origin": {
+        "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+        "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+        "sheet": "Chuyen_tiep_CSKH",
+        "row": 11
+      }
+    },
+    "approved": false
+  }
+]

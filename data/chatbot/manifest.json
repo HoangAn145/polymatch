@@ -1,0 +1,22 @@
+{
+  "source_file": "Mau_data_chatbot_POLYMATCH.xlsx",
+  "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+  "counts": {
+    "FAQ_CSKH": 53,
+    "Logistics": 35,
+    "Cong_nghe_CDS": 34,
+    "Thi_truong": 9,
+    "Nguon_tin": 15,
+    "Test_chatbot": 14,
+    "Chuyen_tiep_CSKH": 8
+  },
+  "knowledge_count": 131,
+  "reference_count": 23,
+  "evaluation_count": 14,
+  "published_count": 0,
+  "status_counts": {
+    "Cần duyệt": 85,
+    "Đã biên soạn – cần duyệt": 5,
+    "Chờ xác minh": 41
+  }
+}

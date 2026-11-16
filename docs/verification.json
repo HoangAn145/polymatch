@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-16",
+  "typescript": "passed",
+  "automated_tests": {"passed": 10, "failed": 0, "skipped": 0},
+  "production_build": "passed_with_nonfatal_vite_warnings",
+  "browser_integration": "passed_with_simulated_supabase",
+  "browser_flows": ["login", "25_answers_and_baseline_kpis", "assessment_persistence", "resource_checked_roadmap", "three_scenario_roi_chart", "kpi_history", "faq", "handoff", "reports", "logout", "admin_review", "published_faq_citation"],
+  "hosted_supabase": {
+    "project_ref": "cjwnwdzegbdywuhbkavb",
+    "migrations_applied": ["202611160001", "202611160002", "202611160003"],
+    "knowledge_rows": 131,
+    "published_knowledge": 0,
+    "reference_rows": 23,
+    "solution_rows": 12,
+    "published_solutions": 0,
+    "rls_tables": 8,
+    "rls_rollback_smoke": "passed",
+    "remaining_test_users": 0,
+    "auth_email_enabled": true
+  },
+  "workbook": {"records": 168, "artifacts_reproduced_byte_for_byte": true},
+  "not_verified": ["real_signup_email_login_and_recovery", "production_redirect_configuration", "real_gemini_and_web_search", "vercel_deployment"],
+  "missing_runtime_variables": ["GEMINI_API_KEY", "VERCEL_TOKEN"],
+  "environment_configuration_published": false,
+  "git_pushed": false,
+  "vercel_deployed": false
+}

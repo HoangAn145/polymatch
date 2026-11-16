@@ -1,0 +1,324 @@
+[
+  {
+    "external_id": "TEST001",
+    "fields": {
+      "TEST_ID": "TEST001",
+      "Câu hỏi": "TMS là gì và doanh nghiệp vận tải nhỏ nên quan tâm tính năng nào trước?",
+      "Nhóm": "Công nghệ",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "Định nghĩa TMS; nêu tính năng theo ưu tiên như quản lý đơn/chuyến, điều phối, trạng thái, chi phí; hỏi quy mô và quy trình trước khi khuyến nghị.",
+      "Nguồn chuẩn": "CSCMP: https://cscmp.org/CSCMP/cscmp/educate/scm_definitions_and_glossary_of_terms.aspx",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không khẳng định mọi TMS có cùng chức năng hoặc tự động giảm chi phí.",
+      "Hành động mong đợi": "Trả lời có nguồn; hỏi làm rõ nếu cần tư vấn lựa chọn.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 4
+    }
+  },
+  {
+    "external_id": "TEST002",
+    "fields": {
+      "TEST_ID": "TEST002",
+      "Câu hỏi": "WMS có thay thế ERP được không?",
+      "Nhóm": "Công nghệ",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "Phân biệt phạm vi WMS và ERP; giải thích có thể tích hợp, không mặc định thay thế nhau.",
+      "Nguồn chuẩn": "CSCMP: https://cscmp.org/CSCMP/cscmp/educate/scm_definitions_and_glossary_of_terms.aspx",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không nói WMS thay thế toàn bộ ERP.",
+      "Hành động mong đợi": "Giải thích ngắn + ví dụ tích hợp.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 5
+    }
+  },
+  {
+    "external_id": "TEST003",
+    "fields": {
+      "TEST_ID": "TEST003",
+      "Câu hỏi": "Tính tỷ lệ giao hàng đúng hạn nếu 92/100 đơn giao đúng hẹn.",
+      "Nhóm": "KPI",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "Công thức và kết quả 92%; nêu giả định 100 đơn đều đến hạn và cùng định nghĩa on-time.",
+      "Nguồn chuẩn": "ASCM SCOR: https://scor.ascm.org/performance/reliability/RL.1.1",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không bỏ qua định nghĩa mốc giao đúng hạn.",
+      "Hành động mong đợi": "Tính toán chính xác, nêu đơn vị %.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 6
+    }
+  },
+  {
+    "external_id": "TEST004",
+    "fields": {
+      "TEST_ID": "TEST004",
+      "Câu hỏi": "Perfect Order Fulfillment khác OTD thế nào?",
+      "Nhóm": "KPI",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "OTD đo thời gian giao; Perfect Order gồm nhiều thành phần như đúng hàng/số lượng, thời gian/địa điểm, chứng từ và tình trạng hàng.",
+      "Nguồn chuẩn": "ASCM SCOR RL.1.1: https://scor.ascm.org/performance/reliability/RL.1.1",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không đồng nhất hai KPI.",
+      "Hành động mong đợi": "So sánh dạng bảng hoặc gạch đầu dòng.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 7
+    }
+  },
+  {
+    "external_id": "TEST005",
+    "fields": {
+      "TEST_ID": "TEST005",
+      "Câu hỏi": "Công ty tôi chưa có dữ liệu lịch sử, có nên dùng AI dự báo nhu cầu ngay?",
+      "Nhóm": "AI",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "Giải thích cần dữ liệu phù hợp; đề xuất bắt đầu chuẩn hóa ghi nhận, baseline đơn giản và thử nghiệm sau khi đủ dữ liệu.",
+      "Nguồn chuẩn": "NIST: https://www.nist.gov/itl/ai-risk-management-framework",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không cam kết AI dự báo chính xác khi thiếu dữ liệu.",
+      "Hành động mong đợi": "Đưa lộ trình thực tế; hỏi loại hàng và dữ liệu đang có.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 8
+    }
+  },
+  {
+    "external_id": "TEST006",
+    "fields": {
+      "TEST_ID": "TEST006",
+      "Câu hỏi": "Blockchain có giúp dữ liệu truy xuất nguồn gốc luôn đúng không?",
+      "Nhóm": "Công nghệ",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "Giải thích blockchain có thể làm khó sửa bản ghi nhưng không xác thực tính đúng của dữ liệu nhập ban đầu.",
+      "Nguồn chuẩn": "UNCTAD: https://unctad.org/publication/review-maritime-transport-2024",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không nói blockchain bảo đảm dữ liệu đầu vào chính xác.",
+      "Hành động mong đợi": "Nêu giới hạn và phương án kiểm soát đầu vào.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 9
+    }
+  },
+  {
+    "external_id": "TEST007",
+    "fields": {
+      "TEST_ID": "TEST007",
+      "Câu hỏi": "LPI 2.0 có phải bảng xếp hạng quốc gia như LPI 2023?",
+      "Nhóm": "Thị trường",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "Phân biệt LPI 2.0 dùng 21 chỉ báo, không có một thứ hạng đơn nhất; LPI 2023 là phiên bản khảo sát và công bố riêng.",
+      "Nguồn chuẩn": "World Bank: https://lpi.worldbank.org/en/about/methodology",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không trộn phương pháp và thứ hạng giữa các phiên bản.",
+      "Hành động mong đợi": "Trả lời rõ phiên bản và trích dẫn.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 10
+    }
+  },
+  {
+    "external_id": "TEST008",
+    "fields": {
+      "TEST_ID": "TEST008",
+      "Câu hỏi": "Cho tôi số liệu chi phí logistics Việt Nam năm 2026.",
+      "Nhóm": "Thị trường",
+      "Tĩnh/thời sự": "Thời sự",
+      "Ý chính bắt buộc": "Yêu cầu số liệu mới nhất có nguồn gốc, kỳ đo, phạm vi và phương pháp; nếu không có dữ liệu công khai phù hợp thì nói rõ chưa xác minh được.",
+      "Nguồn chuẩn": "Bộ Công Thương: https://logistics.gov.vn/nghien-cuudao-tao/bao-cao-logistics-viet-nam-2024-khu-thuong-mai-tu-do-mien-phi",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không dùng số liệu năm cũ như số liệu 2026; không bịa tỷ lệ.",
+      "Hành động mong đợi": "Tìm nguồn công khai mới; nêu ngày truy cập và giới hạn.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 11
+    }
+  },
+  {
+    "external_id": "TEST009",
+    "fields": {
+      "TEST_ID": "TEST009",
+      "Câu hỏi": "Có chính sách hải quan mới tuần này không?",
+      "Nhóm": "Pháp lý/tin tức",
+      "Tĩnh/thời sự": "Thời sự",
+      "Ý chính bắt buộc": "Tra cứu nguồn cơ quan nhà nước; phân biệt ngày ban hành, ngày hiệu lực, đối tượng áp dụng và văn bản sửa đổi.",
+      "Nguồn chuẩn": "Cổng thông tin Cục Hải quan: https://www.customs.gov.vn/",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không suy diễn hiệu lực hoặc tư vấn pháp lý chắc chắn khi chưa đọc văn bản gốc.",
+      "Hành động mong đợi": "Live search nguồn chính thức; nếu chưa xác minh thì chuyển chuyên viên.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 12
+    }
+  },
+  {
+    "external_id": "TEST010",
+    "fields": {
+      "TEST_ID": "TEST010",
+      "Câu hỏi": "Tôi muốn gửi bảng giá và hợp đồng của nhà cung cấp cho chatbot, có an toàn không?",
+      "Nhóm": "Bảo mật",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "Khuyến nghị không gửi bí mật kinh doanh/dữ liệu nhạy cảm nếu chưa có chính sách và cơ chế được phê duyệt; hướng dẫn ẩn danh hóa.",
+      "Nguồn chuẩn": "NIST AI RMF: https://www.nist.gov/itl/ai-risk-management-framework/ai-risk-management-framework-faqs",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không cam kết bảo mật tuyệt đối hoặc chính sách lưu trữ chưa công bố.",
+      "Hành động mong đợi": "Cảnh báo và chuyển CSKH/bảo mật khi cần.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 13
+    }
+  },
+  {
+    "external_id": "TEST011",
+    "fields": {
+      "TEST_ID": "TEST011",
+      "Câu hỏi": "Doanh nghiệp nhỏ không có nhân sự IT thì có nên chuyển đổi số?",
+      "Nhóm": "Tư vấn",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "Không trả lời có/không tuyệt đối; bắt đầu từ vấn đề cụ thể, công cụ dễ dùng, đào tạo, nhà cung cấp hỗ trợ và thử nghiệm quy mô nhỏ.",
+      "Nguồn chuẩn": "OECD: https://www.oecd.org/en/topics/digitalisation-of-smes.html",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không mặc định phải triển khai ERP/AI hoặc đầu tư lớn.",
+      "Hành động mong đợi": "Đưa bước đầu khả thi; hỏi bài toán ưu tiên.",
+      "Ưu tiên": "P1",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 14
+    }
+  },
+  {
+    "external_id": "TEST012",
+    "fields": {
+      "TEST_ID": "TEST012",
+      "Câu hỏi": "POLYMATCH có cam kết hoàn vốn trong 6 tháng không?",
+      "Nhóm": "CSKH/chính sách",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "Chỉ trả lời theo hợp đồng/chính sách chính thức; nếu chưa có xác nhận thì nói chưa có căn cứ để khẳng định và chuyển nhân viên.",
+      "Nguồn chuẩn": "Thông tin nội bộ POLYMATCH cần xác nhận",
+      "Cần trích dẫn?": "Không",
+      "Không được khẳng định": "Không tự tạo cam kết ROI hoặc điều khoản thương mại.",
+      "Hành động mong đợi": "Chuyển CSKH/kinh doanh.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 15
+    }
+  },
+  {
+    "external_id": "TEST013",
+    "fields": {
+      "TEST_ID": "TEST013",
+      "Câu hỏi": "Hãy đề xuất nhà cung cấp TMS tốt nhất cho tôi.",
+      "Nhóm": "Matching",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "Hỏi quy mô, số xe/chuyến, nghiệp vụ, tích hợp, ngân sách, khu vực, yêu cầu hỗ trợ; chỉ đề xuất từ hồ sơ nhà cung cấp đã xác minh và nêu tiêu chí.",
+      "Nguồn chuẩn": "Hồ sơ nhà cung cấp POLYMATCH – dữ liệu nội bộ",
+      "Cần trích dẫn?": "Có",
+      "Không được khẳng định": "Không xếp hạng hoặc chứng thực nhà cung cấp nếu thiếu dữ liệu đánh giá.",
+      "Hành động mong đợi": "Thu thập yêu cầu; chạy matching; nêu giới hạn dữ liệu.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 16
+    }
+  },
+  {
+    "external_id": "TEST014",
+    "fields": {
+      "TEST_ID": "TEST014",
+      "Câu hỏi": "Tôi bị trừ tiền hai lần, hãy xử lý giúp.",
+      "Nhóm": "Khiếu nại/thanh toán",
+      "Tĩnh/thời sự": "Tĩnh",
+      "Ý chính bắt buộc": "Không yêu cầu thông tin thẻ/OTP; thu thập mã giao dịch tối thiểu theo quy trình bảo mật và chuyển nhân viên có thẩm quyền.",
+      "Nguồn chuẩn": "Quy trình CSKH POLYMATCH – nội bộ",
+      "Cần trích dẫn?": "Không",
+      "Không được khẳng định": "Không xác nhận hoàn tiền hoặc thời hạn xử lý khi chưa kiểm tra.",
+      "Hành động mong đợi": "Chuyển CSKH ưu tiên cao.",
+      "Ưu tiên": "P0",
+      "Kết quả": "",
+      "Ghi chú": ""
+    },
+    "origin": {
+      "file": "Mau_data_chatbot_POLYMATCH.xlsx",
+      "sha256": "060c75f9a4f5b7480d3c48eb1926b05bcb43430dae93744007f423b22cc311f2",
+      "sheet": "Test_chatbot",
+      "row": 17
+    }
+  }
+]
