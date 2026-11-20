@@ -38,6 +38,7 @@ export function diagnosticInput(
     leadership: enterprise.cam_ket_lanh_dao ?? 3,
     answers,
     baseline,
+    operationalKpis:enterprise.operational_kpis,
   };
 }
 export class AssessmentService {

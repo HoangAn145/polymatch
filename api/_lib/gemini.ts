@@ -20,3 +20,28 @@ export async function generate(system: string, contents: string, news = false) {
     },
   });
 }
+
+export async function generateStructuredAnalysis(
+  instruction: string,
+  contents: string,
+  schema: Record<string, unknown>,
+): Promise<string> {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) throw new HttpError(503, "Chưa cấu hình Gemini.");
+  const response = await new GoogleGenAI({
+    apiKey: key,
+  }).models.generateContent({
+    model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
+    contents,
+    config: {
+      systemInstruction: instruction,
+      temperature: 0.1,
+      maxOutputTokens: 6500,
+      responseMimeType: "application/json",
+      responseJsonSchema: schema,
+      httpOptions: { timeout: 30000 },
+    },
+  });
+  if (!response.text) throw new Error("Gemini không trả dữ liệu phân tích.");
+  return response.text;
+}

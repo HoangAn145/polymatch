@@ -181,7 +181,7 @@ export function legacyAssessment(
     })),
     top_khoang_trong: gaps,
     ai_dien_giai: {
-      tom_tat: result.interpretation,
+      tom_tat: result.analysis?.generatedBy === "gemini" ? `${result.interpretation}\n\n${result.analysis.summary}` : result.interpretation,
       diem_manh: pillars
         .filter((p) => p.diem >= 60)
         .map((p) => `${p.ten}: ${p.diem}/100`),

@@ -1,3 +1,8 @@
+import {
+  normalizeOperationalKpis,
+  buildDiagnosticAnalysis,
+  type OperationalKpiInput,
+} from "./diagnosticEvidence";
 import { DBI_QUESTIONS, LDMI_QUESTIONS } from "../data/assessmentQuestions";
 import { KNOWLEDGE_GAPS } from "../data/knowledgeGaps";
 import { SOLUTIONS_DATA } from "../data/solutionsData";
@@ -11,6 +16,7 @@ export interface DiagnosticInput {
   leadership: number;
   answers: Record<string, number>;
   baseline: { name: string; value: number; unit: string };
+  operationalKpis?: OperationalKpiInput[];
 }
 export function questionsFor(branch: string) {
   return [
@@ -32,15 +38,18 @@ export function validateInput(input: DiagnosticInput) {
       throw new Error("Mức sẵn sàng phải từ 1 đến 5.");
   if (
     !input.answers ||
-    !input.baseline?.name?.trim() ||
+    typeof input.baseline?.name !== "string" ||
+    !input.baseline.name.trim() ||
     input.baseline.name.length > 200 ||
-    !input.baseline.unit?.trim() ||
+    typeof input.baseline.unit !== "string" ||
+    !input.baseline.unit.trim() ||
     input.baseline.unit.length > 30 ||
     !Number.isFinite(input.baseline.value) ||
     input.baseline.value < 0 ||
     input.baseline.value > 1e15
   )
     throw new Error("Nhập KPI đầu vào hợp lệ.");
+  normalizeOperationalKpis(input.operationalKpis);
   for (const q of questionsFor(input.branch)) {
     const v = input.answers[q.id];
     if (!Number.isInteger(v) || !q.phuong_an.some((o) => o.muc === v))
@@ -71,6 +80,13 @@ export function solutionRejections(
 }
 export function diagnose(input: DiagnosticInput) {
   validateInput(input);
+  input = {
+    ...input,
+    operationalKpis: normalizeOperationalKpis(input.operationalKpis),
+    answers: Object.fromEntries(
+      questionsFor(input.branch).map((q) => [q.id, input.answers[q.id]]),
+    ),
+  };
   const questions = questionsFor(input.branch);
   const score = (ids: string[]) =>
     mean(ids.map((id) => (input.answers[id] - 1) * 25));
@@ -150,7 +166,15 @@ export function diagnose(input: DiagnosticInput) {
     ];
   }).sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
   return {
-    version: 1,
+    version: 2,
+    analysis: buildDiagnosticAnalysis(input.operationalKpis!, {
+      dbi,
+      ldmi,
+      people: input.people,
+      data: input.data,
+      leadership: input.leadership,
+      groups,
+    }),
     input,
     dbi,
     ldmi,

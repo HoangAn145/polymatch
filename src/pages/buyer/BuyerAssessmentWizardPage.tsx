@@ -1,3 +1,5 @@
+import { OperationalKpiEditor } from "../../components/platform/OperationalKpiEditor";
+import type { OperationalKpiInput } from "../../lib/diagnosticEvidence";
 import { demoMode } from "../../lib/supabase";
 import { budgetFor } from "../../services/assessmentService";
 import React, { useState, useEffect } from "react";
@@ -39,6 +41,10 @@ export const BuyerAssessmentWizardPage: React.FC = () => {
     data: enterprise.san_sang_du_lieu ?? 3,
     leadership: enterprise.cam_ket_lanh_dao ?? 3,
   });
+  const [kpiDraftLoaded, setKpiDraftLoaded] = useState(false);
+  const [operationalKpis, setOperationalKpis] = useState<OperationalKpiInput[]>(
+    enterprise.operational_kpis || [],
+  );
   const [baseline, setBaseline] = useState({
     name: "Tỷ lệ giao đúng hạn",
     value: 0,
@@ -66,6 +72,13 @@ export const BuyerAssessmentWizardPage: React.FC = () => {
   // Load draft
   useEffect(() => {
     try {
+      const metricsDraft = localStorage.getItem(
+        `${DRAFT_KEY}_${enterprise.id}_operational`,
+      );
+      if (metricsDraft) {
+        const parsed = JSON.parse(metricsDraft);
+        if (Array.isArray(parsed)) setOperationalKpis(parsed);
+      }
       const draft = localStorage.getItem(`${DRAFT_KEY}_${enterprise.id}`);
       if (draft) {
         setAnswers(JSON.parse(draft));
@@ -78,8 +91,20 @@ export const BuyerAssessmentWizardPage: React.FC = () => {
       }
     } catch {
       // Ignore
+    } finally {
+      setKpiDraftLoaded(true);
     }
   }, [enterprise.id]);
+
+  useEffect(() => {
+    if (!kpiDraftLoaded) return;
+    try {
+      localStorage.setItem(
+        `${DRAFT_KEY}_${enterprise.id}_operational`,
+        JSON.stringify(operationalKpis),
+      );
+    } catch {}
+  }, [operationalKpis, kpiDraftLoaded, enterprise.id]);
 
   // Autosave draft
   const saveDraft = (updatedAnswers: Record<string, number>) => {
@@ -101,6 +126,12 @@ export const BuyerAssessmentWizardPage: React.FC = () => {
 
   const handleManualSaveDraft = () => {
     saveDraft(answers);
+    try {
+      localStorage.setItem(
+        `${DRAFT_KEY}_${enterprise.id}_operational`,
+        JSON.stringify(operationalKpis),
+      );
+    } catch {}
     toast.success(
       "Đã lưu bản nháp",
       "Bạn có thể quay lại làm tiếp bất cứ lúc nào.",
@@ -151,6 +182,7 @@ export const BuyerAssessmentWizardPage: React.FC = () => {
       const updatedEnterprise = {
         ...enterprise,
         ngan_sach_toi_da_trieu: budget,
+        operational_kpis: operationalKpis,
         san_sang_nhan_su: readiness.people,
         san_sang_du_lieu: readiness.data,
         cam_ket_lanh_dao: readiness.leadership,
@@ -265,6 +297,10 @@ export const BuyerAssessmentWizardPage: React.FC = () => {
         </div>
       </section>
 
+      <OperationalKpiEditor
+        value={operationalKpis}
+        onChange={setOperationalKpis}
+      />
       {/* Stepper Progress Bar */}
       <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs overflow-x-auto">
         <div className="flex items-center justify-between min-w-[550px]">

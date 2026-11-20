@@ -28,3 +28,5 @@ npm run build
 Browser tests use `/usr/bin/chromium` by default; set `CHROMIUM_PATH` on other systems.
 
 See [implementation status and limitations](docs/IMPLEMENTATION_STATUS.md) before deployment. Supabase migrations must be applied and environment variables configured before production sign-in and server calls can function.
+
+Operational KPI evidence, structured Gemini analysis, confidence policy and validation are documented in [Diagnostic evidence](docs/DIAGNOSTIC_EVIDENCE.md). Existing routes, scores and legacy assessment records remain compatible.

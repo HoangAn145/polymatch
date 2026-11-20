@@ -29,3 +29,7 @@ Phạm vi hiện tại: giữ nguyên các chức năng/giao diện/đường d�
 - Nhật ký lưu các lần sửa tri thức, tài khoản và ticket tại database. Các danh sách hiện giới hạn số bản ghi tải; chưa có phân trang cho tập dữ liệu lớn.
 - Kiểm tra RLS tự động chạy PostgreSQL trong PGlite với stub `auth.users`/`auth.uid`; chưa thay thế kiểm tra Supabase Auth và PostgREST thật.
 - Không có secret thực trong repository. Service role chỉ có ở Vercel Function để lưu kết quả server đã tính; các thao tác của người dùng và admin dùng JWT + RLS.
+
+## Bổ sung AI Diagnostic Engine
+
+Đã bổ sung KPI vận hành có cấu trúc và phân tích bằng chứng/giả thuyết/mức tin cậy/yêu cầu xác minh theo từng chỉ số. Module `server/analyze.ts` nối vào endpoint `api/diagnostic.ts`, giữ nguyên luồng và điểm gốc. Xem [hợp đồng dữ liệu và giới hạn](DIAGNOSTIC_EVIDENCE.md). Không cần migration mới.

@@ -93,6 +93,12 @@ test("buyer uses the original wizard, results, matching, history, roadmap and RO
   await expect(page.getByText("Chưa có đánh giá của bạn.")).toBeVisible();
   await page.goto("/buyer/assessment");
   await expect(page.getByRole("region", { name: "KPI đầu vào" })).toBeVisible();
+  await page.getByRole("button", { name: "Thêm KPI vận hành" }).click();
+  await page.getByLabel("Giá trị KPI 1", { exact: true }).fill("32");
+  await page.getByLabel("Mục tiêu KPI 1", { exact: true }).fill("15");
+  await page.getByRole("button", { name: "Thêm KPI vận hành" }).click();
+  await page.getByLabel("Giá trị KPI 2", { exact: true }).fill("82");
+  await page.getByLabel("Mục tiêu KPI 2", { exact: true }).fill("95");
   await page.getByText("Chuyển đổi số chung (DBI)", { exact: true }).click();
   for (const q of questionsFor("VT").filter((q) => q.phan === "dbi"))
     await page
@@ -119,6 +125,18 @@ test("buyer uses the original wizard, results, matching, history, roadmap and RO
     page.getByRole("heading", {
       name: "Báo cáo Chẩn đoán Mức độ Trưởng thành số & Điểm nghẽn",
     }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Phân tích bằng chứng KPI" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Tỷ lệ xe chạy rỗng: 32%" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Tỷ lệ giao hàng đúng hạn: 82%" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Lệch 13 điểm phần trăm", { exact: false }),
   ).toBeVisible();
   await page.goto("/buyer/solutions");
   await expect(page.getByText(/Giải thích bộ lọc:/)).toBeVisible();

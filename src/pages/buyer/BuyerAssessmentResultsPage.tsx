@@ -1,3 +1,4 @@
+import {DiagnosticEvidencePanel} from '../../components/platform/DiagnosticEvidencePanel';
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -98,6 +99,7 @@ export const BuyerAssessmentResultsPage: React.FC = () => {
         </div>
       </div>
 
+      <DiagnosticEvidencePanel analysis={result.diagnostic?.analysis}/>
       {/* Primary Dual Score Summary Card */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* DBI Card */}
