@@ -64,3 +64,9 @@ Workbook và payload nhập dữ liệu vẫn giữ ngoài repository công khai
 ## Kiểm chứng và giới hạn triển khai
 
 Kiểm thử tự động dùng provider Gemini/Search và Supabase API giả lập, cùng PostgreSQL PGlite kiểm tra migration/RLS. Chưa gọi Gemini/Search thật từ môi trường làm việc vì không có key runtime. Cần nghiệm thu trên Preview với `GEMINI_API_KEY`, model hỗ trợ Google Search grounding và migration `003` đã áp dụng. Không cần biến môi trường mới ngoài các biến đã có.
+
+## Phong cách trả lời FAQ
+
+Gemini nhận câu hỏi người dùng cùng các đoạn tri thức đã truy xuất. Với sheet hỏi–đáp, phần đưa vào tổng hợp gồm câu hỏi tham chiếu, câu trả lời chuẩn và ngoại lệ; ID, người duyệt, trạng thái nhập liệu và từ khóa tìm kiếm không đưa vào phần nội dung. Prompt yêu cầu trả lời trực tiếp, ngắn gọn, diễn đạt lại tự nhiên, giữ điều kiện của nguồn, không bổ sung phí/giấy tờ/thao tác không có căn cứ. FAQ dùng claim `reported_fact`; giao diện ghép các đoạn và để nguồn phía dưới, không lặp nhãn phân loại từng đoạn. Tin thời sự vẫn giữ nhãn kiểm chứng.
+
+Nếu Gemini không gọi được hoặc đầu ra không qua kiểm tra, giao diện thông báo rõ và chỉ hiển thị đoạn trả lời chuẩn dự phòng. Đây không được coi là xác nhận Gemini đã tổng hợp thành công. Với Gemini 2.5 Flash/Flash Lite, tắt thinking cho các lời gọi JSON ngắn để tránh tiêu hết ngân sách token trước khi trả JSON. Không thay đổi thiết lập thinking của các dòng model khác.

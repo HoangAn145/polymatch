@@ -11,6 +11,9 @@ const dates = [
   ["effectiveOn", "Ngày hiệu lực"],
 ] as const;
 export function ChatResponse({ reply }: { reply: ChatReply }) {
+  const conversational =
+    reply.strategy === "rag" &&
+    reply.claims?.every((c) => c.kind === "reported_fact" && !c.attribution);
   return (
     <div aria-live="polite" className="space-y-3">
       <p className="text-xs text-slate-500">
@@ -24,16 +27,24 @@ export function ChatResponse({ reply }: { reply: ChatReply }) {
           {reply.claims.map((claim, index) => (
             <article
               key={index}
-              className="border rounded-lg p-3 text-sm space-y-1"
+              className={
+                conversational
+                  ? "text-sm space-y-1"
+                  : "border rounded-lg p-3 text-sm space-y-1"
+              }
             >
-              <h3 className="font-semibold">{CLAIM_LABELS[claim.kind]}</h3>
+              {!conversational && (
+                <h3 className="font-semibold">{CLAIM_LABELS[claim.kind]}</h3>
+              )}
               {claim.attribution && (
                 <p className="text-xs">Theo: {claim.attribution}</p>
               )}
               <p className="whitespace-pre-wrap">{claim.text}</p>
-              <p className="text-xs text-blue-700">
-                Nguồn: {claim.sourceIds.join(", ")}
-              </p>
+              {!conversational && (
+                <p className="text-xs text-blue-700">
+                  Nguồn: {claim.sourceIds.join(", ")}
+                </p>
+              )}
             </article>
           ))}
         </div>

@@ -593,3 +593,58 @@ test("RAG sends retrieved approved evidence to Gemini synthesis and returns its 
     !reply.warnings.some((w) => w.includes("Không sử dụng nội dung tổng hợp")),
   );
 });
+
+test("FAQ synthesis receives answer and exceptions rather than spreadsheet administration fields", async () => {
+  const { cleanKnowledgeMaterial, knowledgeExcerpt } =
+    await import("../server/chat/knowledge.js");
+  const material =
+    "ID: FAQ-TEST\nNhóm: Tài khoản\nCâu hỏi chuẩn: Đăng ký thế nào?\nCâu trả lời chuẩn: Bạn chọn loại tài khoản và điền thông tin đăng ký.\nTiếp theo kiểm tra email xác nhận.\nTừ khóa: đăng ký\nNgoại lệ: Quy trình có thể thay đổi.\nNgười duyệt: Nhóm nội bộ\nNgày cập nhật: 2026-11-13\nTrạng thái: Cần duyệt";
+  const cleaned = cleanKnowledgeMaterial(material);
+  assert.match(cleaned, /kiểm tra email xác nhận/);
+  assert.match(cleaned, /Quy trình có thể thay đổi/);
+  assert(!/FAQ-TEST|Người duyệt|Trạng thái|Từ khóa|2026-11-13/.test(cleaned));
+  assert.equal(
+    knowledgeExcerpt(material),
+    "Bạn chọn loại tài khoản và điền thông tin đăng ký.\nTiếp theo kiểm tra email xác nhận.",
+  );
+  assert.equal(
+    cleanKnowledgeMaterial("TMS giúp điều phối."),
+    "TMS giúp điều phối.",
+  );
+  const evidence = source("RAG-1", "https://example.org/guide", material);
+  evidence.public.origin = "rag";
+  evidence.public.sourceType = "approved_knowledge";
+  const ragBase = {
+    ...base,
+    intent: "customer_support" as const,
+    strategy: "rag" as const,
+  };
+  const reply = await composeReply(
+    "Đăng ký thế nào?",
+    [evidence],
+    ragBase,
+    async (system, payload) => {
+      assert.match(system, /dùng kind=reported_fact/);
+      assert.equal(JSON.parse(payload).sourceEvidence[0].material, cleaned);
+      return JSON.stringify(
+        response(
+          "reported_fact",
+          "Bạn chọn loại tài khoản và điền thông tin đăng ký.",
+          ["RAG-1"],
+        ),
+      );
+    },
+  );
+  assert.equal(reply.claims.length, 1);
+  assert(!reply.answer.includes("Người duyệt"));
+  const unavailable = await composeReply(
+    "Đăng ký thế nào?",
+    [evidence],
+    ragBase,
+    async () => {
+      throw new Error("provider failure");
+    },
+  );
+  assert(unavailable.warnings.some((w) => w.includes("Chưa gọi được Gemini")));
+  assert(!/ID:|Người duyệt|Trạng thái/.test(unavailable.answer));
+});

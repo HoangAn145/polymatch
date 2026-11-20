@@ -20,6 +20,10 @@ function structured(
         responseJsonSchema: schema,
         temperature: 0.1,
         maxOutputTokens,
+        // Small structured outputs must not spend their token budget on thinking.
+        ...(/^gemini-2\.5-(flash|flash-lite)/.test(model)
+          ? { thinkingConfig: { thinkingBudget: 0 } }
+          : {}),
         httpOptions: { timeout },
       },
     });
@@ -33,7 +37,7 @@ export function geminiChatProviders(): ChatProviders {
   const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   return {
     router: structured(ai, model, 6000, 150),
-    generate: structured(ai, model, 12000, 4000),
+    generate: structured(ai, model, 18000, 4000),
     search: async (question, officialFirst, now) => {
       const localDay = new Intl.DateTimeFormat("en-CA", {
         timeZone: "Asia/Bangkok",
