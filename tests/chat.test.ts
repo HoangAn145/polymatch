@@ -722,3 +722,31 @@ test("Search accepts candidate text and UTF-8 attributed segments without invent
   const invalid = await liveSources(response, now, async (url) => url);
   assert.equal(invalid[0].material, "");
 });
+
+test("Gemini diagnostics distinguish failures and never expose provider secrets", async () => {
+  const { geminiFailure } = await import("../server/chat/providerError.js");
+  const cases = [
+    [401, "GEMINI_KEY_INVALID"],
+    [403, "GEMINI_ACCESS_DENIED"],
+    [429, "GEMINI_QUOTA"],
+    [404, "GEMINI_MODEL_NOT_FOUND"],
+    [400, "GEMINI_REQUEST_INVALID"],
+    [500, "GEMINI_UNAVAILABLE"],
+  ] as const;
+  for (const [status, code] of cases) {
+    const d = geminiFailure({ status, message: "private-key-and-question" });
+    assert.equal(d.code, code);
+    assert(!JSON.stringify(d).includes("private-key"));
+  }
+  assert.equal(geminiFailure({ name: "AbortError" }).code, "GEMINI_TIMEOUT");
+  const { knowledgeExcerpt, cleanKnowledgeMaterial } =
+    await import("../server/chat/knowledge.js");
+  const material =
+    "ID: TECH-X\nCông nghệ: TMS\nMô tả: Điều phối vận tải.\nHạn chế/rủi ro: Phụ thuộc dữ liệu.\nNguồn: Tài liệu\nhttps://example.org/page\nNgười duyệt: Internal\nNgày cập nhật: 2026-11-13\nTrạng thái: Cần duyệt";
+  assert(
+    !/Người duyệt|người duyệt|2026-11-13|Cần duyệt|TECH-X|example.org/.test(
+      knowledgeExcerpt(material),
+    ),
+  );
+  assert.match(cleanKnowledgeMaterial(material), /Phụ thuộc dữ liệu/);
+});

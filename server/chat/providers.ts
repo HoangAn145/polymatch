@@ -32,9 +32,10 @@ function structured(
   };
 }
 export function geminiChatProviders(): ChatProviders {
-  if (!process.env.GEMINI_API_KEY) return {};
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
+  if (!apiKey) return {};
+  const ai = new GoogleGenAI({ apiKey });
+  const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
   return {
     router: structured(ai, model, 6000, 150),
     generate: structured(ai, model, 18000, 4000),

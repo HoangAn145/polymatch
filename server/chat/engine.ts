@@ -1,3 +1,4 @@
+import { geminiFailure } from "./providerError.js";
 import { rankKnowledge, queryTerms } from "./relevance.js";
 import { CLAIM_LABELS } from "../../src/lib/chatContracts.js";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -98,10 +99,16 @@ export async function answerChat(
   if (tasks[0].status === "fulfilled") evidence.push(...tasks[0].value);
   else warnings.push("Chưa truy xuất được tri thức đã duyệt.");
   if (tasks[1].status === "fulfilled") evidence.push(...tasks[1].value);
-  else if (route.strategy !== "rag")
+  else if (route.strategy !== "rag") {
+    if (providers.search) {
+      const diagnostic = geminiFailure(tasks[1].reason);
+      console.error("[chat:search]", diagnostic.code);
+      warnings.push(`[${diagnostic.code}] ${diagnostic.detail}`);
+    }
     warnings.push(
       "Tìm kiếm trực tiếp chưa khả dụng; không xác nhận thông tin thời sự từ tài liệu RAG.",
     );
+  }
   evidence = evidence.slice(0, 12);
   if (
     route.strategy !== "rag" &&

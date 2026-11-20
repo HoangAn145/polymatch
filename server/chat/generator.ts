@@ -1,3 +1,4 @@
+import { geminiFailure } from "./providerError.js";
 import { cleanKnowledgeMaterial, knowledgeExcerpt } from "./knowledge.js";
 import {
   CLAIM_LABELS,
@@ -424,9 +425,12 @@ export async function composeReply(
       }),
       CHAT_RESPONSE_SCHEMA,
     );
-  } catch {
+  } catch (error) {
+    const diagnostic = geminiFailure(error);
+    console.error("[chat:generate]", diagnostic.code);
     return fallbackReply(evidence, base, [
       ...warnings,
+      `[${diagnostic.code}] ${diagnostic.detail}`,
       "Chưa gọi được Gemini để diễn đạt câu trả lời. Nội dung dưới đây là trích đoạn tham khảo từ tri thức; quản trị viên cần kiểm tra khóa API, hạn mức và kết nối Gemini.",
     ]);
   }
