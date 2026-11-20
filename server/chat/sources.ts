@@ -241,7 +241,13 @@ export async function liveSources(
   retrievedAt: string,
   resolve: (url: string) => Promise<string | null> = resolveGroundingUrl,
 ): Promise<EvidenceSource[]> {
-  const text = typeof response.text === "string" ? response.text : "";
+  const text =
+    typeof response.text === "string"
+      ? response.text
+      : (response.candidates?.[0]?.content?.parts || [])
+          .filter((p: any) => !p.thought && typeof p.text === "string")
+          .map((p: any) => p.text)
+          .join("");
   const metadata = response.candidates?.[0]?.groundingMetadata;
   const chunks = Array.isArray(metadata?.groundingChunks)
     ? metadata.groundingChunks.slice(0, 12)
@@ -256,6 +262,30 @@ export async function liveSources(
       typeof segment?.text === "string" && text.includes(segment.text)
         ? segment.text
         : "";
+    if (
+      !part &&
+      typeof segment?.text !== "string" &&
+      Number.isInteger(segment?.endIndex)
+    ) {
+      // Grounding offsets are UTF-8 byte indices, not JavaScript character indices.
+      const bytes = new TextEncoder().encode(text);
+      const start = segment.startIndex ?? 0;
+      const end = segment.endIndex;
+      if (
+        Number.isInteger(start) &&
+        start >= 0 &&
+        end > start &&
+        end <= bytes.length
+      ) {
+        try {
+          part = new TextDecoder("utf-8", { fatal: true }).decode(
+            bytes.slice(start, end),
+          );
+        } catch {
+          /* An invalid byte boundary is not usable evidence. */
+        }
+      }
+    }
     if (!part) continue;
     for (const index of support.groundingChunkIndices || [])
       if (Number.isInteger(index) && index >= 0 && index < chunks.length) {

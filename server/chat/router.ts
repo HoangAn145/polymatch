@@ -72,8 +72,7 @@ export async function routeQuestion(
   }
   // Freshness/policy detection is a safety floor; the model or legacy FAQ mode cannot disable live retrieval.
   if (fallback === "news_policy") intent = "news_policy";
-  if (fallback === "logistics_market" && temporalQuestion(question))
-    intent = "logistics_market";
+  if (fallback === "logistics_market") intent = "logistics_market";
   if (mode === "news") intent = "news_policy";
   if (internalSupportQuestion(question) && !policyQuestion(question))
     intent = "customer_support";

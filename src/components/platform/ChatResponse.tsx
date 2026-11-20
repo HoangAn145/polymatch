@@ -12,7 +12,7 @@ const dates = [
 ] as const;
 export function ChatResponse({ reply }: { reply: ChatReply }) {
   const conversational =
-    reply.strategy === "rag" &&
+    reply.sources.every((s) => s.origin === "rag") &&
     reply.claims?.every((c) => c.kind === "reported_fact" && !c.attribution);
   return (
     <div aria-live="polite" className="space-y-3">

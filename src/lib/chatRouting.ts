@@ -1,5 +1,5 @@
 import type { ChatIntent, ChatStrategy } from "./chatContracts.js";
-function normalize(s: string) {
+export function normalize(s: string) {
   return s
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -35,7 +35,7 @@ export function requestedSince(question: string, now: string): string | null {
   return null;
 }
 export function temporalQuestion(question: string) {
-  return /\b(moi nhat|hom nay|tuan nay|thang nay|hien nay|hien tai|cap nhat|tin moi|thoi su|latest|today|this week|current)\b/.test(
+  return /\b(moi nhat|hom nay|tuan nay|thang nay|hien nay|hien tai|cap nhat|tin moi|thoi su|latest|today|this week|current|tinh hinh|dien bien|gan day)\b/.test(
     normalize(question),
   );
 }
@@ -49,7 +49,7 @@ export function ruleIntent(question: string): ChatIntent {
   )
     return "news_policy";
   if (
-    /\b(gia cuoc|cuoc van tai|cuoc bien|thi truong|bao cao nganh|xuat khau|nhap khau|lpi|freight|market|chi so logistics)\b/.test(
+    /\b(gia cuoc|cuoc van tai|cuoc bien|thi truong|bao cao nganh|xuat khau|nhap khau|lpi|freight|market|chi so logistics|phat thai|khi nha kinh|ghg|carbon|logistics xanh|cang bien|van tai bien|kho bai|chuoi cung ung)\b/.test(
       q,
     )
   )

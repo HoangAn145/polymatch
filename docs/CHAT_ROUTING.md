@@ -70,3 +70,9 @@ Kiểm thử tự động dùng provider Gemini/Search và Supabase API giả l�
 Gemini nhận câu hỏi người dùng cùng các đoạn tri thức đã truy xuất. Với sheet hỏi–đáp, phần đưa vào tổng hợp gồm câu hỏi tham chiếu, câu trả lời chuẩn và ngoại lệ; ID, người duyệt, trạng thái nhập liệu và từ khóa tìm kiếm không đưa vào phần nội dung. Prompt yêu cầu trả lời trực tiếp, ngắn gọn, diễn đạt lại tự nhiên, giữ điều kiện của nguồn, không bổ sung phí/giấy tờ/thao tác không có căn cứ. FAQ dùng claim `reported_fact`; giao diện ghép các đoạn và để nguồn phía dưới, không lặp nhãn phân loại từng đoạn. Tin thời sự vẫn giữ nhãn kiểm chứng.
 
 Nếu Gemini không gọi được hoặc đầu ra không qua kiểm tra, giao diện thông báo rõ và chỉ hiển thị đoạn trả lời chuẩn dự phòng. Đây không được coi là xác nhận Gemini đã tổng hợp thành công. Với Gemini 2.5 Flash/Flash Lite, tắt thinking cho các lời gọi JSON ngắn để tránh tiêu hết ngân sách token trước khi trả JSON. Không thay đổi thiết lập thinking của các dòng model khác.
+
+## Kiểm tra độ liên quan và phục hồi tìm kiếm
+
+Ứng viên full-text phải qua xếp hạng từ đầy đủ đã chuẩn hóa dấu, không khớp chuỗi con (ví dụ “khí” không khớp “khi”, hoặc metadata trạng thái không phải bằng chứng). Câu hỏi cần khớp tối thiểu 60% từ nội dung và tối thiểu hai từ nếu có hai từ trở lên. Khi không có ứng viên đạt, truy xuất tối đa 200 tài liệu đã duyệt trong các nhóm được phép và xếp hạng lại; không bỏ RLS hoặc dùng tài liệu pending. Đây vẫn là truy xuất từ vựng có giới hạn, chưa phải vector search và không đảm bảo hiểu mọi cách diễn đạt.
+
+Bổ sung nhóm phát thải/khí nhà kính/carbon/cảng biển vào logistics và nhận diện “tình hình/diễn biến/gần đây” là yêu cầu cập nhật. Grounding đọc được cả text accessor lẫn candidate content, hỗ trợ đoạn nguồn có chỉ số byte UTF-8, không tự gán cả câu trả lời cho mọi URL khi thiếu attribution.

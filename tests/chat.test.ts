@@ -648,3 +648,77 @@ test("FAQ synthesis receives answer and exceptions rather than spreadsheet admin
   assert(unavailable.warnings.some((w) => w.includes("Chưa gọi được Gemini")));
   assert(!/ID:|Người duyệt|Trạng thái/.test(unavailable.answer));
 });
+
+test("emission queries route to logistics and never return a supplier FAQ from syllable overlap", async () => {
+  const { rankKnowledge } = await import("../server/chat/relevance.js");
+  const supplier = {
+    id: "FAQ-X",
+    title: "Nhà cung cấp cần cung cấp thông tin gì?",
+    content:
+      "Câu trả lời chuẩn: Thông tin gồm pháp nhân, mã số thuế, tính năng và giới hạn, hỗ trợ sau bán.\nTrạng thái: Cần duyệt",
+  };
+  const emissions = {
+    id: "LOG-X",
+    title: "GHG Emissions",
+    content:
+      "Thuật ngữ: GHG Emissions\nĐịnh nghĩa: Phát thải khí nhà kính từ hoạt động vận tải.\nTừ khóa: phát thải, khí nhà kính, carbon",
+  };
+  for (const question of ["Phát thải khí nhà kính", "phat thai khi nha kinh"]) {
+    assert.equal(ruleIntent(question), "logistics_market");
+    assert.deepEqual(
+      rankKnowledge(question, [supplier, emissions]).map((r) => r.id),
+      ["LOG-X"],
+    );
+    assert.deepEqual(rankKnowledge(question, [supplier]), []);
+    const db = fakeDb([supplier, emissions]);
+    const docs = await retrieveKnowledge(
+      db as any,
+      question,
+      "customer_support",
+      now,
+    );
+    assert.equal(docs.length, 1);
+    assert.equal(docs[0].public.title, "GHG Emissions");
+  }
+  const routed = await routeQuestion(
+    "Phát thải khí nhà kính",
+    "faq",
+    async () => JSON.stringify({ intent: "customer_support" }),
+  );
+  assert.equal(routed.intent, "logistics_market");
+  assert.equal(ruleIntent("Tình hình cảng biển"), "logistics_market");
+});
+
+test("Search accepts candidate text and UTF-8 attributed segments without inventing missing evidence", async () => {
+  const segment = "Phí vận chuyển thay đổi.";
+  const text = "Nguồn: " + segment;
+  const startIndex = new TextEncoder().encode("Nguồn: ").length;
+  const response = {
+    candidates: [
+      {
+        content: {
+          parts: [{ text: "private thinking", thought: true }, { text }],
+        },
+        groundingMetadata: {
+          groundingChunks: [
+            { web: { uri: "https://reuters.com/test", title: "Report" } },
+          ],
+          groundingSupports: [
+            {
+              segment: {
+                startIndex,
+                endIndex: new TextEncoder().encode(text).length,
+              },
+              groundingChunkIndices: [0],
+            },
+          ],
+        },
+      },
+    ],
+  };
+  const result = await liveSources(response, now, async (url) => url);
+  assert.equal(result[0].material, segment);
+  response.candidates[0].groundingMetadata.groundingSupports[0].segment.endIndex = 9999;
+  const invalid = await liveSources(response, now, async (url) => url);
+  assert.equal(invalid[0].material, "");
+});

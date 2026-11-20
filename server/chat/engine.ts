@@ -1,3 +1,4 @@
+import { rankKnowledge, queryTerms } from "./relevance.js";
 import { CLAIM_LABELS } from "../../src/lib/chatContracts.js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ChatIntent, ChatReply } from "../../src/lib/chatContracts.js";
@@ -24,64 +25,39 @@ const CATEGORIES: Record<Exclude<ChatIntent, "news_policy">, string[]> = {
   technology: ["Cong_nghe_CDS", "Technology", "technology"],
   logistics_market: ["Logistics", "Thi_truong", "logistics_market"],
 };
-const STOP = new Set([
-  "là",
-  "gì",
-  "của",
-  "và",
-  "có",
-  "cho",
-  "tôi",
-  "thì",
-  "nào",
-  "các",
-  "về",
-  "với",
-  "như",
-  "một",
-  "được",
-  "không",
-  "thế",
-  "nên",
-  "để",
-  "trong",
-]);
 export async function retrieveKnowledge(
   db: SupabaseClient,
   question: string,
   intent: Exclude<ChatIntent, "news_policy">,
   now: string,
 ): Promise<EvidenceSource[]> {
-  const terms =
-    question
-      .toLowerCase()
-      .match(/[\p{L}\p{N}]+/gu)
-      ?.filter((t) => t.length > 1 && !STOP.has(t))
-      .slice(0, 24) || [];
+  const terms = queryTerms(question);
   if (!terms.length) return [];
-  const { data, error } = await db
-    .from("knowledge_documents")
-    .select("id,title,content,source,category,reviewed_at,metadata")
-    .eq("status", "approved")
-    .in("category", CATEGORIES[intent])
-    .textSearch("search_vector", terms.join(" | "), { config: "simple" })
-    .limit(16);
-  if (error) throw error;
-  return (data || [])
-    .map((row) => ({
-      row,
-      score: terms.reduce(
-        (score, term) =>
-          score +
-          (String(row.title).toLowerCase().includes(term) ? 3 : 0) +
-          (String(row.content).toLowerCase().includes(term) ? 1 : 0),
-        0,
-      ),
-    }))
-    .filter((r) => r.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 4)
-    .map(({ row }, index) => ragSource(row, index, now));
+  // Full-text search is a candidate generator. Word-level relevance is checked
+  // separately; Vietnamese syllables in unrelated metadata are not evidence.
+  const query = (categories: string[]) =>
+    db
+      .from("knowledge_documents")
+      .select("id,title,content,source,category,reviewed_at,metadata")
+      .eq("status", "approved")
+      .in("category", categories);
+  const first = await query(CATEGORIES[intent])
+    .textSearch(
+      "search_vector",
+      (question.toLowerCase().match(/[\p{L}\p{N}]+/gu) || terms).join(" | "),
+      { config: "simple" },
+    )
+    .limit(80);
+  if (first.error) throw first.error;
+  let ranked = rankKnowledge(question, first.data || []);
+  if (!ranked.length) {
+    // Bounded accent-insensitive recovery also searches other approved categories
+    // when the intent router is uncertain. Never remove status/RLS constraints.
+    const recovery = await query(Object.values(CATEGORIES).flat()).limit(200);
+    if (recovery.error) throw recovery.error;
+    ranked = rankKnowledge(question, recovery.data || []);
+  }
+  return ranked.slice(0, 4).map((row, index) => ragSource(row, index, now));
 }
 export async function answerChat(
   question: string,

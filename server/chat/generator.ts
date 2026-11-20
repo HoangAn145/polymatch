@@ -378,7 +378,7 @@ export function fallbackReply(
       : evidence.find((s) => s.public.origin === "rag" && s.material);
   const live = evidence.filter((s) => s.public.origin === "live");
   const answer = rag
-    ? `Tài liệu đã duyệt: ${rag.public.title}\n${knowledgeExcerpt(rag.material)}${base.strategy === "rag_search" ? "\nĐây là kiến thức nền, chưa xác nhận tình hình thị trường hiện tại." : ""}`
+    ? `Trích đoạn tham khảo — ${rag.public.title}\n${knowledgeExcerpt(rag.material)}${base.strategy === "rag_search" ? "\nĐây là kiến thức nền, chưa xác nhận tình hình thị trường hiện tại." : ""}`
     : live.length
       ? "Đã tìm thấy nguồn tham khảo, nhưng chưa đủ căn cứ để tổng hợp các khẳng định hoặc ngày pháp lý một cách đáng tin cậy. Vui lòng đối chiếu liên kết nguồn hoặc chuyển chuyên viên."
       : "Chưa có tài liệu đã duyệt hoặc nguồn tin trực tiếp phù hợp. Bạn có thể chuyển câu hỏi cho chuyên viên.";
