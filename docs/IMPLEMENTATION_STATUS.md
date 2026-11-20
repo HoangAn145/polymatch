@@ -23,8 +23,8 @@ Phạm vi hiện tại: giữ nguyên các chức năng/giao diện/đường d�
 - `gia_min_trieu` trong danh mục cũ đã là giá 12 tháng, kể cả thuê bao tháng. Không nhân thêm 12. Giá chưa biết không được khẳng định là phù hợp ngân sách.
 - Điểm matching giữ 7 nhóm thành phần; phần tích hợp và kiểm chứng để 0 vì chưa có dữ liệu được xác minh, và hiển thị rõ giới hạn. Điểm không phải xác suất thành công.
 - 3PL đang trả lời toàn bộ câu hỏi LDMI áp dụng cho nhánh 3PL. Chưa tách bộ câu hỏi theo từng dịch vụ 3PL.
-- Truy xuất tri thức dùng PostgreSQL full-text search cấu hình `simple`, chưa có semantic vector search, reranking hoặc hội thoại nhiều lượt. Mỗi câu hỏi được xử lý độc lập. Cần đánh giá độ bao phủ tiếng Việt trên bộ test thật.
-- Tin tức dùng Google Search grounding, chưa tự thu thập RSS/API từ 15 nguồn trong workbook và chưa có bộ lọc domain nguồn tin bắt buộc.
+- Chatbot có router 4 nhóm, full-text RAG theo category và Live Search riêng; chưa có vector embeddings hoặc hội thoại nhiều lượt. Lịch sử được lưu để người dùng xem lại, không tự dùng làm bằng chứng hay kho RAG. Cần đánh giá độ bao phủ tiếng Việt với provider thật.
+- Tin tức dùng Google Search grounding theo truy vấn, có phân loại hostname/nguồn và kiểm tra tham chiếu/ngày; chưa có crawler/RSS tự chạy nền. Không coi hai domain hoặc một nhãn chính thức là bảo đảm mọi suy luận đúng.
 - Chuyển tiếp thực hiện qua ticket theo hành động đồng ý của người dùng; chưa tự áp dụng phân loại/SLA trong 8 dòng chuyển tiếp mẫu. Không tự hứa SLA chưa được chủ dự án phê duyệt.
 - Nhật ký lưu các lần sửa tri thức, tài khoản và ticket tại database. Các danh sách hiện giới hạn số bản ghi tải; chưa có phân trang cho tập dữ liệu lớn.
 - Kiểm tra RLS tự động chạy PostgreSQL trong PGlite với stub `auth.users`/`auth.uid`; chưa thay thế kiểm tra Supabase Auth và PostgREST thật.
@@ -33,3 +33,7 @@ Phạm vi hiện tại: giữ nguyên các chức năng/giao diện/đường d�
 ## Bổ sung AI Diagnostic Engine
 
 Đã bổ sung KPI vận hành có cấu trúc và phân tích bằng chứng/giả thuyết/mức tin cậy/yêu cầu xác minh theo từng chỉ số. Module `server/analyze.ts` nối vào endpoint `api/diagnostic.ts`, giữ nguyên luồng và điểm gốc. Xem [hợp đồng dữ liệu và giới hạn](DIAGNOSTIC_EVIDENCE.md). Không cần migration mới.
+
+## Chatbot 4 nhóm và lịch sử tin
+
+Đã bổ sung LLM Intent Router, tách RAG/Live Search, phân loại thông tin chính trị, các mốc ngày pháp lý và metadata nguồn. Cần chạy thêm `003_chat_history.sql` để lưu lịch sử và tin. Workbook giữ riêng. Xem [thiết kế, cách bật và giới hạn](CHAT_ROUTING.md).

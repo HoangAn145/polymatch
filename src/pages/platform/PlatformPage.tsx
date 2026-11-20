@@ -468,10 +468,11 @@ export function Knowledge({ userId }: { userId: string }) {
         status: selected.status,
         reviewed_by: userId,
         reviewed_at: new Date().toISOString(),
+        category: selected.category || "FAQ_CSKH",
       };
       const query = featureStore().from("knowledge_documents");
       const { error } = selected._new
-        ? await query.insert({ id: selected.id, category: "FAQ", ...payload })
+        ? await query.insert({ id: selected.id, ...payload })
         : await query.update(payload).eq("id", selected.id);
       if (error) throw error;
       await load();
@@ -495,6 +496,7 @@ export function Knowledge({ userId }: { userId: string }) {
             content: "",
             source: "",
             status: "pending",
+            category: "FAQ_CSKH",
             _new: true,
           });
           setMessage("");
@@ -544,6 +546,23 @@ export function Knowledge({ userId }: { userId: string }) {
         {selected && (
           <div className="space-y-3">
             <h3 className="font-bold">{selected.id}</h3>
+            <label className="block">
+              Nhóm tri thức
+              <select
+                aria-label="Nhóm tri thức"
+                className={field}
+                value={selected.category || "FAQ_CSKH"}
+                onChange={(e) =>
+                  setSelected({ ...selected, category: e.target.value })
+                }
+              >
+                <option value="FAQ_CSKH">CSKH & hướng dẫn</option>
+                <option value="FAQ">FAQ cũ</option>
+                <option value="Logistics">Kiến thức logistics</option>
+                <option value="Thi_truong">Báo cáo thị trường</option>
+                <option value="Cong_nghe_CDS">Công nghệ</option>
+              </select>
+            </label>
             <label className="block">
               Tiêu đề
               <input

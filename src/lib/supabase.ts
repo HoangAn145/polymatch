@@ -20,7 +20,7 @@ export async function api<T>(path: string, body: unknown): Promise<T> {
       Authorization: `Bearer ${data.session.access_token}`,
     },
     body: JSON.stringify(body),
-    signal: AbortSignal.timeout(45000),
+    signal: AbortSignal.timeout(path === "chat" ? 55000 : 45000),
   });
   const value = await res.json();
   if (!res.ok) throw new Error(value.error || "Không thể xử lý yêu cầu.");

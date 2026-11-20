@@ -6,6 +6,7 @@ Tạo project hoặc sử dụng project hiện có. Chạy các migration trong
 
 1. `supabase/migrations/001_platform.sql`
 2. `supabase/migrations/002_admin_audit.sql`
+3. `supabase/migrations/003_chat_history.sql` — mới, lưu lịch sử chatbot và metadata tin. Nếu đã chạy 001/002 thì chỉ chạy thêm file này.
 
 Các migration dành cho database mới, chưa có các bảng cùng tên. Nếu project đã có schema ứng dụng, cần đối chiếu schema trước khi áp dụng. Không chạy lại migration cấu trúc trên database đã áp dụng. Có thể dùng Supabase CLI migration workflow nếu project đã liên kết đúng.
 
@@ -56,10 +57,13 @@ Công cụ giữ nguyên 7 sheet và ID; 4 sheet nội dung được chuyển th
 
 Sau khi nhập dữ liệu riêng: đăng nhập admin → Quản lý tri thức → rà soát nội dung/nguồn → duyệt từng tài liệu. Chỉ tài liệu `approved` được truy xuất. Chatbot ban đầu có thể báo chưa đủ tài liệu; đây là trạng thái dự kiến khi chưa duyệt.
 
-- FAQ: PostgreSQL full-text search trên tài liệu đã duyệt; chưa dùng vector embedding.
-- RAG: Gemini diễn giải các tài liệu truy xuất, nguồn hiển thị kèm câu trả lời. Nếu Gemini lỗi, trả tài liệu đã duyệt trực tiếp.
-- Tin tức: Gemini Google Search grounding; chỉ hiển thị câu trả lời khi có nguồn trả về, không giả định dữ liệu workbook là thời sự.
-- Chuyển chuyên viên: người dùng bấm đồng ý gửi câu hỏi → tạo ticket thật trong Supabase. Admin phân bộ phận, cập nhật trạng thái và phản hồi. Chưa gửi email hoặc nhắn tin ngoài ứng dụng.
+- Router phân câu hỏi vào 4 nhóm: CSKH, thị trường logistics, công nghệ, tin tức/chính sách.
+- CSKH/công nghệ dùng RAG tài liệu đã duyệt; thị trường kết hợp RAG và Search; tin tức/chính sách dùng Live Search.
+- Gemini tổng hợp có schema, ID nguồn và kiểm tra số liệu/ngày. Tách ngày đăng, thông qua, ban hành và hiệu lực; phân loại tuyên bố/ý kiến/thông tin đã đối chiếu hoặc chưa xác minh.
+- Chuyển chuyên viên vẫn theo hành động đồng ý của người dùng; chưa gửi email ngoài ứng dụng.
+- Lịch sử và metadata tin lưu ở `chat_queries`/`chat_news_items`, có RLS theo người dùng; không lưu toàn văn báo, không tự đưa tin vào RAG.
+
+Xem [cơ chế định tuyến và kiểm chứng nguồn](CHAT_ROUTING.md). Nếu chưa có migration 003, chatbot thông báo chưa lưu lịch sử; các bảng cũ không cần tạo lại.
 
 ## 4. Nghiệm thu trên preview
 
@@ -84,4 +88,4 @@ Sau khi nhập dữ liệu riêng: đăng nhập admin → Quản lý tri thức
 
 Nhánh này giữ các dashboard `/buyer/*`, `/seller/*`, `/admin/*`. Liên kết email `/workspace` tự chuyển về dashboard đúng vai trò. Sau khi redeploy Preview, các menu gốc và nghiệp vụ cũ vẫn truy cập được, không cần bật demo để khôi phục menu. Bật `VITE_DEMO_MODE=true` chỉ khi chủ dự án muốn dùng dữ liệu diễn tập và bộ đổi vai trò.
 
-Các tính năng bổ sung dùng các bảng đã tạo bởi hai migration hiện có; không cần chạy lại SQL đã thành công. Dữ liệu localStorage gốc không bị xóa hoặc đổi tên. Cache production tách theo người đăng nhập để tránh dùng nhầm dữ liệu demo hoặc dữ liệu người khác.
+Các tính năng cũ và Diagnostic dùng các bảng đã tạo bởi hai migration hiện có; không chạy lại SQL đã thành công. Bổ sung lịch sử chatbot cần chạy thêm migration `003_chat_history.sql`. Dữ liệu localStorage gốc không bị xóa hoặc đổi tên. Cache production tách theo người đăng nhập để tránh dùng nhầm dữ liệu demo hoặc dữ liệu người khác.

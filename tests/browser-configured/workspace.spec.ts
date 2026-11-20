@@ -223,3 +223,102 @@ test("admin retains old administration and gains knowledge and customer support"
   await page.goto("/buyer/assessment");
   await expect(page).toHaveURL(/\/admin\/dashboard$/);
 });
+
+test("chat displays classified claims, distinct legal dates, source links and private query history", async ({
+  page,
+}) => {
+  await login(page);
+  const reply = {
+    intent: "news_policy",
+    strategy: "live_search",
+    router: "llm",
+    retrievedAt: "2026-11-21T06:00:00Z",
+    answer: "",
+    claims: [
+      {
+        kind: "party_statement",
+        text: "Bên A tuyên bố cần tiếp tục đối thoại.",
+        sourceIds: ["LIVE-1"],
+        attribution: "Bên A",
+        verification: "reported_only",
+      },
+      {
+        kind: "expert_assessment",
+        text: "Tác động logistics cần được theo dõi.",
+        sourceIds: ["LIVE-1"],
+        attribution: "Chuyên gia B",
+        verification: "reported_only",
+      },
+      {
+        kind: "logistics_impact",
+        text: "Chi phí vận chuyển có thể biến động.",
+        sourceIds: ["LIVE-1"],
+        attribution: null,
+        verification: "analysis",
+      },
+    ],
+    sources: [
+      {
+        id: "LIVE-1",
+        title: "Nguồn chính thức thử nghiệm",
+        url: "https://customs.gov.vn/example",
+        origin: "live",
+        sourceType: "official",
+        publisherGroup: "customs.gov.vn",
+        retrievedAt: "2026-11-21T06:00:00Z",
+        publishedOn: "2026-11-18",
+        adoptedOn: "2026-11-10",
+        issuedOn: "2026-11-15",
+        effectiveOn: "2027-01-01",
+        documentNumber: "01/2026/TEST",
+      },
+    ],
+    handoff: false,
+    mode: "news",
+    warnings: [],
+    historySaved: true,
+  };
+  await page.route("**/api/chat", async (route) => {
+    const body = route.request().postDataJSON();
+    await route.fulfill({
+      json:
+        body.action === "history"
+          ? {
+              history: [
+                {
+                  id: "history-1",
+                  question: "Câu hỏi đã lưu thử nghiệm",
+                  intent: "news_policy",
+                  strategy: "live_search",
+                  created_at: "2026-11-21T06:00:00Z",
+                  response: reply,
+                },
+              ],
+            }
+          : reply,
+    });
+  });
+  await page.goto("/buyer/dashboard");
+  await page.getByRole("button", { name: "Chat CSKH" }).click();
+  await page
+    .getByLabel("Câu hỏi", { exact: true })
+    .fill("Chính sách hải quan tuần này?");
+  await page.getByRole("button", { name: "Gửi câu hỏi", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Tuyên bố của bên liên quan" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Nhận định chuyên gia" }),
+  ).toBeVisible();
+  await expect(page.getByText("Ngày đăng: 2026-11-18")).toBeVisible();
+  await expect(page.getByText("Ngày thông qua: 2026-11-10")).toBeVisible();
+  await expect(page.getByText("Ngày hiệu lực: 2027-01-01")).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Nguồn chính thức thử nghiệm" }),
+  ).toHaveAttribute("href", "https://customs.gov.vn/example");
+  await page.getByText("Lịch sử truy vấn của tôi", { exact: true }).click();
+  await page.getByRole("button", { name: /Câu hỏi đã lưu thử nghiệm/ }).click();
+  await expect(page.getByLabel("Câu hỏi", { exact: true })).toHaveValue(
+    "Câu hỏi đã lưu thử nghiệm",
+  );
+});

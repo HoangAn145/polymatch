@@ -1,25 +1,42 @@
+import { ruleIntent, strategyFor } from "../../lib/chatRouting";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
 import { api, demoMode } from "../../lib/supabase";
 import { featureStore } from "../../lib/featureStore";
 import { authService } from "../../services/authService";
-type Reply = {
-  answer: string;
-  sources: { id?: string; title: string; source?: string; url?: string }[];
-  handoff: boolean;
-  mode: string;
-};
+import {
+  CHAT_INTENTS,
+  type ChatReply as Reply,
+  type ChatHistoryItem,
+} from "../../lib/chatContracts";
+import { ChatResponse } from "./ChatResponse";
 export function ChatWidget({ session }: { session: Session | null }) {
   const userId =
     session?.user.id || (demoMode ? authService.getCurrentUser()?.id : null);
   const [open, setOpen] = useState(false),
     [question, setQuestion] = useState(""),
-    [mode, setMode] = useState("faq"),
+    [mode, setMode] = useState("auto"),
     [reply, setReply] = useState<Reply | null>(null),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [ticket, setTicket] = useState("");
+  const [history, setHistory] = useState<ChatHistoryItem[]>([]);
+  async function loadHistory() {
+    setError("");
+    try {
+      if (demoMode) {
+        setHistory([]);
+        return;
+      }
+      const result = await api<{ history: ChatHistoryItem[] }>("chat", {
+        action: "history",
+      });
+      setHistory(result.history);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  }
   async function ask(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
@@ -27,6 +44,7 @@ export function ChatWidget({ session }: { session: Session | null }) {
     setTicket("");
     try {
       if (demoMode) {
+        const intent = mode === "news" ? "news_policy" : ruleIntent(question);
         const { data } = await featureStore()
           .from("knowledge_documents")
           .select("*")
@@ -35,7 +53,14 @@ export function ChatWidget({ session }: { session: Session | null }) {
           .toLowerCase()
           .split(/\s+/)
           .filter((t) => t.length > 2);
+        const categories =
+          intent === "technology"
+            ? ["Cong_nghe_CDS", "Technology", "technology"]
+            : intent === "logistics_market"
+              ? ["Logistics", "Thi_truong", "logistics_market"]
+              : ["FAQ_CSKH", "FAQ", "customer_support"];
         const ranked = (data || [])
+          .filter((d) => categories.includes(d.category))
           .map((d) => ({
             d,
             score: terms.filter((t) =>
@@ -47,15 +72,37 @@ export function ChatWidget({ session }: { session: Session | null }) {
         const doc = ranked[0]?.d;
         setReply({
           answer:
-            mode === "news"
+            intent === "news_policy"
               ? "Tìm tin tức mới cần phiên đăng nhập Supabase và Gemini đã cấu hình."
               : doc?.content ||
                 "Chưa có tài liệu đã duyệt phù hợp. Bạn có thể gửi câu hỏi cho chuyên viên.",
-          sources: doc
-            ? [{ id: doc.id, title: doc.title, source: doc.source }]
-            : [],
-          handoff: !doc,
+          sources:
+            intent !== "news_policy" && doc
+              ? [
+                  {
+                    id: doc.id,
+                    title: doc.title,
+                    source: doc.source,
+                    origin: "rag",
+                    sourceType: "approved_knowledge",
+                    publisherGroup: "approved_knowledge",
+                    retrievedAt: new Date().toISOString(),
+                    publishedOn: null,
+                    adoptedOn: null,
+                    issuedOn: null,
+                    effectiveOn: null,
+                    documentNumber: null,
+                  },
+                ]
+              : [],
+          handoff: !doc || intent === "news_policy",
           mode: "faq",
+          intent,
+          strategy: strategyFor(intent),
+          router: "rules",
+          retrievedAt: new Date().toISOString(),
+          claims: [],
+          warnings: [],
         });
       } else setReply(await api<Reply>("chat", { question, mode }));
     } catch (e) {
@@ -113,6 +160,9 @@ export function ChatWidget({ session }: { session: Session | null }) {
                     }}
                     className="w-full border rounded p-2"
                   >
+                    <option value="auto">
+                      Tự động nhận diện 4 nhóm thông tin
+                    </option>
                     <option value="faq">FAQ & kiến thức</option>
                     <option value="news">
                       Tìm tin tức mới (Google Search)
@@ -122,6 +172,7 @@ export function ChatWidget({ session }: { session: Session | null }) {
                 <label className="block text-sm">
                   Câu hỏi
                   <textarea
+                    aria-label="Câu hỏi"
                     required
                     maxLength={2000}
                     value={question}
@@ -141,37 +192,46 @@ export function ChatWidget({ session }: { session: Session | null }) {
                   {busy ? "Đang xử lý…" : "Gửi câu hỏi"}
                 </button>
               </form>
-              {reply && (
-                <div aria-live="polite" className="space-y-2">
-                  <p className="text-xs text-slate-500">
-                    {reply.mode === "rag"
-                      ? "Diễn giải Gemini + tài liệu đã duyệt"
-                      : reply.mode === "news"
-                        ? "Tìm kiếm thời sự"
-                        : "Tra cứu tài liệu"}
-                  </p>
-                  <p className="whitespace-pre-wrap text-sm">{reply.answer}</p>
-                  {reply.sources.map((s, i) => (
-                    <p key={i} className="text-xs">
-                      {s.url ? (
-                        <a
-                          href={s.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-blue-700 underline"
-                        >
-                          {s.title}
-                        </a>
-                      ) : (
-                        <span>
-                          {s.id} · {s.title}
-                          <br />
-                          {s.source}
+              {reply && <ChatResponse reply={reply} />}
+              {!demoMode && (
+                <details className="text-sm">
+                  <summary
+                    className="cursor-pointer"
+                    onClick={() => void loadHistory()}
+                  >
+                    Lịch sử truy vấn của tôi
+                  </summary>
+                  <div className="space-y-2 pt-2">
+                    {!history.length && (
+                      <p className="text-xs text-slate-500">
+                        Chưa có lịch sử đã lưu.
+                      </p>
+                    )}
+                    {history.map((item) => (
+                      <button
+                        key={item.id}
+                        className="block text-left w-full border rounded p-2 text-xs"
+                        onClick={() => {
+                          setQuestion(item.question);
+                          setReply({
+                            ...item.response,
+                            warnings: [
+                              ...(item.response.warnings || []),
+                              "Kết quả đã lưu; gửi lại câu hỏi để kiểm tra cập nhật mới.",
+                            ],
+                          });
+                          setTicket("");
+                        }}
+                      >
+                        {item.question}
+                        <span className="block text-slate-500">
+                          {CHAT_INTENTS[item.intent]} ·{" "}
+                          {new Date(item.created_at).toLocaleString("vi-VN")}
                         </span>
-                      )}
-                    </p>
-                  ))}
-                </div>
+                      </button>
+                    ))}
+                  </div>
+                </details>
               )}
               {question.trim() && !ticket && (
                 <button
@@ -184,8 +244,7 @@ export function ChatWidget({ session }: { session: Session | null }) {
               )}
               {ticket && (
                 <p role="status" className="text-sm text-green-700">
-                  Đã tạo yêu cầu: {ticket}. Xem tiến độ trong Không gian làm
-                  việc → Yêu cầu CSKH.
+                  Đã tạo yêu cầu: {ticket}. Xem tiến độ trong mục Hỗ trợ CSKH.
                 </p>
               )}
               {error && (

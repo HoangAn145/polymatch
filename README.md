@@ -30,3 +30,5 @@ Browser tests use `/usr/bin/chromium` by default; set `CHROMIUM_PATH` on other s
 See [implementation status and limitations](docs/IMPLEMENTATION_STATUS.md) before deployment. Supabase migrations must be applied and environment variables configured before production sign-in and server calls can function.
 
 Operational KPI evidence, structured Gemini analysis, confidence policy and validation are documented in [Diagnostic evidence](docs/DIAGNOSTIC_EVIDENCE.md). Existing routes, scores and legacy assessment records remain compatible.
+
+The four-intent chatbot, live-source/date checks and private query history are documented in [Chat routing](docs/CHAT_ROUTING.md). Apply migration `003_chat_history.sql` once to enable history; keep publisher article bodies out of storage.
