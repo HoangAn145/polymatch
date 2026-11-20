@@ -99,3 +99,7 @@ Các tính năng cũ và Diagnostic dùng các bảng đã tạo bởi hai migra
 5. Trong chatbot chọn tự động hoặc FAQ/tri thức, hỏi về nội dung tài liệu vừa duyệt và kiểm tra nguồn trích dẫn. Chế độ **Tìm tin tức mới** sử dụng Google Search grounding, không phải chế độ chỉ RAG.
 
 Nếu gặp HTTP 500 dạng văn bản thay vì JSON, xem Runtime Logs của function `/api/chat` trên đúng deployment. Các import của function phải chạy được bằng Node ESM; kiểm thử `tests/chat-runtime.test.ts` kiểm tra điều này mà không bundle hoặc dùng TS loader. Lỗi 429/403 từ Gemini cần kiểm tra hạn mức/quyền API trong project Google. Không gửi khóa API trong chat hoặc đưa vào repository.
+
+### Lỗi “Chưa cấu hình dịch vụ dữ liệu”
+
+Lỗi này xảy ra trước bước Gemini khi API không nhận được cặp URL/public key của Supabase. API dùng `SUPABASE_URL`/`SUPABASE_ANON_KEY`, hoặc dự phòng bằng `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` trong cùng deployment. Không dùng service role thay anon; JWT người dùng và RLS vẫn được giữ. Sau khi sửa biến phải redeploy đúng Preview/Production. Fallback không thể đọc biến ở môi trường khác hoặc deployment cũ.

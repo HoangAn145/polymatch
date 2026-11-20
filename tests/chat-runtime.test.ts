@@ -36,6 +36,7 @@ test("chat function loads as native Node ESM without a TS loader or bundler", as
     }
     const code = `import handler from './api/chat.js';
       delete process.env.SUPABASE_URL; delete process.env.SUPABASE_ANON_KEY;
+      delete process.env.VITE_SUPABASE_URL; delete process.env.VITE_SUPABASE_ANON_KEY;
       let status, payload;
       await handler({method:'POST',headers:{},body:{}}, {
         setHeader(){}, status(s){status=s;return this}, json(p){payload=p;return this}

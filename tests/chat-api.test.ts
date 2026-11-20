@@ -3,7 +3,13 @@ import assert from "node:assert/strict";
 import handler from "../api/chat";
 test("chat endpoint authenticates, records routed history, returns history, and keeps policy out of RAG without a live provider", async () => {
   const oldFetch = globalThis.fetch;
-  const keys = ["SUPABASE_URL", "SUPABASE_ANON_KEY", "GEMINI_API_KEY"];
+  const keys = [
+    "SUPABASE_URL",
+    "SUPABASE_ANON_KEY",
+    "GEMINI_API_KEY",
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_ANON_KEY",
+  ];
   const before = Object.fromEntries(keys.map((k) => [k, process.env[k]]));
   process.env.SUPABASE_URL = "https://unit.supabase.co";
   process.env.SUPABASE_ANON_KEY = "synthetic-public";
@@ -69,6 +75,14 @@ test("chat endpoint authenticates, records routed history, returns history, and 
     )!.body;
     assert.equal(saved.p_intent, "news_policy");
     assert.deepEqual(saved.p_sources, []);
+    // A Vercel deployment configured with only the browser's public pair must
+    // still authenticate server requests and preserve user-scoped RLS.
+    process.env.VITE_SUPABASE_URL = process.env.SUPABASE_URL;
+    process.env.VITE_SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+    delete process.env.SUPABASE_URL;
+    delete process.env.SUPABASE_ANON_KEY;
+    const publicPair = await call({ question: "Chính sách thuế mới nhất?" });
+    assert.equal(publicPair.status, 200);
     const history = await call({ action: "history" });
     assert.equal(history.status, 200);
     assert.deepEqual(history.payload.history, []);

@@ -11,9 +11,18 @@ export class HttpError extends Error {
 export async function context(req: VercelRequest) {
   if (req.method !== "POST")
     throw new HttpError(405, "Phương thức không được hỗ trợ.");
-  const url = process.env.SUPABASE_URL,
-    key = process.env.SUPABASE_ANON_KEY;
-  if (!url || !key) throw new HttpError(503, "Chưa cấu hình dịch vụ dữ liệu.");
+  // The browser and function use the same public project identity. Never fall
+  // back to service_role: requests must still run under the user's JWT/RLS.
+  const url =
+      process.env.SUPABASE_URL?.trim() || process.env.VITE_SUPABASE_URL?.trim(),
+    key =
+      process.env.SUPABASE_ANON_KEY?.trim() ||
+      process.env.VITE_SUPABASE_ANON_KEY?.trim();
+  if (!url || !key)
+    throw new HttpError(
+      503,
+      "Chưa cấu hình kết nối Supabase cho API. Cần SUPABASE_URL và SUPABASE_ANON_KEY (hoặc cặp VITE_SUPABASE tương ứng) ở môi trường của deployment, sau đó triển khai lại.",
+    );
   const token = req.headers.authorization;
   if (!token?.startsWith("Bearer "))
     throw new HttpError(401, "Vui lòng đăng nhập.");
@@ -44,14 +53,12 @@ export async function context(req: VercelRequest) {
 }
 export function fail(res: VercelResponse, error: unknown) {
   res.setHeader("Cache-Control", "no-store");
-  return res
-    .status(error instanceof HttpError ? error.status : 500)
-    .json({
-      error:
-        error instanceof HttpError
-          ? error.message
-          : "Không thể xử lý yêu cầu. Vui lòng thử lại.",
-    });
+  return res.status(error instanceof HttpError ? error.status : 500).json({
+    error:
+      error instanceof HttpError
+        ? error.message
+        : "Không thể xử lý yêu cầu. Vui lòng thử lại.",
+  });
 }
 export function textInput(value: unknown, max = 2000) {
   if (typeof value !== "string" || !value.trim() || value.length > max)
