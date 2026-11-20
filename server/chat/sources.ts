@@ -141,7 +141,7 @@ export function eventDateSupported(
   const text = material
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
+    .replace(/đ/gi, "d")
     .toLowerCase();
   const [year, month, date] = day.split("-");
   const d = Number(date),

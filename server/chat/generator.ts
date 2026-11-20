@@ -98,7 +98,7 @@ function normalized(s: string) {
   return s
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
+    .replace(/đ/gi, "d")
     .toLowerCase();
 }
 function numbers(s: string) {

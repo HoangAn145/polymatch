@@ -3,11 +3,11 @@ function normalize(s: string) {
   return s
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
+    .replace(/đ/gi, "d")
     .toLowerCase();
 }
 export function internalSupportQuestion(question: string) {
-  return /\b(tai khoan|dang ky|dang nhap|mat khau|otp|hoan tien|cskh|chinh sach bao mat|dieu khoan su dung)\b/.test(
+  return /\b(tai khoan|dang ky|dang nhap|mat khau|otp|hoan tien|doi soat|cskh|chinh sach bao mat|dieu khoan su dung)\b/.test(
     normalize(question),
   );
 }

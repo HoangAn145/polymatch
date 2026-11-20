@@ -88,6 +88,7 @@ test("four intents select distinct strategies, including Vietnamese registration
   const cases: [string, string, string][] = [
     ["Tôi đăng ký tài khoản POLYMATCH thế nào?", "customer_support", "rag"],
     ["TMS tích hợp ERP thế nào?", "technology", "rag"],
+    ["Đăng nhập TMS bị lỗi hôm nay", "customer_support", "rag"],
     [
       "Giá cước vận tải quốc tế đang có xu hướng thế nào?",
       "logistics_market",
@@ -285,6 +286,13 @@ test("publication, adoption, issuance and effective dates remain distinct and ti
       "effectiveOn",
       "2027-01-01",
       "Dự thảo dự kiến có hiệu lực: 2027-01-01.",
+    ),
+  );
+  assert(
+    !eventDateSupported(
+      "effectiveOn",
+      "2027-01-01",
+      "Đề xuất có hiệu lực: 2027-01-01.",
     ),
   );
   output.sourceDates[0].effectiveOn = "2026-11-10";
