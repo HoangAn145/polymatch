@@ -1,3 +1,4 @@
+import { readApiResponse } from "./apiResponse";
 import { createClient } from "@supabase/supabase-js";
 const env = import.meta.env;
 export const demoMode = env.VITE_DEMO_MODE === "true";
@@ -22,7 +23,5 @@ export async function api<T>(path: string, body: unknown): Promise<T> {
     body: JSON.stringify(body),
     signal: AbortSignal.timeout(path === "chat" ? 55000 : 45000),
   });
-  const value = await res.json();
-  if (!res.ok) throw new Error(value.error || "Không thể xử lý yêu cầu.");
-  return value;
+  return readApiResponse<T>(res);
 }

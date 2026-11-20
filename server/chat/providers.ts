@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import type { ChatProviders } from "./engine";
+import type { ChatProviders } from "./engine.js";
 function structured(
   ai: GoogleGenAI,
   model: string,

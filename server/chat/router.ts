@@ -1,4 +1,4 @@
-import type { ChatIntent, ChatStrategy } from "../../src/lib/chatContracts";
+import type { ChatIntent, ChatStrategy } from "../../src/lib/chatContracts.js";
 export type RouterGenerator = (
   system: string,
   payload: string,
@@ -11,7 +11,7 @@ import {
   temporalQuestion,
   internalSupportQuestion,
   redactOutboundQuestion,
-} from "../../src/lib/chatRouting";
+} from "../../src/lib/chatRouting.js";
 export {
   ruleIntent,
   strategyFor,
@@ -20,7 +20,7 @@ export {
   internalSupportQuestion,
   redactOutboundQuestion,
   requestedSince,
-} from "../../src/lib/chatRouting";
+} from "../../src/lib/chatRouting.js";
 export async function routeQuestion(
   question: string,
   mode: unknown,

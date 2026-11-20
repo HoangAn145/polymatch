@@ -1,4 +1,4 @@
-import type { ChatIntent, ChatStrategy } from "./chatContracts";
+import type { ChatIntent, ChatStrategy } from "./chatContracts.js";
 function normalize(s: string) {
   return s
     .normalize("NFD")

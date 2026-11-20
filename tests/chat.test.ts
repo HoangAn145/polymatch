@@ -549,3 +549,47 @@ test("two media reports repeating a party claim do not establish the claimed eve
       ),
     );
 });
+
+test("RAG sends retrieved approved evidence to Gemini synthesis and returns its cited answer", async () => {
+  const db = fakeDb([
+    {
+      id: "TEC-1",
+      category: "Cong_nghe_CDS",
+      title: "TMS",
+      content: "TMS giúp điều phối vận tải.",
+      source: "Approved source",
+    },
+  ]);
+  let generated = false;
+  const reply = await answerChat(
+    "TMS là gì?",
+    "auto",
+    db as any,
+    {
+      generate: async (_system, payload) => {
+        const input = JSON.parse(payload);
+        assert.equal(input.route.strategy, "rag");
+        assert.equal(input.sourceEvidence.length, 1);
+        assert.match(input.sourceEvidence[0].material, /TMS giúp điều phối/);
+        generated = true;
+        return JSON.stringify(
+          response("reported_fact", "TMS giúp điều phối vận tải.", [
+            input.sourceEvidence[0].id,
+          ]),
+        );
+      },
+      search: async () => {
+        throw new Error("Stable technology RAG must not search the web");
+      },
+    },
+    now,
+  );
+  assert.equal(generated, true);
+  assert.equal(reply.strategy, "rag");
+  assert.equal(reply.claims.length, 1);
+  assert.match(reply.answer, /TMS giúp điều phối vận tải/);
+  assert.equal(reply.sources[0].origin, "rag");
+  assert(
+    !reply.warnings.some((w) => w.includes("Không sử dụng nội dung tổng hợp")),
+  );
+});

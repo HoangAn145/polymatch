@@ -1,4 +1,4 @@
-import type { ChatSource, SourceDates } from "../../src/lib/chatContracts";
+import type { ChatSource, SourceDates } from "../../src/lib/chatContracts.js";
 export interface EvidenceSource {
   public: ChatSource;
   material: string;

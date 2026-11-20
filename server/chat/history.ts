@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { ChatReply } from "../../src/lib/chatContracts";
+import type { ChatReply } from "../../src/lib/chatContracts.js";
 export async function saveChatHistory(
   db: SupabaseClient,
   question: string,

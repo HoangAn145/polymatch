@@ -5,7 +5,7 @@ import {
   type ChatSource,
   type ClaimKind,
   type SourceDates,
-} from "../../src/lib/chatContracts";
+} from "../../src/lib/chatContracts.js";
 import {
   dateOnly,
   dateInMaterial,
@@ -13,8 +13,8 @@ import {
   legalPrimarySource,
   EMPTY_DATES,
   type EvidenceSource,
-} from "./sources";
-import type { RouterGenerator } from "./router";
+} from "./sources.js";
+import type { RouterGenerator } from "./router.js";
 const text = { type: "string", minLength: 1, maxLength: 700 };
 const nullable = {
   anyOf: [{ type: "string", maxLength: 100 }, { type: "null" }],

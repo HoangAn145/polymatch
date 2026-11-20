@@ -1,14 +1,14 @@
-import { CLAIM_LABELS } from "../../src/lib/chatContracts";
+import { CLAIM_LABELS } from "../../src/lib/chatContracts.js";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { ChatIntent, ChatReply } from "../../src/lib/chatContracts";
+import type { ChatIntent, ChatReply } from "../../src/lib/chatContracts.js";
 import {
   routeQuestion,
   requestedSince,
   redactOutboundQuestion,
   type RouterGenerator,
-} from "./router";
-import { liveSources, ragSource, type EvidenceSource } from "./sources";
-import { composeReply } from "./generator";
+} from "./router.js";
+import { liveSources, ragSource, type EvidenceSource } from "./sources.js";
+import { composeReply } from "./generator.js";
 export interface ChatProviders {
   router?: RouterGenerator;
   generate?: RouterGenerator;
@@ -140,6 +140,10 @@ export async function answerChat(
   )
     warnings.push(
       "Chưa đối chiếu được nguồn chính thức; không kết luận số văn bản hoặc các mốc hiệu lực pháp lý.",
+    );
+  if (!providers.generate)
+    warnings.push(
+      "Chưa bật Gemini cho chatbot. Quản trị viên cần cấu hình GEMINI_API_KEY phía máy chủ và triển khai lại.",
     );
   const reply = await composeReply(
     outbound,

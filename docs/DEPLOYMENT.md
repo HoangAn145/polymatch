@@ -89,3 +89,13 @@ Xem [cơ chế định tuyến và kiểm chứng nguồn](CHAT_ROUTING.md). N�
 Nhánh này giữ các dashboard `/buyer/*`, `/seller/*`, `/admin/*`. Liên kết email `/workspace` tự chuyển về dashboard đúng vai trò. Sau khi redeploy Preview, các menu gốc và nghiệp vụ cũ vẫn truy cập được, không cần bật demo để khôi phục menu. Bật `VITE_DEMO_MODE=true` chỉ khi chủ dự án muốn dùng dữ liệu diễn tập và bộ đổi vai trò.
 
 Các tính năng cũ và Diagnostic dùng các bảng đã tạo bởi hai migration hiện có; không chạy lại SQL đã thành công. Bổ sung lịch sử chatbot cần chạy thêm migration `003_chat_history.sql`. Dữ liệu localStorage gốc không bị xóa hoặc đổi tên. Cache production tách theo người đăng nhập để tránh dùng nhầm dữ liệu demo hoặc dữ liệu người khác.
+
+## 5. Bật Gemini trả lời từ RAG
+
+1. Tạo API key trong Google AI Studio (https://aistudio.google.com/apikey), chọn project có quyền/hạn mức Gemini.
+2. Vercel → project → Settings → Environment Variables: thêm `GEMINI_API_KEY` dạng secret cho **Preview** nếu đang thử nhánh PR; `GEMINI_MODEL=gemini-2.5-flash`. Chỉ cấu hình phía server, không dùng tiền tố `VITE_`.
+3. Kiểm tra `SUPABASE_URL` và `SUPABASE_ANON_KEY` cùng scope, sau đó triển khai lại nhánh `codex/platform-diagnostic-cskh`. Thay biến môi trường không cập nhật deployment cũ.
+4. Admin → Quản lý tri thức: thêm/nhập tài liệu đúng danh mục `FAQ_CSKH`, `Cong_nghe_CDS`, `Logistics` hoặc `Thi_truong`; rà soát rồi duyệt. Gemini chỉ nhận các đoạn liên quan trong tài liệu `approved`, không tự có nội dung workbook.
+5. Trong chatbot chọn tự động hoặc FAQ/tri thức, hỏi về nội dung tài liệu vừa duyệt và kiểm tra nguồn trích dẫn. Chế độ **Tìm tin tức mới** sử dụng Google Search grounding, không phải chế độ chỉ RAG.
+
+Nếu gặp HTTP 500 dạng văn bản thay vì JSON, xem Runtime Logs của function `/api/chat` trên đúng deployment. Các import của function phải chạy được bằng Node ESM; kiểm thử `tests/chat-runtime.test.ts` kiểm tra điều này mà không bundle hoặc dùng TS loader. Lỗi 429/403 từ Gemini cần kiểm tra hạn mức/quyền API trong project Google. Không gửi khóa API trong chat hoặc đưa vào repository.
