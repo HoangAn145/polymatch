@@ -44,7 +44,7 @@ export function geminiChatProviders(): ChatProviders {
   );
   return {
     router: structured(run, 4000, 500),
-    generate: structured(run, 16000, 4000),
+    generate: structured(run, 25000, 2400),
     search: async (question, officialFirst, now) => {
       const localDay = new Intl.DateTimeFormat("en-CA", {
         timeZone: "Asia/Bangkok",

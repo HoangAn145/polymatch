@@ -1,3 +1,4 @@
+import { withDeadline } from "./deadline.js";
 import type {
   GenerateContentParameters,
   GenerateContentResponse,
@@ -60,39 +61,42 @@ export async function generateInteraction(
   request: GenerateContentParameters,
 ) {
   const config = request.config || {};
-  const result = await ai.interactions.create(
-    {
-      model: `models/${request.model.replace(/^models\//, "")}`,
-      input:
-        typeof request.contents === "string"
-          ? request.contents
-          : JSON.stringify(request.contents),
-      system_instruction:
-        typeof config.systemInstruction === "string"
-          ? config.systemInstruction
-          : undefined,
-      store: false,
-      stream: false,
-      background: false,
-      automatic_continuation: false,
-      generation_config: {
-        max_output_tokens: config.maxOutputTokens || 4000,
-        thinking_level: "low",
+  const timeout = config.httpOptions?.timeout || 25000;
+  const result = await withDeadline(timeout, (signal) =>
+    ai.interactions.create(
+      {
+        model: `models/${request.model.replace(/^models\//, "")}`,
+        input:
+          typeof request.contents === "string"
+            ? request.contents
+            : JSON.stringify(request.contents),
+        system_instruction:
+          typeof config.systemInstruction === "string"
+            ? config.systemInstruction
+            : undefined,
+        store: false,
+        stream: false,
+        background: false,
+        automatic_continuation: false,
+        generation_config: {
+          max_output_tokens: config.maxOutputTokens || 4000,
+          thinking_level: "low",
+        },
+        ...(config.responseJsonSchema
+          ? {
+              response_format: {
+                type: "text" as const,
+                mime_type: "application/json",
+                schema: config.responseJsonSchema as Record<string, any>,
+              },
+            }
+          : {}),
+        ...(config.tools?.some((t) => "googleSearch" in t)
+          ? { tools: [{ type: "google_search" as const }] }
+          : {}),
       },
-      ...(config.responseJsonSchema
-        ? {
-            response_format: {
-              type: "text" as const,
-              mime_type: "application/json",
-              schema: config.responseJsonSchema as Record<string, any>,
-            },
-          }
-        : {}),
-      ...(config.tools?.some((t) => "googleSearch" in t)
-        ? { tools: [{ type: "google_search" as const }] }
-        : {}),
-    },
-    { timeout_ms: config.httpOptions?.timeout || 16000 },
+      { timeout_ms: timeout, signal, retries: { strategy: "none" } },
+    ),
   );
   return interactionResponse(result);
 }

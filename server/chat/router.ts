@@ -29,7 +29,11 @@ export async function routeQuestion(
   const fallback = ruleIntent(question);
   let intent = fallback,
     router: "llm" | "rules" = "rules";
-  if (generator) {
+  const clearTechnology =
+    fallback === "technology" &&
+    !temporalQuestion(question) &&
+    !policyQuestion(question);
+  if (generator && !clearTechnology) {
     try {
       const raw = JSON.parse(
         await generator(

@@ -80,3 +80,7 @@ Bổ sung nhóm phát thải/khí nhà kính/carbon/cảng biển vào logistics
 ## Model không còn khả dụng (404)
 
 Chatbot ưu tiên `GEMINI_MODEL`. Nếu Google trả 404, nó gọi Models.list bằng cùng API key (timeout 4 giây, tối đa 100 mục), lọc model văn bản có `generateContent`, bỏ model ảnh/âm thanh/embedding và ưu tiên Flash ổn định. Thử lại một lần; model thay thế dùng chung trong yêu cầu chat hiện tại và được ghi bằng ID công khai ở log `[chat:model]`. Không tự thử model khác khi gặp 400/401/403/429. Khả năng JSON schema/Google Search của model được Google kiểm tra khi gọi; Models.list không xác nhận hai tính năng này. Nếu danh sách không có model phù hợp hoặc request vẫn lỗi, chatbot báo lỗi, không giả vờ đã tổng hợp. Không ghi API key, câu hỏi hay tài liệu vào log.
+
+## Ngân sách thời gian Interactions
+
+Interactions tắt retry của SDK, có AbortSignal và wall-clock deadline riêng. Lượt tổng hợp tối đa 25 giây/2400 output token; câu hỏi công nghệ rõ được phân loại bằng quy tắc để giảm một lượt gọi. API chat có deadline tổng 48 giây và trả JSON 504 nếu chưa hoàn tất, trước timeout phía browser 55 giây và Vercel 60 giây. Deadline tổng không thể hủy mọi thao tác DB đã bắt đầu; kiểm tra abort trước khi khởi tạo lời gọi tiếp theo/lưu lịch sử. Model chậm vẫn có thể trả GEMINI_TIMEOUT và đoạn tri thức dự phòng; các thay đổi này không bảo đảm Gemini hoàn thành mọi câu hỏi.
