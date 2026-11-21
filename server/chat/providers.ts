@@ -1,8 +1,8 @@
+import { createModelSession } from "./modelSession.js";
 import { GoogleGenAI } from "@google/genai";
 import type { ChatProviders } from "./engine.js";
 function structured(
-  ai: GoogleGenAI,
-  model: string,
+  run: ReturnType<typeof createModelSession>,
   timeout: number,
   maxOutputTokens: number,
 ) {
@@ -11,7 +11,7 @@ function structured(
     payload: string,
     schema: Record<string, unknown>,
   ) => {
-    const result = await ai.models.generateContent({
+    const result = await run((model) => ({
       model,
       contents: payload,
       config: {
@@ -26,7 +26,7 @@ function structured(
           : {}),
         httpOptions: { timeout },
       },
-    });
+    }));
     if (!result.text) throw new Error("Empty Gemini response");
     return result.text;
   };
@@ -36,14 +36,15 @@ export function geminiChatProviders(): ChatProviders {
   if (!apiKey) return {};
   const ai = new GoogleGenAI({ apiKey });
   const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
+  const run = createModelSession(ai, model);
   return {
-    router: structured(ai, model, 6000, 150),
-    generate: structured(ai, model, 18000, 4000),
+    router: structured(run, 4000, 500),
+    generate: structured(run, 16000, 4000),
     search: async (question, officialFirst, now) => {
       const localDay = new Intl.DateTimeFormat("en-CA", {
         timeZone: "Asia/Bangkok",
       }).format(new Date(now));
-      return ai.models.generateContent({
+      return run((model) => ({
         model,
         contents: JSON.stringify({
           question,
@@ -55,9 +56,9 @@ export function geminiChatProviders(): ChatProviders {
           tools: [{ googleSearch: {} }],
           temperature: 0.1,
           maxOutputTokens: 2600,
-          httpOptions: { timeout: 18000 },
+          httpOptions: { timeout: 16000 },
         },
-      });
+      }));
     },
   };
 }

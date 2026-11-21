@@ -76,3 +76,7 @@ Nếu Gemini không gọi được hoặc đầu ra không qua kiểm tra, giao 
 Ứng viên full-text phải qua xếp hạng từ đầy đủ đã chuẩn hóa dấu, không khớp chuỗi con (ví dụ “khí” không khớp “khi”, hoặc metadata trạng thái không phải bằng chứng). Câu hỏi cần khớp tối thiểu 60% từ nội dung và tối thiểu hai từ nếu có hai từ trở lên. Khi không có ứng viên đạt, truy xuất tối đa 200 tài liệu đã duyệt trong các nhóm được phép và xếp hạng lại; không bỏ RLS hoặc dùng tài liệu pending. Đây vẫn là truy xuất từ vựng có giới hạn, chưa phải vector search và không đảm bảo hiểu mọi cách diễn đạt.
 
 Bổ sung nhóm phát thải/khí nhà kính/carbon/cảng biển vào logistics và nhận diện “tình hình/diễn biến/gần đây” là yêu cầu cập nhật. Grounding đọc được cả text accessor lẫn candidate content, hỗ trợ đoạn nguồn có chỉ số byte UTF-8, không tự gán cả câu trả lời cho mọi URL khi thiếu attribution.
+
+## Model không còn khả dụng (404)
+
+Chatbot ưu tiên `GEMINI_MODEL`. Nếu Google trả 404, nó gọi Models.list bằng cùng API key (timeout 4 giây, tối đa 100 mục), lọc model văn bản có `generateContent`, bỏ model ảnh/âm thanh/embedding và ưu tiên Flash ổn định. Thử lại một lần; model thay thế dùng chung trong yêu cầu chat hiện tại và được ghi bằng ID công khai ở log `[chat:model]`. Không tự thử model khác khi gặp 400/401/403/429. Khả năng JSON schema/Google Search của model được Google kiểm tra khi gọi; Models.list không xác nhận hai tính năng này. Nếu danh sách không có model phù hợp hoặc request vẫn lỗi, chatbot báo lỗi, không giả vờ đã tổng hợp. Không ghi API key, câu hỏi hay tài liệu vào log.
