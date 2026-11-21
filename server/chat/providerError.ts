@@ -2,11 +2,12 @@
 export function geminiFailure(error: unknown) {
   const e = error as {
     status?: unknown;
+    statusCode?: unknown;
     code?: unknown;
     name?: unknown;
     message?: unknown;
   } | null;
-  const status = Number(e?.status ?? e?.code);
+  const status = Number(e?.status ?? e?.statusCode ?? e?.code);
   const message = typeof e?.message === "string" ? e.message : "";
   let code = "GEMINI_UNAVAILABLE",
     detail = "Chưa kết nối được Gemini; kiểm tra dịch vụ và thử lại.";

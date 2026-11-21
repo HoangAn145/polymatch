@@ -103,3 +103,9 @@ Nếu gặp HTTP 500 dạng văn bản thay vì JSON, xem Runtime Logs của fun
 ### Lỗi “Chưa cấu hình dịch vụ dữ liệu”
 
 Lỗi này xảy ra trước bước Gemini khi API không nhận được cặp URL/public key của Supabase. API dùng `SUPABASE_URL`/`SUPABASE_ANON_KEY`, hoặc dự phòng bằng `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` trong cùng deployment. Không dùng service role thay anon; JWT người dùng và RLS vẫn được giữ. Sau khi sửa biến phải redeploy đúng Preview/Production. Fallback không thể đọc biến ở môi trường khác hoặc deployment cũ.
+
+### Model dùng Interactions API
+
+Nếu mã xuất từ AI Studio gọi `client.interactions.create`, dùng model ID của chính đoạn mã đó. Chatbot tự dùng Interactions khi `GEMINI_MODEL` có dạng `gemini-4-*` (chấp nhận tiền tố `models/`). Với model khác có thể đặt `GEMINI_API_MODE=interactions`; mặc định `auto`, có thể giữ `generate_content` cho API cũ. Biến chỉ áp dụng cho chatbot, không đổi Diagnostic.
+
+Ví dụ cấu hình theo mã Playground người dùng cung cấp: `GEMINI_MODEL=gemini-4-hydrogen`, `GEMINI_API_MODE=interactions`, scope Preview. Redeploy sau khi lưu. Thành công trong Playground không chứng minh API key của deployment có quyền/quota giống phiên Google. Interactions dùng system prompt/JSON schema và `google_search`; chỉ đoạn trích có URL citation được đưa vào kiểm chứng nguồn. Dùng `store=false`, không lưu hội thoại RAG để truy xuất từ Google; ngân sách output tối đa 4000, thinking low, giới hạn timeout thay vì sao chép thiết lập 65536/high từ Playground.

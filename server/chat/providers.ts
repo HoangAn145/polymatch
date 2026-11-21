@@ -36,7 +36,12 @@ export function geminiChatProviders(): ChatProviders {
   if (!apiKey) return {};
   const ai = new GoogleGenAI({ apiKey });
   const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
-  const run = createModelSession(ai, model);
+  const mode = process.env.GEMINI_API_MODE?.trim();
+  const run = createModelSession(
+    ai,
+    model,
+    mode === "interactions" || mode === "generate_content" ? mode : "auto",
+  );
   return {
     router: structured(run, 4000, 500),
     generate: structured(run, 16000, 4000),

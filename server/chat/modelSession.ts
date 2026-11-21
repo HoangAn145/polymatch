@@ -1,9 +1,14 @@
+import { generateInteraction } from "./interactions.js";
 import type {
   GoogleGenAI,
   GenerateContentParameters,
   GenerateContentResponse,
 } from "@google/genai";
-export function createModelSession(ai: GoogleGenAI, configured: string) {
+export function createModelSession(
+  ai: GoogleGenAI,
+  configured: string,
+  mode: "auto" | "generate_content" | "interactions" = "auto",
+) {
   let current = configured.replace(/^models\//, "").trim();
   let discovery: Promise<string> | undefined;
   async function discover(): Promise<string> {
@@ -38,18 +43,29 @@ export function createModelSession(ai: GoogleGenAI, configured: string) {
       });
     return candidates[0];
   }
+  const generate = (request: GenerateContentParameters) =>
+    mode === "interactions" ||
+    (mode === "auto" && /^gemini-4(?:-|\.)/.test(request.model))
+      ? generateInteraction(ai, request)
+      : ai.models.generateContent(request);
   return async (
     request: (model: string) => GenerateContentParameters,
   ): Promise<GenerateContentResponse> => {
     try {
-      return await ai.models.generateContent(request(current));
+      return await generate(request(current));
     } catch (error) {
-      if (Number((error as { status?: number })?.status) !== 404) throw error;
+      if (
+        Number(
+          (error as { status?: number; statusCode?: number })?.status ??
+            (error as { statusCode?: number })?.statusCode,
+        ) !== 404
+      )
+        throw error;
       // Share discovery across router, synthesis and Search; never retry auth/quota errors.
       discovery ??= discover();
       current = await discovery;
       console.info("[chat:model]", current);
-      return ai.models.generateContent(request(current));
+      return generate(request(current));
     }
   };
 }
