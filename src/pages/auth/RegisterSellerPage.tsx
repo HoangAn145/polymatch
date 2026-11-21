@@ -1,3 +1,4 @@
+import { demoMode, supabase } from '../../lib/supabase';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Layers, ArrowRight, UserCheck, ShieldAlert, CheckCircle2 } from 'lucide-react';
@@ -65,6 +66,7 @@ export const RegisterSellerPage: React.FC = () => {
     setLoading(true);
     try {
       const user = await authService.registerSeller({
+        password,
         companyName,
         taxId,
         fullName,
@@ -77,9 +79,15 @@ export const RegisterSellerPage: React.FC = () => {
         servedBranches
       });
 
+      if (!user) {
+        toast.info("Kiểm tra email xác nhận", "Tài khoản đã được gửi đăng ký. Vui lòng xác nhận email rồi đăng nhập.");
+        navigate('/login');
+        return;
+      }
+
       toast.info(
         "Hồ sơ đã gửi thành công!",
-        "Tài khoản Nhà cung cấp đã được tạo ở trạng thái Chờ duyệt. Ban Quản trị sẽ đối soát mã số thuế và kích hoạt trong vòng 24 giờ."
+        "Tài khoản Nhà cung cấp đã được tạo ở trạng thái Chờ duyệt. Ban Quản trị sẽ kiểm tra hồ sơ trước khi kích hoạt."
       );
 
       navigate('/seller/verification');
@@ -111,6 +119,7 @@ export const RegisterSellerPage: React.FC = () => {
 
         {/* Form Card */}
         <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/90 shadow-md space-y-6">
+          {!demoMode && !supabase && <p role="alert" className="text-amber-800">Chưa cấu hình Supabase cho ứng dụng. Vui lòng cấu hình biến môi trường và redeploy.</p>}
           <form onSubmit={handleSubmit} className="space-y-4 text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -253,6 +262,7 @@ export const RegisterSellerPage: React.FC = () => {
                 <label className="block font-semibold text-slate-700 mb-1">Mật khẩu *</label>
                 <input
                   type="password"
+                  minLength={demoMode ? 6 : 8}
                   required
                   value={password}
                   onChange={e => setPassword(e.target.value)}
@@ -265,6 +275,7 @@ export const RegisterSellerPage: React.FC = () => {
                 <label className="block font-semibold text-slate-700 mb-1">Xác nhận mật khẩu *</label>
                 <input
                   type="password"
+                  minLength={demoMode ? 6 : 8}
                   required
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
@@ -303,6 +314,7 @@ export const RegisterSellerPage: React.FC = () => {
                 variant="success"
                 size="md"
                 className="w-full font-bold shadow-sm bg-emerald-700 hover:bg-emerald-800"
+                disabled={!demoMode && !supabase}
                 loading={loading}
                 type="submit"
                 rightIcon={<ArrowRight className="w-4 h-4" />}

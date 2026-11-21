@@ -1,3 +1,4 @@
+import { demoMode, supabase } from '../../lib/supabase';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -19,8 +20,8 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const [email, setEmail] = useState('buyer@vinatrans.vn');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState(demoMode ? 'buyer@vinatrans.vn' : '');
+  const [password, setPassword] = useState(demoMode ? '123456' : '');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -34,7 +35,7 @@ export const LoginPage: React.FC = () => {
 
     setLoading(true);
     try {
-      const user = await authService.login(email);
+      const user = await authService.login(email, password);
       toast.success("Đăng nhập thành công!", `Chào mừng ${user.fullName} (${user.companyName})`);
 
       if (user.role === 'BUYER') {
@@ -77,6 +78,7 @@ export const LoginPage: React.FC = () => {
 
         {/* Form Card */}
         <div className="bg-white py-8 px-6 sm:px-8 shadow-md rounded-2xl border border-slate-200/90 space-y-6">
+          {!demoMode && !supabase && <p role="alert" className="text-amber-800">Chưa cấu hình Supabase cho ứng dụng. Vui lòng cấu hình biến môi trường và redeploy.</p>}
           <form onSubmit={handleLogin} className="space-y-4 text-xs">
             {/* Email field */}
             <div>
@@ -140,6 +142,7 @@ export const LoginPage: React.FC = () => {
                 variant="primary"
                 size="md"
                 className="w-full font-bold shadow-sm"
+                disabled={!demoMode && !supabase}
                 loading={loading}
                 type="submit"
               >
@@ -149,7 +152,7 @@ export const LoginPage: React.FC = () => {
           </form>
 
           {/* Quick-fill section for Evaluators / Testers */}
-          <div className="pt-4 border-t border-slate-100 space-y-2.5">
+          {demoMode && <div className="pt-4 border-t border-slate-100 space-y-2.5">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block text-center">
               Điền nhanh tài khoản diễn tập (Demo)
             </span>
@@ -201,6 +204,7 @@ export const LoginPage: React.FC = () => {
             </div>
           </div>
 
+          }
           {/* Registration link */}
           <div className="text-center pt-2 text-xs text-slate-500">
             Chưa có tài khoản?{' '}

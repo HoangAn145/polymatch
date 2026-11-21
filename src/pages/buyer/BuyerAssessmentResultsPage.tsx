@@ -1,5 +1,6 @@
+import {DiagnosticEvidencePanel} from '../../components/platform/DiagnosticEvidencePanel';
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Award,
   TrendingUp,
@@ -39,9 +40,12 @@ export const BuyerAssessmentResultsPage: React.FC = () => {
   const toast = useToast();
   const currentUser = authService.getCurrentUser();
   const assessments = dbService.getAssessments().filter(a => a.userId === currentUser?.id);
-  const result = assessments[0] || dbService.getAssessments()[0];
+  const [params] = useSearchParams();
+  const result = assessments.find(a=>a.id===params.get('assessment')) || assessments[0];
 
   const [activeTab, setActiveTab] = useState<'overview' | 'dbi' | 'ldmi' | 'gaps' | 'ai'>('overview');
+
+  if (!result) return <div className="bg-white rounded-2xl border p-6 space-y-3"><h1 className="text-xl font-bold">Kết quả đánh giá</h1><p>Chưa có đánh giá của bạn.</p><Link className="text-blue-700 underline" to="/buyer/assessment">Thực hiện đánh giá</Link></div>;
 
   // Chart data for DBI
   const dbiChartData = result.dbi_tru_cot.map(p => ({
@@ -95,6 +99,7 @@ export const BuyerAssessmentResultsPage: React.FC = () => {
         </div>
       </div>
 
+      <DiagnosticEvidencePanel analysis={result.diagnostic?.analysis}/>
       {/* Primary Dual Score Summary Card */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* DBI Card */}

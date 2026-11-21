@@ -1,20 +1,34 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# POLYMATCH
 
-# Run and deploy your AI Studio app
+React/Vite frontend, Supabase Auth/Postgres/RLS, and Vercel Functions for Diagnostic and CSKH.
 
-This contains everything you need to run your app locally.
+The original Buyer, Seller and Admin pages, routes, registration forms and navigation remain in place. New Diagnostic, CSKH, Roadmap/ROI and KPI features extend those pages. `/workspace` is only an email-callback alias that redirects to the authenticated role dashboard. Demo mode is explicitly enabled with `VITE_DEMO_MODE=true`; cloud sign-in uses Supabase profiles and RLS.
 
-View your app in AI Studio: https://ai.studio/apps/f2dfb3c2-e7a3-4a93-9821-5f5b247e38e0
+## Local development
 
-## Run Locally
+Use Node 22.12+ (CI uses Node 24).
 
-**Prerequisites:**  Node.js
+```sh
+npm ci
+cp .env.example .env.local
+npm run dev
+```
 
+`vite` serves the frontend only. Use the Vercel development environment to exercise `/api/chat` and `/api/diagnostic`, with the variables documented in [deployment instructions](docs/DEPLOYMENT.md).
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+```sh
+npm run lint
+npm test
+npm run test:browser
+npm run test:browser:configured
+npm run test:browser:demo
+npm run build
+```
+
+Browser tests use `/usr/bin/chromium` by default; set `CHROMIUM_PATH` on other systems.
+
+See [implementation status and limitations](docs/IMPLEMENTATION_STATUS.md) before deployment. Supabase migrations must be applied and environment variables configured before production sign-in and server calls can function.
+
+Operational KPI evidence, structured Gemini analysis, confidence policy and validation are documented in [Diagnostic evidence](docs/DIAGNOSTIC_EVIDENCE.md). Existing routes, scores and legacy assessment records remain compatible.
+
+The four-intent chatbot, live-source/date checks and private query history are documented in [Chat routing](docs/CHAT_ROUTING.md). Apply migration `003_chat_history.sql` once to enable history; keep publisher article bodies out of storage.

@@ -1,3 +1,4 @@
+import {simulateRoi} from '../../lib/diagnostic';
 import React, { useState, useMemo } from 'react';
 import {
   Calculator,
@@ -41,55 +42,18 @@ export const BuyerRoiSimulatorPage: React.FC = () => {
 
   // Financial calculations
   const calculation = useMemo(() => {
-    const monthlyNetBenefit = monthlySavings - monthlyOperatingCost;
-    const totalBenefit = monthlyNetBenefit * timeframeMonths;
-    const netProfit = totalBenefit - initialInvestment;
-
-    const roi = initialInvestment > 0 ? (netProfit / initialInvestment) * 100 : 0;
-
-    // Payback period
-    const paybackMonths = monthlyNetBenefit > 0
-      ? Math.round((initialInvestment / monthlyNetBenefit) * 10) / 10
-      : 0;
-
-    // Monthly cash flow and NPV
-    const monthlyDiscountRate = Math.pow(1 + discountRatePercent / 100, 1 / 12) - 1;
-    let npv = -initialInvestment;
-    let cumulative = -initialInvestment;
-
-    const chartData = [
-      {
-        month: 0,
-        label: 'Tháng 0',
-        dongTienRong: -Math.round(initialInvestment / 1000000),
-        luyKe: -Math.round(initialInvestment / 1000000)
-      }
-    ];
-
-    for (let m = 1; m <= timeframeMonths; m++) {
-      const discountedCashflow = monthlyNetBenefit / Math.pow(1 + monthlyDiscountRate, m);
-      npv += discountedCashflow;
-      cumulative += monthlyNetBenefit;
-
-      chartData.push({
-        month: m,
-        label: `Tháng ${m}`,
-        dongTienRong: Math.round(monthlyNetBenefit / 1000000),
-        luyKe: Math.round(cumulative / 1000000)
-      });
-    }
-
+    const scenarios=simulateRoi(initialInvestment,monthlyOperatingCost,monthlySavings,timeframeMonths,discountRatePercent);
+    const base=scenarios[1];
     return {
-      roi: Math.round(roi),
-      npv: Math.round(npv),
-      paybackMonths,
-      netProfit: Math.round(netProfit),
-      chartData
+      roi:base.roi===null?null:Math.round(base.roi),npv:Math.round(base.npv),paybackMonths:base.payback,
+      netProfit:Math.round(base.cashflows.at(-1)!.cumulative),scenarios,
+      chartData:base.cashflows.map(c=>({month:c.month,label:`Tháng ${c.month}`,dongTienRong:Math.round(c.cash/1000000),luyKe:Math.round(c.cumulative/1000000)}))
     };
   }, [initialInvestment, monthlyOperatingCost, monthlySavings, timeframeMonths, discountRatePercent]);
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
+      <section className="bg-white rounded-2xl border p-5 space-y-3"><h2 className="font-bold">So sánh ba kịch bản tài chính</h2><p className="text-xs text-slate-500">Lợi ích thay đổi ±30%, chi phí giữ nguyên. ROI = lợi nhuận ròng / tổng chi phí đầu tư và vận hành trong kỳ.</p><div className="overflow-x-auto"><table className="w-full text-sm text-left"><thead><tr><th>Kịch bản</th><th>ROI</th><th>NPV (triệu đồng)</th><th>Hoàn vốn</th></tr></thead><tbody>{calculation.scenarios.map(s=><tr key={s.name}><td className="py-2">{s.name}</td><td>{s.roi===null?"—":`${s.roi.toFixed(1)}%`}</td><td>{(s.npv/1000000).toFixed(2)}</td><td>{s.payback===null?"Chưa hoàn vốn trong kỳ":`${s.payback} tháng`}</td></tr>)}</tbody></table></div></section>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div>
@@ -220,7 +184,7 @@ export const BuyerRoiSimulatorPage: React.FC = () => {
             <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-1">
               <span className="text-[11px] text-slate-400 font-semibold uppercase">Tỷ suất sinh lời ROI</span>
               <div className="text-2xl sm:text-3xl font-black text-emerald-600">
-                {calculation.roi}%
+                {calculation.roi === null ? "—" : `${calculation.roi}%`}
               </div>
               <span className="text-[11px] text-slate-500">Trong vòng {timeframeMonths} tháng</span>
             </div>
@@ -228,7 +192,7 @@ export const BuyerRoiSimulatorPage: React.FC = () => {
             <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-1">
               <span className="text-[11px] text-slate-400 font-semibold uppercase">Thời gian hoàn vốn</span>
               <div className="text-2xl sm:text-3xl font-black text-[#1769AA]">
-                {calculation.paybackMonths} <span className="text-sm font-normal text-slate-400">tháng</span>
+                {calculation.paybackMonths === null ? <span className="text-base">Chưa hoàn vốn trong kỳ</span> : <>{calculation.paybackMonths} <span className="text-sm font-normal text-slate-400">tháng</span></>}
               </div>
               <span className="text-[11px] text-slate-500">Điểm hòa vốn đầu tư</span>
             </div>
@@ -248,7 +212,7 @@ export const BuyerRoiSimulatorPage: React.FC = () => {
               <h4 className="font-bold text-sm text-slate-900">
                 Biểu đồ Dòng tiền Luỹ kế theo thời gian (Triệu VNĐ)
               </h4>
-              <Badge variant="success" size="sm">Hoàn vốn sau ~{calculation.paybackMonths} tháng</Badge>
+              <Badge variant="success" size="sm">{calculation.paybackMonths===null?"Chưa hoàn vốn trong kỳ":`Hoàn vốn sau ${calculation.paybackMonths} tháng`}</Badge>
             </div>
 
             <div className="h-64 w-full text-xs">
@@ -282,7 +246,7 @@ export const BuyerRoiSimulatorPage: React.FC = () => {
             <div className="pt-2 text-xs text-slate-500 flex items-center justify-between border-t border-slate-100">
               <span>Lợi nhuận ròng dự kiến sau {timeframeMonths} tháng:</span>
               <strong className="text-emerald-700 text-sm font-bold">
-                +{(calculation.netProfit / 1000000).toLocaleString('vi-VN')} triệu VNĐ
+                {calculation.netProfit>0?"+":""}{(calculation.netProfit / 1000000).toLocaleString('vi-VN')} triệu VNĐ
               </strong>
             </div>
           </div>

@@ -27,7 +27,7 @@ export const BuyerDashboardPage: React.FC = () => {
   const currentUser = authService.getCurrentUser();
   const enterprise = dbService.getEnterprises().find(e => e.userId === currentUser?.id) || dbService.getEnterprises()[0];
   const assessments = dbService.getAssessments().filter(a => a.userId === currentUser?.id);
-  const latestAssessment = assessments[0] || dbService.getAssessments()[0];
+  const latestAssessment = assessments[0];
   const connections = dbService.getConnections().filter(c => c.buyerId === currentUser?.id);
   const projects = dbService.getProjects().filter(p => p.buyerId === currentUser?.id);
 
@@ -66,8 +66,8 @@ export const BuyerDashboardPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <StatCard
           title="Mức DBI (QĐ 2158)"
-          value={`${latestAssessment?.dbi_diem || 42.5}/100`}
-          change={latestAssessment?.dbi_muc || "Hình thành"}
+          value={`${latestAssessment?.dbi_diem ?? "—"}/100`}
+          change={latestAssessment?.dbi_muc || "Chưa đánh giá"}
           changeType="positive"
           description="Chỉ số chuyển đổi số doanh nghiệp chung"
           icon={<Award className="w-5 h-5 text-[#1769AA]" />}
@@ -77,8 +77,8 @@ export const BuyerDashboardPage: React.FC = () => {
 
         <StatCard
           title="Mức LDMI Logistics"
-          value={`${latestAssessment?.ldmi_diem || 38.0}/100`}
-          change={latestAssessment?.ldmi_muc || "Số hóa"}
+          value={`${latestAssessment?.ldmi_diem ?? "—"}/100`}
+          change={latestAssessment?.ldmi_muc || "Chưa đánh giá"}
           changeType="neutral"
           description="Năng lực vận hành số logistics đặc thù"
           icon={<TrendingUp className="w-5 h-5 text-indigo-600" />}
@@ -88,7 +88,7 @@ export const BuyerDashboardPage: React.FC = () => {
 
         <StatCard
           title="Điểm nghẽn cần tháo gỡ"
-          value={latestAssessment?.top_khoang_trong.length || 3}
+          value={latestAssessment?.top_khoang_trong.length ?? 0}
           change="3 điểm ưu tiên"
           changeType="negative"
           description="Điều phối xe thủ công, ePOD & Chạy rỗng"
