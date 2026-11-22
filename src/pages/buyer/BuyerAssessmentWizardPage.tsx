@@ -1,3 +1,4 @@
+import { sandboxMode } from "../../lib/demoSandbox";
 import { OperationalKpiEditor } from "../../components/platform/OperationalKpiEditor";
 import type { OperationalKpiInput } from "../../lib/diagnosticEvidence";
 import { demoMode } from "../../lib/supabase";
@@ -26,7 +27,7 @@ import { dbService } from "../../services/mockDatabase";
 import { assessmentService } from "../../services/assessmentService";
 import { useToast } from "../../components/ui/Toast";
 
-const DRAFT_KEY = "polymatch_assessment_draft";
+const DRAFT_KEY = sandboxMode ? "polymatch_public_demo_assessment_draft" : "polymatch_assessment_draft";
 
 export const BuyerAssessmentWizardPage: React.FC = () => {
   const navigate = useNavigate();

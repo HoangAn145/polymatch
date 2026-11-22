@@ -211,6 +211,9 @@ export const LoginPage: React.FC = () => {
 
           {!demoMode && supabase && (
             <div className="pt-4 border-t border-slate-100 space-y-2">
+              <h3 className="font-semibold text-sm text-center">
+                Chọn tài khoản Demo
+              </h3>
               <Button
                 type="button"
                 variant="secondary"
@@ -218,11 +221,33 @@ export const LoginPage: React.FC = () => {
                 loading={loading}
                 onClick={handleDemoLogin}
               >
-                Dùng thử bằng tài khoản Demo
+                Demo Buyer – Doanh nghiệp
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full"
+                disabled={loading}
+                onClick={() =>
+                  window.location.assign("/seller/dashboard?demo=seller")
+                }
+              >
+                Demo Seller – Nhà cung cấp
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full"
+                disabled={loading}
+                onClick={() =>
+                  window.location.assign("/admin/dashboard?demo=admin")
+                }
+              >
+                Demo Admin – Quản trị
               </Button>
               <p className="text-xs text-slate-500 text-center">
-                Không cần đăng ký. Dữ liệu Demo dùng chung, chỉ nhập thông tin
-                giả lập.
+                Không cần đăng ký. Buyer có chatbot AI; Seller và Admin dùng dữ
+                liệu giả lập riêng. Chỉ nhập thông tin giả lập.
               </p>
             </div>
           )}

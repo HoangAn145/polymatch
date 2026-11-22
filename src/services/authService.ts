@@ -1,3 +1,4 @@
+import { sandboxMode, sandboxRole, setSandboxRole } from "../lib/demoSandbox";
 import { demoMode, supabase, requireSupabase } from "../lib/supabase";
 import type { Session } from "@supabase/supabase-js";
 import {
@@ -9,7 +10,9 @@ import {
 import { User, EnterpriseProfile, SellerProfile } from "../types";
 import { dbService } from "./mockDatabase";
 
-const SESSION_KEY = "polymatch_active_session_user";
+const SESSION_KEY = sandboxMode
+  ? "polymatch_public_demo_session_v1"
+  : "polymatch_active_session_user";
 
 export interface RegisterBuyerInput {
   password?: string;
@@ -44,6 +47,12 @@ class AuthService {
 
   constructor() {
     if (demoMode) this.loadSession();
+    if (sandboxRole)
+      this.switchDemoUser(
+        sandboxRole === "seller"
+          ? "SELLER_APPROVED"
+          : (sandboxRole.toUpperCase() as "BUYER" | "ADMIN"),
+      );
   }
 
   private session: Session | null = null;
@@ -400,6 +409,8 @@ class AuthService {
 
     this.demoSignedOut = false;
     this.currentUser = target;
+    if (sandboxMode)
+      setSandboxRole(target.role.toLowerCase() as "buyer" | "seller" | "admin");
     localStorage.setItem(SESSION_KEY, JSON.stringify(target));
     this.notify();
     return target;

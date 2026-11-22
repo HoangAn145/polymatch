@@ -1,7 +1,10 @@
+import { sandboxMode } from "./demoSandbox";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { demoMode, requireSupabase } from "./supabase";
 // Additional demo features have their own storage; the original database stays intact.
-const KEY = "polymatch_additional_features_v1";
+const KEY = sandboxMode
+  ? "polymatch_public_demo_features_v1"
+  : "polymatch_additional_features_v1";
 type Row = Record<string, any>;
 function load(): Record<string, Row[]> {
   try {
