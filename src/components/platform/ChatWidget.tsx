@@ -1,3 +1,5 @@
+import { sandboxMode } from "../../lib/demoSandbox";
+import { readApiResponse } from "../../lib/apiResponse";
 import { ruleIntent, strategyFor } from "../../lib/chatRouting";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
@@ -11,9 +13,21 @@ import {
   type ChatHistoryItem,
 } from "../../lib/chatContracts";
 import { ChatResponse } from "./ChatResponse";
+async function chatRequest<T>(body: unknown): Promise<T> {
+  if (!sandboxMode) return api<T>("chat", body);
+  const response = await fetch("/api/demo-chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(55000),
+  });
+  return readApiResponse<T>(response);
+}
 export function ChatWidget({ session }: { session: Session | null }) {
   const userId =
     session?.user.id || (demoMode ? authService.getCurrentUser()?.id : null);
+  const sharedDemo =
+    sandboxMode || session?.user.app_metadata?.public_demo === true;
   const [open, setOpen] = useState(false),
     [question, setQuestion] = useState(""),
     [mode, setMode] = useState("auto"),
@@ -25,11 +39,11 @@ export function ChatWidget({ session }: { session: Session | null }) {
   async function loadHistory() {
     setError("");
     try {
-      if (demoMode) {
+      if (demoMode && !sandboxMode) {
         setHistory([]);
         return;
       }
-      const result = await api<{ history: ChatHistoryItem[] }>("chat", {
+      const result = await chatRequest<{ history: ChatHistoryItem[] }>({
         action: "history",
       });
       setHistory(result.history);
@@ -43,7 +57,7 @@ export function ChatWidget({ session }: { session: Session | null }) {
     setError("");
     setTicket("");
     try {
-      if (demoMode) {
+      if (demoMode && !sandboxMode) {
         const intent = mode === "news" ? "news_policy" : ruleIntent(question);
         const { data } = await featureStore()
           .from("knowledge_documents")
@@ -104,7 +118,7 @@ export function ChatWidget({ session }: { session: Session | null }) {
           claims: [],
           warnings: [],
         });
-      } else setReply(await api<Reply>("chat", { question, mode }));
+      } else setReply(await chatRequest<Reply>({ question, mode }));
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -193,13 +207,15 @@ export function ChatWidget({ session }: { session: Session | null }) {
                 </button>
               </form>
               {reply && <ChatResponse reply={reply} />}
-              {!demoMode && (
+              {(!demoMode || sandboxMode) && (
                 <details className="text-sm">
                   <summary
                     className="cursor-pointer"
                     onClick={() => void loadHistory()}
                   >
-                    Lịch sử truy vấn của tôi
+                    {sharedDemo
+                      ? "Lịch sử Demo dùng chung"
+                      : "Lịch sử truy vấn của tôi"}
                   </summary>
                   <div className="space-y-2 pt-2">
                     {!history.length && (

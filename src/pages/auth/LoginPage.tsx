@@ -246,8 +246,8 @@ export const LoginPage: React.FC = () => {
                 Demo Admin – Quản trị
               </Button>
               <p className="text-xs text-slate-500 text-center">
-                Không cần đăng ký. Buyer có chatbot AI; Seller và Admin dùng dữ
-                liệu giả lập riêng. Chỉ nhập thông tin giả lập.
+                Không cần đăng ký. Cả ba Demo có chatbot tra tri thức đã duyệt.
+                Dữ liệu nghiệp vụ Seller/Admin vẫn là giả lập.
               </p>
             </div>
           )}

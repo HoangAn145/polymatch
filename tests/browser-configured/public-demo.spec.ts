@@ -61,3 +61,44 @@ for (const role of ["seller", "admin"] as const) {
     ).toBeNull();
   });
 }
+
+for (const role of ["seller", "admin"] as const) {
+  test(`${role} chatbot reads shared approved knowledge through the limited Demo chat endpoint`, async ({
+    page,
+  }) => {
+    let queried = false;
+    await page.route("**/api/demo-chat", async (route) => {
+      const body = route.request().postDataJSON();
+      expect(body.question).toBe("TMS là gì?");
+      queried = true;
+      await route.fulfill({
+        json: {
+          answer: "TMS giúp điều phối vận tải từ tài liệu chung.",
+          intent: "technology",
+          strategy: "rag",
+          router: "rules",
+          mode: "rag",
+          retrievedAt: "2026-11-22T10:00:00Z",
+          sources: [],
+          claims: [],
+          warnings: [],
+          handoff: false,
+        },
+      });
+    });
+    await page.goto(`/${role}/dashboard?demo=${role}`);
+    await page.getByRole("button", { name: "Chat CSKH", exact: true }).click();
+    await page
+      .getByRole("textbox", { name: "Câu hỏi", exact: true })
+      .fill("TMS là gì?");
+    await page
+      .getByRole("button", { name: "Gửi câu hỏi", exact: true })
+      .click();
+    await expect(
+      page.getByText("TMS giúp điều phối vận tải từ tài liệu chung.", {
+        exact: true,
+      }),
+    ).toBeVisible();
+    expect(queried).toBe(true);
+  });
+}

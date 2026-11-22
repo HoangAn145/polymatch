@@ -121,3 +121,9 @@ Cần `SUPABASE_SERVICE_ROLE_KEY` ở Functions Production, cùng URL/public ano
 Trang đăng nhập có ba nút Buyer/Seller/Admin. Buyer giữ phiên Supabase thật dùng chung đã triển khai để trải nghiệm chatbot. Seller (`/seller/dashboard?demo=seller`) và Admin (`/admin/dashboard?demo=admin`) chạy dữ liệu mẫu cục bộ, không tạo/cấp phiên Admin thật. Khi vào, trình duyệt lưu lựa chọn trong sessionStorage của tab; khi tải lại vẫn giữ vai trò. Thanh Demo cho phép đổi vai trò hoặc “Thoát Demo” để quay về đăng nhập thông thường.
 
 Trong chế độ giả lập công khai, Supabase client không được khởi tạo; không truy xuất dữ liệu Production qua featureStore/API. Database, phiên người dùng, tính năng bổ sung và bản nháp đánh giá dùng khóa lưu trữ riêng `polymatch_public_demo_*`, không đọc/ghi đè dữ liệu thường. Đây là tính năng minh họa UI/quy trình, không phải phân quyền Admin ở máy chủ. Mọi API thật vẫn yêu cầu JWT và kiểm tra vai trò từ Supabase. Nội dung FAQ từ workbook không được sao chép vào bundle Demo.
+
+### Kho tri thức chung cho cả ba chatbot Demo
+
+Demo Buyer dùng `/api/chat` với phiên Buyer Demo. Demo Seller/Admin dùng `/api/demo-chat`; máy chủ tạo phiên của đúng Buyer Demo rồi chạy cùng `chatPayload`, vẫn kiểm tra JWT, marker Demo, role BUYER, trạng thái, quota và RLS. Token không trả về trình duyệt Seller/Admin. Service role chỉ được dùng trong bước cấp phiên Demo, không dùng để truy xuất tri thức/lịch sử. Endpoint không nhận email, role hoặc user ID từ client.
+
+Cả ba truy xuất cùng `knowledge_documents` trạng thái `approved` trong Supabase; bổ sung/duyệt tài liệu ở kho thật sẽ được dùng ở lần hỏi tiếp theo. Không sao chép workbook vào bundle, không tự duyệt pending. Seller/Admin vẫn giữ dữ liệu nghiệp vụ và quyền quản trị giả lập cục bộ; chỉ chatbot gọi cổng Demo giới hạn. Lịch sử Demo dùng chung theo tài khoản Buyer Demo và được ghi nhãn tương ứng. Không cần thêm biến môi trường hoặc migration nếu đăng nhập Buyer Demo đã hoạt động.
