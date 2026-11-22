@@ -1,3 +1,4 @@
+import { sandboxMode, exitSandbox } from "../../lib/demoSandbox";
 import { demoMode } from '../../lib/supabase';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -39,7 +40,7 @@ export const DemoToolbar: React.FC = () => {
       <div className="flex items-center gap-2">
         <span className="inline-flex items-center gap-1 font-semibold text-amber-400 bg-amber-950/70 border border-amber-600/40 px-2 py-0.5 rounded text-[11px]">
           <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-          MÔI TRƯỜNG DEMO 3 ACTOR
+          {sandboxMode ? "DEMO 3 VAI TRÒ · DỮ LIỆU GIẢ LẬP" : "MÔI TRƯỜNG DEMO 3 ACTOR"}
         </span>
         <span className="hidden sm:inline text-slate-400">
           Đang xem: <strong className="text-white">{currentUser?.fullName || "Khách"}</strong> ({currentUser?.role || "GUEST"} - {currentUser?.companyName || "Chưa đăng nhập"})
@@ -47,6 +48,7 @@ export const DemoToolbar: React.FC = () => {
       </div>
 
       <div className="flex items-center gap-2">
+        {sandboxMode && <button onClick={exitSandbox} className="bg-white text-slate-900 rounded px-2 py-1 text-xs">Thoát Demo</button>}
         {/* Switcher Dropdown */}
         <div className="relative">
           <button

@@ -1,3 +1,4 @@
+import { sandboxMode } from "../lib/demoSandbox";
 import {
   User,
   EnterpriseProfile,
@@ -22,7 +23,7 @@ import {
 import { SOLUTIONS_DATA } from '../data/solutionsData';
 import { EXPERTS_DATA, ARTICLES_DATA } from '../data/expertsData';
 
-const DB_KEY = 'polymatch_database_v3';
+const DB_KEY = sandboxMode ? 'polymatch_public_demo_database_v1' : 'polymatch_database_v3';
 
 export const CREDIT_EXCHANGE_RATE = 10000; // 1 Tín chỉ = 10.000 VNĐ
 export const MIN_WITHDRAW_CREDITS = 50; // Tối thiểu 50 tín chỉ (500.000 VNĐ)
