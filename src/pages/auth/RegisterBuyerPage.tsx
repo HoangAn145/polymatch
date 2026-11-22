@@ -1,3 +1,4 @@
+import { demoMode, supabase } from '../../lib/supabase';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Layers, ArrowRight, Building2, CheckCircle2 } from 'lucide-react';
@@ -44,6 +45,7 @@ export const RegisterBuyerPage: React.FC = () => {
     setLoading(true);
     try {
       const user = await authService.registerBuyer({
+        password,
         companyName,
         taxId,
         fullName,
@@ -54,6 +56,12 @@ export const RegisterBuyerPage: React.FC = () => {
         branch,
         scale
       });
+
+      if (!user) {
+        toast.info("Kiểm tra email xác nhận", "Tài khoản đã được gửi đăng ký. Vui lòng xác nhận email rồi đăng nhập.");
+        navigate('/login');
+        return;
+      }
 
       toast.success(
         "Đăng ký tài khoản Doanh nghiệp thành công!",
@@ -89,6 +97,7 @@ export const RegisterBuyerPage: React.FC = () => {
 
         {/* Form Card */}
         <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/90 shadow-md">
+          {!demoMode && !supabase && <p role="alert" className="text-amber-800">Chưa cấu hình Supabase cho ứng dụng. Vui lòng cấu hình biến môi trường và redeploy.</p>}
           <form onSubmit={handleSubmit} className="space-y-4 text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -209,6 +218,7 @@ export const RegisterBuyerPage: React.FC = () => {
                 <label className="block font-semibold text-slate-700 mb-1">Mật khẩu *</label>
                 <input
                   type="password"
+                  minLength={demoMode ? 6 : 8}
                   required
                   value={password}
                   onChange={e => setPassword(e.target.value)}
@@ -221,6 +231,7 @@ export const RegisterBuyerPage: React.FC = () => {
                 <label className="block font-semibold text-slate-700 mb-1">Xác nhận mật khẩu *</label>
                 <input
                   type="password"
+                  minLength={demoMode ? 6 : 8}
                   required
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
@@ -248,6 +259,7 @@ export const RegisterBuyerPage: React.FC = () => {
                 variant="primary"
                 size="md"
                 className="w-full font-bold shadow-sm"
+                disabled={!demoMode && !supabase}
                 loading={loading}
                 type="submit"
                 rightIcon={<ArrowRight className="w-4 h-4" />}

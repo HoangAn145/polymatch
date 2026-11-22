@@ -659,6 +659,7 @@ export const INITIAL_WITHDRAWAL_REQUESTS: WithdrawalRequest[] = [
 
 class MockDatabaseService {
   private data: PolymatchDB;
+  private storageKey = DB_KEY;
 
   constructor() {
     this.data = this.loadFromStorage();
@@ -666,7 +667,7 @@ class MockDatabaseService {
 
   private loadFromStorage(): PolymatchDB {
     try {
-      const stored = localStorage.getItem(DB_KEY);
+      const stored = localStorage.getItem(this.storageKey);
       if (stored) {
         return JSON.parse(stored);
       }
@@ -678,10 +679,26 @@ class MockDatabaseService {
 
   public saveToStorage(): void {
     try {
-      localStorage.setItem(DB_KEY, JSON.stringify(this.data));
+      localStorage.setItem(this.storageKey, JSON.stringify(this.data));
     } catch {
       console.warn("Storage quota exceeded or unavailable");
     }
+  }
+
+  /** Isolate cloud caches without changing the existing demo database. */
+  public activateCloudUser(user: User, enterprise: EnterpriseProfile, seller: SellerProfile | null, assessments: AssessmentResult[]): void {
+    this.storageKey = `${DB_KEY}_cloud_${user.id}`;
+    this.data = this.loadFromStorage();
+    this.data.users = [user];
+    this.data.enterprises = [enterprise];
+    this.data.assessments = assessments;
+    if (seller) this.data.sellers = [...this.data.sellers.filter(s => s.userId !== user.id), seller];
+    this.saveToStorage();
+  }
+
+  public clearCloudUser(): void {
+    this.storageKey = DB_KEY;
+    this.data = this.getInitialData();
   }
 
   public resetDatabase(): void {

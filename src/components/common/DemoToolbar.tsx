@@ -1,3 +1,4 @@
+import { demoMode } from '../../lib/supabase';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserCheck, ShieldCheck, Clock, RotateCcw, Building2, ChevronDown, Coins } from 'lucide-react';
@@ -30,6 +31,8 @@ export const DemoToolbar: React.FC = () => {
       dbService.resetDatabase();
     }
   };
+
+  if (!demoMode) return null;
 
   return (
     <div className="bg-slate-900 text-white text-xs border-b border-slate-800 px-4 py-1.5 flex flex-wrap items-center justify-between gap-2 shadow-xs z-40 relative">

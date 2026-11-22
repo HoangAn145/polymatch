@@ -25,8 +25,8 @@ export const PublicLayout: React.FC = () => {
   const toast = useToast();
   const currentUser = authService.getCurrentUser();
 
-  const handleLogout = () => {
-    authService.logout();
+  const handleLogout = async () => {
+    await authService.logout();
     toast.info("Đã đăng xuất", "Hẹn gặp lại bạn!");
     navigate('/');
   };

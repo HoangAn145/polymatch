@@ -31,7 +31,7 @@ export const BuyerSolutionsPage: React.FC = () => {
   const currentUser = authService.getCurrentUser();
   const enterprise = dbService.getEnterprises().find(e => e.userId === currentUser?.id) || dbService.getEnterprises()[0];
   const assessments = dbService.getAssessments().filter(a => a.userId === currentUser?.id);
-  const latestAssessment = assessments[0] || dbService.getAssessments()[0];
+  const latestAssessment = assessments[0];
 
   const [filterGap, setFilterGap] = useState<string>(searchParams.get('gap') || 'all');
   const [selectedSolutionForQuote, setSelectedSolutionForQuote] = useState<Solution | null>(null);
@@ -44,7 +44,7 @@ export const BuyerSolutionsPage: React.FC = () => {
   const [reqTimeframe, setReqTimeframe] = useState('Triển khai trong tháng tới');
 
   const matches = useMemo(() => {
-    return assessmentService.matchSolutions(latestAssessment, enterprise);
+    return latestAssessment ? assessmentService.matchSolutions(latestAssessment, enterprise) : [];
   }, [latestAssessment, enterprise]);
 
   const filteredMatches = useMemo(() => {
@@ -97,8 +97,12 @@ export const BuyerSolutionsPage: React.FC = () => {
     }
   };
 
+  if (!latestAssessment) return <div className="bg-white rounded-2xl border p-6 space-y-3"><h1 className="text-xl font-bold">Giải pháp đề xuất</h1><p>Hoàn thành đánh giá để ghép nối theo dữ liệu của bạn.</p><Link className="text-blue-700 underline" to="/buyer/assessment">Thực hiện đánh giá</Link></div>;
+  const excluded = assessmentService.getExcludedSolutions(latestAssessment,enterprise);
+
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
+      <details className="bg-white border rounded-xl p-4"><summary>Giải thích bộ lọc: {excluded.length} giải pháp bị loại</summary>{excluded.map(x=><p key={x.solution.id} className="text-sm py-1">{x.solution.ten}: {x.reasons.join(' ')}</p>)}</details>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>

@@ -71,7 +71,7 @@ export const BuyerHistoryPage: React.FC = () => {
               </div>
             </div>
 
-            <Link to="/buyer/results">
+            <Link to={`/buyer/results?assessment=${asm.id}`}>
               <Button variant="outline" size="sm" leftIcon={<Eye className="w-3.5 h-3.5" />}>
                 Xem chi tiết báo cáo &rarr;
               </Button>

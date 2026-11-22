@@ -1,3 +1,4 @@
+import {demoMode, requireSupabase} from '../../lib/supabase';
 import React, { useState } from 'react';
 import { Building2, Save, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
@@ -36,10 +37,11 @@ export const BuyerProfilePage: React.FC = () => {
     });
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
+      if(!demoMode){const {error}=await requireSupabase().from('enterprises').upsert({user_id:form.userId,data:{legacyProfile:form},updated_at:new Date().toISOString()});if(error)throw error;}
       dbService.updateEnterprise(form.userId, form);
       toast.success("Đã cập nhật hồ sơ doanh nghiệp", "Thông tin hồ sơ và năng lực đã được lưu thành công.");
     } catch {
